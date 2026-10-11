@@ -1,0 +1,14 @@
+# Licences of the Rust crates compiled into modewise (the CLI and the Python wheels).
+# Regenerate THIRD_PARTY_LICENSES.md with:
+#   cargo about generate --workspace about.hbs -o drivers/python/THIRD_PARTY_LICENSES.md
+accepted = [
+  "Apache-2.0",
+  "BSD-2-Clause",
+  "MIT",
+  "Unicode-3.0",
+  "Zlib",
+]
+ignore-dev-dependencies = true
+ignore-build-dependencies = true
+# modewise's own crates are covered by LICENSE.
+private = { ignore = true }

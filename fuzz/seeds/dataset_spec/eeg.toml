@@ -1,0 +1,18 @@
+root = "."
+filter = { task = ["rest"] }
+
+[[input]]
+name = "eeg"
+pattern = "sub-{subject}/eeg/sub-{subject}_task-{task}_eeg.h5"
+format = "hdf5"
+dataset = "signal"
+layout = "time_by_channels"
+sidecar = "sub-{subject}/eeg/sub-{subject}_task-{task}_eeg.json"
+labels_file = "channels.txt"
+
+[[input]]
+name = "reference"
+pattern = "derived/sub-{subject}_task-{task}_ref.h5"
+format = "hdf5"
+dataset = "signal"
+sampling_rate_hz = 250.0

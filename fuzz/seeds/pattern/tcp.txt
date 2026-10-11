@@ -1,0 +1,1 @@
+fMRI_timeseries_clean_denoised_GSR_parcellated/NDAR_{subject}/task-{task}_run-{run}_bold_Atlas_hp2000_clean_GSR_parcellated.h5

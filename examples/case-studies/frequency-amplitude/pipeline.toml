@@ -1,0 +1,18 @@
+# Frequency-specific amplitude (Zuo et al. 2010): the run's spectrum for ALFF per band, and a
+# wavelet MRA as an independent second method.
+[pipeline]
+name = "amplitude"
+inputs = ["bold"]
+
+# Periodogram of the whole run (scipy's defaults; the FFT ALFF uses).
+[[step]]
+id = "psd"
+op = "spectrum"
+input = "bold"
+
+# Octave bands at 1.25 Hz: D6 ≈ 0.010–0.020 Hz (inside slow-5), D4 ≈ 0.039–0.078 Hz (slow-4).
+[[step]]
+id = "octaves"
+op = "modwt_mra"
+input = "bold"
+params = { wavelet = "sym4", levels = 6, boundary = "reflection" }

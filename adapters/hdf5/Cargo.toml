@@ -1,0 +1,21 @@
+[package]
+name = "modewise_hdf5"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+hdf5-pure.workspace = true
+modewise_signals.workspace = true
+ndarray.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+proptest.workspace = true
+modewise_decomposition.workspace = true
+modewise_mvmd.workspace = true
+
+[lints]
+workspace = true

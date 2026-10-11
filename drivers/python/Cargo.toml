@@ -1,0 +1,47 @@
+[package]
+name = "modewise_python"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lib]
+name = "_core"
+crate-type = ["cdylib"]
+
+[dependencies]
+modewise_cli.workspace = true
+modewise_dataset.workspace = true
+modewise_stats.workspace = true
+modewise_study.workspace = true
+modewise_cohort.workspace = true
+modewise_brain.workspace = true
+modewise_connectivity.workspace = true
+modewise_decomposition.workspace = true
+modewise_epochs.workspace = true
+modewise_cwt.workspace = true
+modewise_fc.workspace = true
+modewise_hdf5.workspace = true
+modewise_hilbert.workspace = true
+modewise_method.workspace = true
+modewise_emd.workspace = true
+modewise_wavelet.workspace = true
+modewise_mvmd.workspace = true
+modewise_parcellate.workspace = true
+modewise_nifti.workspace = true
+modewise_operations.workspace = true
+serde_json.workspace = true
+modewise_pipeline.workspace = true
+modewise_results.workspace = true
+modewise_signals.workspace = true
+modewise_spectral.workspace = true
+modewise_stft.workspace = true
+modewise_vlmd.workspace = true
+modewise_store_memory.workspace = true
+ndarray.workspace = true
+numpy = "0.29"
+pyo3 = { version = "0.29", features = ["abi3-py310"] }
+
+[lints]
+workspace = true

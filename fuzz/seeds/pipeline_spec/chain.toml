@@ -1,0 +1,21 @@
+[pipeline]
+name = "band-power"
+inputs = ["bold"]
+
+[[step]]
+id = "modes"
+op = "mvmd"
+input = "bold"
+params = { num_modes = 3, alpha = 2000.0, init = "linear", tau = 0.0, tolerance = 1e-7 }
+
+[[step]]
+id = "slow"
+op = "reconstruct"
+input = "modes"
+params = { modes = [0] }
+
+[[step]]
+id = "spectrum"
+op = "stft"
+input = { signal = "slow" }
+params = { window_len = 128, hop = 32 }

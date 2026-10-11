@@ -1,0 +1,435 @@
+name	region	hemisphere	yeo17	tcp_network
+17networks_LH_TempPar_IPL_1	IPL	left	TempPar	TempPar
+17networks_LH_TempPar_ST_1	ST	left	TempPar	TempPar
+17networks_LH_TempPar_ST_2	ST	left	TempPar	TempPar
+17networks_LH_TempPar_Temp_1	Temp	left	TempPar	TempPar
+17networks_LH_TempPar_Temp_2	Temp	left	TempPar	TempPar
+17networks_LH_DefaultC_IPL	IPL	left	DefaultC	DefaultC
+17networks_LH_DefaultC_PHC_1	PHC	left	DefaultC	DefaultC
+17networks_LH_DefaultC_PHC_2	PHC	left	DefaultC	DefaultC
+17networks_LH_DefaultC_PHC_3	PHC	left	DefaultC	DefaultC
+17networks_LH_DefaultC_RSC	RSC	left	DefaultC	DefaultC
+17networks_LH_DefaultB_IPL_1	IPL	left	DefaultB	DefaultB
+17networks_LH_DefaultB_IPL_2	IPL	left	DefaultB	DefaultB
+17networks_LH_DefaultB_IPL_3	IPL	left	DefaultB	DefaultB
+17networks_LH_DefaultB_IPL_4	IPL	left	DefaultB	DefaultB
+17networks_LH_DefaultB_PFCd_1	PFCd	left	DefaultB	DefaultB
+17networks_LH_DefaultB_PFCd_2	PFCd	left	DefaultB	DefaultB
+17networks_LH_DefaultB_PFCd_3	PFCd	left	DefaultB	DefaultB
+17networks_LH_DefaultB_PFCd_4	PFCd	left	DefaultB	DefaultB
+17networks_LH_DefaultB_PFCd_5	PFCd	left	DefaultB	DefaultB
+17networks_LH_DefaultB_PFCl_1	PFCl	left	DefaultB	DefaultB
+17networks_LH_DefaultB_PFCl_2	PFCl	left	DefaultB	DefaultB
+17networks_LH_DefaultB_PFCv_1	PFCv	left	DefaultB	DefaultB
+17networks_LH_DefaultB_PFCv_2	PFCv	left	DefaultB	DefaultB
+17networks_LH_DefaultB_PFCv_3	PFCv	left	DefaultB	DefaultB
+17networks_LH_DefaultB_PFCv_4	PFCv	left	DefaultB	DefaultB
+17networks_LH_DefaultB_PFCv_5	PFCv	left	DefaultB	DefaultB
+17networks_LH_DefaultB_TempPole	TempPole	left	DefaultB	DefaultB
+17networks_LH_DefaultB_Temp_1	Temp	left	DefaultB	DefaultB
+17networks_LH_DefaultB_Temp_2	Temp	left	DefaultB	DefaultB
+17networks_LH_DefaultB_Temp_3	Temp	left	DefaultB	DefaultB
+17networks_LH_DefaultB_Temp_4	Temp	left	DefaultB	DefaultB
+17networks_LH_DefaultB_Temp_5	Temp	left	DefaultB	DefaultB
+17networks_LH_DefaultB_Temp_6	Temp	left	DefaultB	DefaultB
+17networks_LH_DefaultB_Temp_7	Temp	left	DefaultB	DefaultB
+17networks_LH_DefaultA_FPole	FPole	left	DefaultA	DefaultA
+17networks_LH_DefaultA_IPL_1	IPL	left	DefaultA	DefaultA
+17networks_LH_DefaultA_PCC_1	PCC	left	DefaultA	DefaultA
+17networks_LH_DefaultA_PCC_2	PCC	left	DefaultA	DefaultA
+17networks_LH_DefaultA_PCC_3	PCC	left	DefaultA	DefaultA
+17networks_LH_DefaultA_PCC_4	PCC	left	DefaultA	DefaultA
+17networks_LH_DefaultA_PFCd_1	PFCd	left	DefaultA	DefaultA
+17networks_LH_DefaultA_PFCd_2	PFCd	left	DefaultA	DefaultA
+17networks_LH_DefaultA_PFCd_3	PFCd	left	DefaultA	DefaultA
+17networks_LH_DefaultA_PFCd_4	PFCd	left	DefaultA	DefaultA
+17networks_LH_DefaultA_PFCm_1	PFCm	left	DefaultA	DefaultA
+17networks_LH_DefaultA_PFCm_2	PFCm	left	DefaultA	DefaultA
+17networks_LH_DefaultA_PFCm_3	PFCm	left	DefaultA	DefaultA
+17networks_LH_DefaultA_PFCm_4	PFCm	left	DefaultA	DefaultA
+17networks_LH_DefaultA_pCun_1	pCun	left	DefaultA	DefaultA
+17networks_LH_DefaultA_pCun_2	pCun	left	DefaultA	DefaultA
+17networks_LH_ContC_PCC_1	PCC	left	ContC	ContC
+17networks_LH_ContC_SPL	SPL	left	ContC	ContC
+17networks_LH_ContC_pCun_1	pCun	left	ContC	ContC
+17networks_LH_ContC_pCun_2	pCun	left	ContC	ContC
+17networks_LH_ContC_pCun_3	pCun	left	ContC	ContC
+17networks_LH_ContB_FPole_1	FPole	left	ContB	ContB
+17networks_LH_ContB_FPole_2	FPole	left	ContB	ContB
+17networks_LH_ContB_FrMed	FrMed	left	ContB	ContB
+17networks_LH_ContB_IPL_1	IPL	left	ContB	ContB
+17networks_LH_ContB_IPL_2	IPL	left	ContB	ContB
+17networks_LH_ContB_PFCd_1	PFCd	left	ContB	ContB
+17networks_LH_ContB_PFCl_1	PFCl	left	ContB	ContB
+17networks_LH_ContB_PFCv_1	PFCv	left	ContB	ContB
+17networks_LH_ContB_Temp_1	Temp	left	ContB	ContB
+17networks_LH_ContA_Cingm	Cingm	left	ContA	ContA
+17networks_LH_ContA_IPS_1	IPS	left	ContA	ContA
+17networks_LH_ContA_IPS_2	IPS	left	ContA	ContA
+17networks_LH_ContA_IPS_3	IPS	left	ContA	ContA
+17networks_LH_ContA_IPS_4	IPS	left	ContA	ContA
+17networks_LH_ContA_IPS_5	IPS	left	ContA	ContA
+17networks_LH_ContA_PFCd	PFCd	left	ContA	ContA
+17networks_LH_ContA_PFCl_1	PFCl	left	ContA	ContA
+17networks_LH_ContA_PFCl_2	PFCl	left	ContA	ContA
+17networks_LH_ContA_PFCl_3	PFCl	left	ContA	ContA
+17networks_LH_ContA_PFCl_4	PFCl	left	ContA	ContA
+17networks_LH_ContA_PFCl_5	PFCl	left	ContA	ContA
+17networks_LH_ContA_PFCl_6	PFCl	left	ContA	ContA
+17networks_LH_ContA_PrCv_1	PrCv	left	ContA	ContA
+17networks_LH_ContA_PrCv_2	PrCv	left	ContA	ContA
+17networks_LH_ContA_TempOcc	TempOcc	left	ContA	ContA
+17networks_LH_LimbicA_Ins	Ins	left	LimbicA	LimbicA
+17networks_LH_LimbicA_TempOcc	TempOcc	left	LimbicA	LimbicA
+17networks_LH_LimbicA_TempPole_1	TempPole	left	LimbicA	LimbicA
+17networks_LH_LimbicA_TempPole_2	TempPole	left	LimbicA	LimbicA
+17networks_LH_LimbicA_Temp_1	Temp	left	LimbicA	LimbicA
+17networks_LH_LimbicA_Temp_2	Temp	left	LimbicA	LimbicA
+17networks_LH_LimbicB_FPole	FPole	left	LimbicB	LimbicB
+17networks_LH_LimbicB_OFC_1	OFC	left	LimbicB	LimbicB
+17networks_LH_LimbicB_OFC_2	OFC	left	LimbicB	LimbicB
+17networks_LH_LimbicB_OFC_3	OFC	left	LimbicB	LimbicB
+17networks_LH_LimbicB_OFC_4	OFC	left	LimbicB	LimbicB
+17networks_LH_LimbicB_OFC_5	OFC	left	LimbicB	LimbicB
+17networks_LH_LimbicB_OFC_6	OFC	left	LimbicB	LimbicB
+17networks_LH_LimbicB_PFCm	PFCm	left	LimbicB	LimbicB
+17networks_LH_SalVentAttnB_FrMed	FrMed	left	SalVentAttnB	SalVentAttnB
+17networks_LH_SalVentAttnB_Ins_1	Ins	left	SalVentAttnB	SalVentAttnB
+17networks_LH_SalVentAttnB_Ins_2	Ins	left	SalVentAttnB	SalVentAttnB
+17networks_LH_SalVentAttnB_Ins_3	Ins	left	SalVentAttnB	SalVentAttnB
+17networks_LH_SalVentAttnB_PFCl_1	PFCl	left	SalVentAttnB	SalVentAttnB
+17networks_LH_SalVentAttnB_PFCl_2	PFCl	left	SalVentAttnB	SalVentAttnB
+17networks_LH_SalVentAttnB_PFCl_3	PFCl	left	SalVentAttnB	SalVentAttnB
+17networks_LH_SalVentAttnB_PFCm_1	PFCm	left	SalVentAttnB	SalVentAttnB
+17networks_LH_SalVentAttnA_FrMed_1	FrMed	left	SalVentAttnA	SalVentAttnA
+17networks_LH_SalVentAttnA_FrMed_2	FrMed	left	SalVentAttnA	SalVentAttnA
+17networks_LH_SalVentAttnA_FrMed_3	FrMed	left	SalVentAttnA	SalVentAttnA
+17networks_LH_SalVentAttnA_FrOper_1	FrOper	left	SalVentAttnA	SalVentAttnA
+17networks_LH_SalVentAttnA_FrOper_2	FrOper	left	SalVentAttnA	SalVentAttnA
+17networks_LH_SalVentAttnA_IPL_1	IPL	left	SalVentAttnA	SalVentAttnA
+17networks_LH_SalVentAttnA_IPL_2	IPL	left	SalVentAttnA	SalVentAttnA
+17networks_LH_SalVentAttnA_IPL_3	IPL	left	SalVentAttnA	SalVentAttnA
+17networks_LH_SalVentAttnA_Ins_1	Ins	left	SalVentAttnA	SalVentAttnA
+17networks_LH_SalVentAttnA_Ins_2	Ins	left	SalVentAttnA	SalVentAttnA
+17networks_LH_SalVentAttnA_Ins_3	Ins	left	SalVentAttnA	SalVentAttnA
+17networks_LH_SalVentAttnA_Ins_4	Ins	left	SalVentAttnA	SalVentAttnA
+17networks_LH_SalVentAttnA_SPL_1	SPL	left	SalVentAttnA	SalVentAttnA
+17networks_LH_SalVentAttnA_SPL_2	SPL	left	SalVentAttnA	SalVentAttnA
+17networks_LH_SalVentAttnA_SPL_3	SPL	left	SalVentAttnA	SalVentAttnA
+17networks_LH_SalVentAttnA_SPL_4	SPL	left	SalVentAttnA	SalVentAttnA
+17networks_LH_DorsAttnB_IPL_1	IPL	left	DorsAttnB	DorsAttnB
+17networks_LH_DorsAttnB_IPL_2	IPL	left	DorsAttnB	DorsAttnB
+17networks_LH_DorsAttnB_PFCd	PFCd	left	DorsAttnB	DorsAttnB
+17networks_LH_DorsAttnB_PostC_1	PostC	left	DorsAttnB	DorsAttnB
+17networks_LH_DorsAttnB_PostC_2	PostC	left	DorsAttnB	DorsAttnB
+17networks_LH_DorsAttnB_PostC_3	PostC	left	DorsAttnB	DorsAttnB
+17networks_LH_DorsAttnB_PrCd_1	PrCd	left	DorsAttnB	DorsAttnB
+17networks_LH_DorsAttnB_PrCd_2	PrCd	left	DorsAttnB	DorsAttnB
+17networks_LH_DorsAttnB_PrCd_3	PrCd	left	DorsAttnB	DorsAttnB
+17networks_LH_DorsAttnB_PrCv	PrCv	left	DorsAttnB	DorsAttnB
+17networks_LH_DorsAttnB_SPL_1	SPL	left	DorsAttnB	DorsAttnB
+17networks_LH_DorsAttnB_SPL_2	SPL	left	DorsAttnB	DorsAttnB
+17networks_LH_DorsAttnB_SPL_3	SPL	left	DorsAttnB	DorsAttnB
+17networks_LH_DorsAttnB_SPL_4	SPL	left	DorsAttnB	DorsAttnB
+17networks_LH_DorsAttnB_TempOcc	TempOcc	left	DorsAttnB	DorsAttnB
+17networks_LH_DorsAttnA_ExStr_1	ExStr	left	DorsAttnA	DorsAttnA
+17networks_LH_DorsAttnA_ExStr_2	ExStr	left	DorsAttnA	DorsAttnA
+17networks_LH_DorsAttnA_SPL_1	SPL	left	DorsAttnA	DorsAttnA
+17networks_LH_DorsAttnA_SPL_2	SPL	left	DorsAttnA	DorsAttnA
+17networks_LH_DorsAttnA_SPL_3	SPL	left	DorsAttnA	DorsAttnA
+17networks_LH_DorsAttnA_SPL_4	SPL	left	DorsAttnA	DorsAttnA
+17networks_LH_DorsAttnA_TempOcc_1	TempOcc	left	DorsAttnA	DorsAttnA
+17networks_LH_DorsAttnA_TempOcc_2	TempOcc	left	DorsAttnA	DorsAttnA
+17networks_LH_DorsAttnA_TempOcc_3	TempOcc	left	DorsAttnA	DorsAttnA
+17networks_LH_DorsAttnA_TempOcc_4	TempOcc	left	DorsAttnA	DorsAttnA
+17networks_LH_DorsAttnA_TempOcc_5	TempOcc	left	DorsAttnA	DorsAttnA
+17networks_LH_SomMotB_1		left	SomMotB	SomMotB
+17networks_LH_SomMotB_2		left	SomMotB	SomMotB
+17networks_LH_SomMotB_3		left	SomMotB	SomMotB
+17networks_LH_SomMotB_4		left	SomMotB	SomMotB
+17networks_LH_SomMotB_5		left	SomMotB	SomMotB
+17networks_LH_SomMotB_6		left	SomMotB	SomMotB
+17networks_LH_SomMotB_7		left	SomMotB	SomMotB
+17networks_LH_SomMotB_Ins_1	Ins	left	SomMotB	SomMotB
+17networks_LH_SomMotB_Ins_2	Ins	left	SomMotB	SomMotB
+17networks_LH_SomMotB_ParOper_1	ParOper	left	SomMotB	SomMotB
+17networks_LH_SomMotB_ParOper_2	ParOper	left	SomMotB	SomMotB
+17networks_LH_SomMotB_ParOper_3	ParOper	left	SomMotB	SomMotB
+17networks_LH_SomMotB_ParOper_4	ParOper	left	SomMotB	SomMotB
+17networks_LH_SomMotB_ST_1	ST	left	SomMotB	SomMotB
+17networks_LH_SomMotB_ST_2	ST	left	SomMotB	SomMotB
+17networks_LH_SomMotB_ST_3	ST	left	SomMotB	SomMotB
+17networks_LH_SomMotB_ST_4	ST	left	SomMotB	SomMotB
+17networks_LH_SomMotA_1		left	SomMotA	SomMotA
+17networks_LH_SomMotA_10		left	SomMotA	SomMotA
+17networks_LH_SomMotA_11		left	SomMotA	SomMotA
+17networks_LH_SomMotA_12		left	SomMotA	SomMotA
+17networks_LH_SomMotA_13		left	SomMotA	SomMotA
+17networks_LH_SomMotA_14		left	SomMotA	SomMotA
+17networks_LH_SomMotA_15		left	SomMotA	SomMotA
+17networks_LH_SomMotA_16		left	SomMotA	SomMotA
+17networks_LH_SomMotA_17		left	SomMotA	SomMotA
+17networks_LH_SomMotA_2		left	SomMotA	SomMotA
+17networks_LH_SomMotA_3		left	SomMotA	SomMotA
+17networks_LH_SomMotA_4		left	SomMotA	SomMotA
+17networks_LH_SomMotA_5		left	SomMotA	SomMotA
+17networks_LH_SomMotA_6		left	SomMotA	SomMotA
+17networks_LH_SomMotA_7		left	SomMotA	SomMotA
+17networks_LH_SomMotA_8		left	SomMotA	SomMotA
+17networks_LH_SomMotA_9		left	SomMotA	SomMotA
+17networks_LH_SomMotA_SPL	SPL	left	SomMotA	SomMotA
+17networks_LH_VisPeri_ExStr	ExStr	left	VisPeri	VisPeri
+17networks_LH_VisPeri_ExStrInf_1	ExStrInf	left	VisPeri	VisPeri
+17networks_LH_VisPeri_ExStrInf_2	ExStrInf	left	VisPeri	VisPeri
+17networks_LH_VisPeri_ExStrInf_3	ExStrInf	left	VisPeri	VisPeri
+17networks_LH_VisPeri_ExStrSup_1	ExStrSup	left	VisPeri	VisPeri
+17networks_LH_VisPeri_ExStrSup_2	ExStrSup	left	VisPeri	VisPeri
+17networks_LH_VisPeri_ExStrSup_3	ExStrSup	left	VisPeri	VisPeri
+17networks_LH_VisPeri_ExStrSup_4	ExStrSup	left	VisPeri	VisPeri
+17networks_LH_VisPeri_Striate_1	Striate	left	VisPeri	VisPeri
+17networks_LH_VisPeri_Striate_2	Striate	left	VisPeri	VisPeri
+17networks_LH_VisCent_ExStr_1	ExStr	left	VisCent	VisCent
+17networks_LH_VisCent_ExStr_10	ExStr	left	VisCent	VisCent
+17networks_LH_VisCent_ExStr_2	ExStr	left	VisCent	VisCent
+17networks_LH_VisCent_ExStr_3	ExStr	left	VisCent	VisCent
+17networks_LH_VisCent_ExStr_4	ExStr	left	VisCent	VisCent
+17networks_LH_VisCent_ExStr_5	ExStr	left	VisCent	VisCent
+17networks_LH_VisCent_ExStr_6	ExStr	left	VisCent	VisCent
+17networks_LH_VisCent_ExStr_7	ExStr	left	VisCent	VisCent
+17networks_LH_VisCent_ExStr_8	ExStr	left	VisCent	VisCent
+17networks_LH_VisCent_ExStr_9	ExStr	left	VisCent	VisCent
+17networks_LH_VisCent_Striate	Striate	left	VisCent	VisCent
+17networks_RH_SalVentAttnA_IPL_4	IPL	right	SalVentAttnA	SalVentAttnA
+17networks_RH_TempPar_ST_1	ST	right	TempPar	TempPar
+17networks_RH_TempPar_ST_2	ST	right	TempPar	TempPar
+17networks_RH_TempPar_Temp_1	Temp	right	TempPar	TempPar
+17networks_RH_TempPar_Temp_2	Temp	right	TempPar	TempPar
+17networks_RH_DefaultC_IPL	IPL	right	DefaultC	DefaultC
+17networks_RH_DefaultC_PHC_1	PHC	right	DefaultC	DefaultC
+17networks_RH_DefaultC_PHC_2	PHC	right	DefaultC	DefaultC
+17networks_RH_VisPeri_PHC	PHC	right	VisPeri	VisPeri
+17networks_RH_DefaultC_RSC	RSC	right	DefaultC	DefaultC
+17networks_RH_DefaultA_IPL_2	IPL	right	DefaultA	DefaultA
+17networks_RH_SalVentAttnB_IPL	IPL	right	SalVentAttnB	SalVentAttnB
+17networks_RH_DefaultA_IPL_3	IPL	right	DefaultA	DefaultA
+17networks_RH_TempPar_IPL_1	IPL	right	TempPar	TempPar
+17networks_RH_DefaultB_PFCd_1	PFCd	right	DefaultB	DefaultB
+17networks_RH_DefaultB_PFCd_2	PFCd	right	DefaultB	DefaultB
+17networks_RH_DefaultB_PFCd_3	PFCd	right	DefaultB	DefaultB
+17networks_RH_SalVentAttnB_PFCd	PFCd	right	SalVentAttnB	SalVentAttnB
+17networks_RH_DefaultA_PFCd_4	PFCd	right	DefaultA	DefaultA
+17networks_RH_ContB_PFCl_3	PFCl	right	ContB	ContB
+17networks_RH_ContB_PFCl_2	PFCl	right	ContB	ContB
+17networks_RH_DefaultB_PFCv_1	PFCv	right	DefaultB	DefaultB
+17networks_RH_DefaultB_PFCv_2	PFCv	right	DefaultB	DefaultB
+17networks_RH_SalVentAttnB_PFCv_1	PFCv	right	SalVentAttnB	SalVentAttnB
+17networks_RH_SalVentAttnB_PFCv_2	PFCv	right	SalVentAttnB	SalVentAttnB
+17networks_RH_ContB_PFCv_2	PFCv	right	ContB	ContB
+17networks_RH_DefaultB_TempPole	TempPole	right	DefaultB	DefaultB
+17networks_RH_DefaultB_Temp_1	Temp	right	DefaultB	DefaultB
+17networks_RH_DefaultB_Temp_2	Temp	right	DefaultB	DefaultB
+17networks_RH_TempPar_Temp_3	Temp	right	TempPar	TempPar
+17networks_RH_TempPar_Temp_4	Temp	right	TempPar	TempPar
+17networks_RH_TempPar_Temp_5	Temp	right	TempPar	TempPar
+17networks_RH_ContB_Temp_2	Temp	right	ContB	ContB
+17networks_RH_DefaultA_Temp	Temp	right	DefaultA	DefaultA
+17networks_RH_DefaultA_FPole	FPole	right	DefaultA	DefaultA
+17networks_RH_DefaultA_IPL_1	IPL	right	DefaultA	DefaultA
+17networks_RH_DefaultA_PCC_1	PCC	right	DefaultA	DefaultA
+17networks_RH_DefaultA_PCC_2	PCC	right	DefaultA	DefaultA
+17networks_RH_DefaultA_PCC_3	PCC	right	DefaultA	DefaultA
+17networks_RH_ContC_PCC_2	PCC	right	ContC	ContC
+17networks_RH_DefaultA_PFCd_1	PFCd	right	DefaultA	DefaultA
+17networks_RH_DefaultA_PFCd_2	PFCd	right	DefaultA	DefaultA
+17networks_RH_DefaultA_PFCd_3	PFCd	right	DefaultA	DefaultA
+17networks_RH_ContB_PFCd_2	PFCd	right	ContB	ContB
+17networks_RH_DefaultA_PFCm_1	PFCm	right	DefaultA	DefaultA
+17networks_RH_DefaultA_PFCm_2	PFCm	right	DefaultA	DefaultA
+17networks_RH_DefaultA_PFCm_3	PFCm	right	DefaultA	DefaultA
+17networks_RH_SalVentAttnB_PFCm_2	PFCm	right	SalVentAttnB	SalVentAttnB
+17networks_RH_DefaultA_pCun_1	pCun	right	DefaultA	DefaultA
+17networks_RH_ContC_pCun_4	pCun	right	ContC	ContC
+17networks_RH_ContC_PCC_1	PCC	right	ContC	ContC
+17networks_RH_ContC_SPL	SPL	right	ContC	ContC
+17networks_RH_ContC_pCun_1	pCun	right	ContC	ContC
+17networks_RH_ContC_pCun_2	pCun	right	ContC	ContC
+17networks_RH_ContC_pCun_3	pCun	right	ContC	ContC
+17networks_RH_ContB_FPole_1	FPole	right	ContB	ContB
+17networks_RH_ContB_FPole_2	FPole	right	ContB	ContB
+17networks_RH_ContB_FrMed	FrMed	right	ContB	ContB
+17networks_RH_ContB_IPL_1	IPL	right	ContB	ContB
+17networks_RH_ContB_IPL_2	IPL	right	ContB	ContB
+17networks_RH_ContB_PFCd_1	PFCd	right	ContB	ContB
+17networks_RH_ContB_PFCl_1	PFCl	right	ContB	ContB
+17networks_RH_ContB_PFCv_1	PFCv	right	ContB	ContB
+17networks_RH_ContB_Temp_1	Temp	right	ContB	ContB
+17networks_RH_ContA_Cingm	Cingm	right	ContA	ContA
+17networks_RH_ContA_IPS_1	IPS	right	ContA	ContA
+17networks_RH_ContA_IPS_2	IPS	right	ContA	ContA
+17networks_RH_ContA_IPS_3	IPS	right	ContA	ContA
+17networks_RH_ContA_IPS_4	IPS	right	ContA	ContA
+17networks_RH_DorsAttnA_IPS	IPS	right	DorsAttnA	DorsAttnA
+17networks_RH_ContA_PFCd	PFCd	right	ContA	ContA
+17networks_RH_ContA_PFCl_1	PFCl	right	ContA	ContA
+17networks_RH_ContA_PFCl_2	PFCl	right	ContA	ContA
+17networks_RH_ContA_PFCl_3	PFCl	right	ContA	ContA
+17networks_RH_ContA_PFCl_4	PFCl	right	ContA	ContA
+17networks_RH_ContA_PFCl_5	PFCl	right	ContA	ContA
+17networks_RH_SalVentAttnB_PFCl_4	PFCl	right	SalVentAttnB	SalVentAttnB
+17networks_RH_ContA_PrCv_1	PrCv	right	ContA	ContA
+17networks_RH_SalVentAttnA_PrCv	PrCv	right	SalVentAttnA	SalVentAttnA
+17networks_RH_ContA_TempOcc	TempOcc	right	ContA	ContA
+17networks_RH_SalVentAttnA_Ins_5	Ins	right	SalVentAttnA	SalVentAttnA
+17networks_RH_LimbicA_TempOcc	TempOcc	right	LimbicA	LimbicA
+17networks_RH_LimbicA_TempPole_1	TempPole	right	LimbicA	LimbicA
+17networks_RH_LimbicA_TempPole_2	TempPole	right	LimbicA	LimbicA
+17networks_RH_LimbicA_Temp_1	Temp	right	LimbicA	LimbicA
+17networks_RH_LimbicA_Temp_2	Temp	right	LimbicA	LimbicA
+17networks_RH_LimbicB_FPole	FPole	right	LimbicB	LimbicB
+17networks_RH_LimbicB_OFC_1	OFC	right	LimbicB	LimbicB
+17networks_RH_LimbicB_OFC_2	OFC	right	LimbicB	LimbicB
+17networks_RH_LimbicB_OFC_3	OFC	right	LimbicB	LimbicB
+17networks_RH_LimbicB_OFC_4	OFC	right	LimbicB	LimbicB
+17networks_RH_LimbicB_OFC_5	OFC	right	LimbicB	LimbicB
+17networks_RH_ContB_OFC	OFC	right	ContB	ContB
+17networks_RH_LimbicB_PFCm	PFCm	right	LimbicB	LimbicB
+17networks_RH_SalVentAttnB_FrMed	FrMed	right	SalVentAttnB	SalVentAttnB
+17networks_RH_SalVentAttnB_Ins_1	Ins	right	SalVentAttnB	SalVentAttnB
+17networks_RH_SalVentAttnB_Ins_2	Ins	right	SalVentAttnB	SalVentAttnB
+17networks_RH_SalVentAttnA_Ins_4	Ins	right	SalVentAttnA	SalVentAttnA
+17networks_RH_SalVentAttnB_PFCl_1	PFCl	right	SalVentAttnB	SalVentAttnB
+17networks_RH_SalVentAttnB_PFCl_2	PFCl	right	SalVentAttnB	SalVentAttnB
+17networks_RH_SalVentAttnB_PFCl_3	PFCl	right	SalVentAttnB	SalVentAttnB
+17networks_RH_SalVentAttnB_PFCm_1	PFCm	right	SalVentAttnB	SalVentAttnB
+17networks_RH_SalVentAttnA_FrMed_1	FrMed	right	SalVentAttnA	SalVentAttnA
+17networks_RH_SalVentAttnA_FrMed_2	FrMed	right	SalVentAttnA	SalVentAttnA
+17networks_RH_SalVentAttnA_FrMed_3	FrMed	right	SalVentAttnA	SalVentAttnA
+17networks_RH_SalVentAttnA_FrOper_1	FrOper	right	SalVentAttnA	SalVentAttnA
+17networks_RH_SalVentAttnA_FrOper_2	FrOper	right	SalVentAttnA	SalVentAttnA
+17networks_RH_SalVentAttnA_IPL_1	IPL	right	SalVentAttnA	SalVentAttnA
+17networks_RH_SalVentAttnA_IPL_2	IPL	right	SalVentAttnA	SalVentAttnA
+17networks_RH_SalVentAttnA_IPL_3	IPL	right	SalVentAttnA	SalVentAttnA
+17networks_RH_SalVentAttnA_Ins_1	Ins	right	SalVentAttnA	SalVentAttnA
+17networks_RH_SalVentAttnA_Ins_2	Ins	right	SalVentAttnA	SalVentAttnA
+17networks_RH_SalVentAttnA_Ins_3	Ins	right	SalVentAttnA	SalVentAttnA
+17networks_RH_SomMotB_Ins_3	Ins	right	SomMotB	SomMotB
+17networks_RH_SalVentAttnA_SPL_1	SPL	right	SalVentAttnA	SalVentAttnA
+17networks_RH_SalVentAttnA_SPL_2	SPL	right	SalVentAttnA	SalVentAttnA
+17networks_RH_SalVentAttnA_SPL_3	SPL	right	SalVentAttnA	SalVentAttnA
+17networks_RH_SalVentAttnA_SPL_4	SPL	right	SalVentAttnA	SalVentAttnA
+17networks_RH_DorsAttnB_IPL_1	IPL	right	DorsAttnB	DorsAttnB
+17networks_RH_DorsAttnB_IPL_2	IPL	right	DorsAttnB	DorsAttnB
+17networks_RH_DorsAttnB_PFCd	PFCd	right	DorsAttnB	DorsAttnB
+17networks_RH_DorsAttnB_PostC_1	PostC	right	DorsAttnB	DorsAttnB
+17networks_RH_DorsAttnB_PostC_2	PostC	right	DorsAttnB	DorsAttnB
+17networks_RH_SomMotA_PostC	PostC	right	SomMotA	SomMotA
+17networks_RH_DorsAttnB_PrCd_1	PrCd	right	DorsAttnB	DorsAttnB
+17networks_RH_DorsAttnB_PrCd_2	PrCd	right	DorsAttnB	DorsAttnB
+17networks_RH_SomMotA_PrCd	PrCd	right	SomMotA	SomMotA
+17networks_RH_DorsAttnB_PrCv	PrCv	right	DorsAttnB	DorsAttnB
+17networks_RH_DorsAttnB_SPL_1	SPL	right	DorsAttnB	DorsAttnB
+17networks_RH_DorsAttnB_SPL_2	SPL	right	DorsAttnB	DorsAttnB
+17networks_RH_DorsAttnB_SPL_3	SPL	right	DorsAttnB	DorsAttnB
+17networks_RH_DorsAttnB_SPL_4	SPL	right	DorsAttnB	DorsAttnB
+17networks_RH_TempPar_TempOcc	TempOcc	right	TempPar	TempPar
+17networks_RH_VisCent_ExStr_12	ExStr	right	VisCent	VisCent
+17networks_RH_LimbicA_ExStr	ExStr	right	LimbicA	LimbicA
+17networks_RH_DorsAttnA_SPL_1	SPL	right	DorsAttnA	DorsAttnA
+17networks_RH_DorsAttnA_SPL_2	SPL	right	DorsAttnA	DorsAttnA
+17networks_RH_DorsAttnA_SPL_3	SPL	right	DorsAttnA	DorsAttnA
+17networks_RH_DorsAttnA_SPL_4	SPL	right	DorsAttnA	DorsAttnA
+17networks_RH_DorsAttnA_TempOcc_1	TempOcc	right	DorsAttnA	DorsAttnA
+17networks_RH_DorsAttnA_TempOcc_2	TempOcc	right	DorsAttnA	DorsAttnA
+17networks_RH_DorsAttnA_TempOcc_3	TempOcc	right	DorsAttnA	DorsAttnA
+17networks_RH_DorsAttnA_TempOcc_4	TempOcc	right	DorsAttnA	DorsAttnA
+17networks_RH_DorsAttnA_TempOcc_5	TempOcc	right	DorsAttnA	DorsAttnA
+17networks_RH_SomMotB_1		right	SomMotB	SomMotB
+17networks_RH_SomMotB_2		right	SomMotB	SomMotB
+17networks_RH_SomMotB_3		right	SomMotB	SomMotB
+17networks_RH_SomMotB_4		right	SomMotB	SomMotB
+17networks_RH_SomMotB_5		right	SomMotB	SomMotB
+17networks_RH_SomMotB_6		right	SomMotB	SomMotB
+17networks_RH_SomMotB_7		right	SomMotB	SomMotB
+17networks_RH_SomMotB_Ins_1	Ins	right	SomMotB	SomMotB
+17networks_RH_SomMotB_Ins_2	Ins	right	SomMotB	SomMotB
+17networks_RH_SomMotB_ParOper_1	ParOper	right	SomMotB	SomMotB
+17networks_RH_SomMotB_ParOper_2	ParOper	right	SomMotB	SomMotB
+17networks_RH_SomMotB_ParOper_3	ParOper	right	SomMotB	SomMotB
+17networks_RH_SomMotB_ParOper_4	ParOper	right	SomMotB	SomMotB
+17networks_RH_SomMotB_ST_1	ST	right	SomMotB	SomMotB
+17networks_RH_SomMotB_ST_2	ST	right	SomMotB	SomMotB
+17networks_RH_SomMotB_ST_3	ST	right	SomMotB	SomMotB
+17networks_RH_SomMotB_ST_4	ST	right	SomMotB	SomMotB
+17networks_RH_SomMotA_1		right	SomMotA	SomMotA
+17networks_RH_SomMotA_10		right	SomMotA	SomMotA
+17networks_RH_SomMotA_11		right	SomMotA	SomMotA
+17networks_RH_SomMotA_12		right	SomMotA	SomMotA
+17networks_RH_SomMotA_13		right	SomMotA	SomMotA
+17networks_RH_SomMotA_14		right	SomMotA	SomMotA
+17networks_RH_SomMotA_15		right	SomMotA	SomMotA
+17networks_RH_SomMotA_16		right	SomMotA	SomMotA
+17networks_RH_SomMotA_17		right	SomMotA	SomMotA
+17networks_RH_SomMotA_2		right	SomMotA	SomMotA
+17networks_RH_SomMotA_3		right	SomMotA	SomMotA
+17networks_RH_SomMotA_4		right	SomMotA	SomMotA
+17networks_RH_SomMotA_5		right	SomMotA	SomMotA
+17networks_RH_SomMotA_6		right	SomMotA	SomMotA
+17networks_RH_SomMotA_7		right	SomMotA	SomMotA
+17networks_RH_SomMotA_8		right	SomMotA	SomMotA
+17networks_RH_SomMotA_9		right	SomMotA	SomMotA
+17networks_RH_SalVentAttnA_SPL_5	SPL	right	SalVentAttnA	SalVentAttnA
+17networks_RH_VisCent_ExStr_11	ExStr	right	VisCent	VisCent
+17networks_RH_VisPeri_ExStrInf_1	ExStrInf	right	VisPeri	VisPeri
+17networks_RH_VisPeri_ExStrInf_2	ExStrInf	right	VisPeri	VisPeri
+17networks_RH_VisCent_ExStrInf	ExStrInf	right	VisCent	VisCent
+17networks_RH_VisPeri_ExStrSup_1	ExStrSup	right	VisPeri	VisPeri
+17networks_RH_VisPeri_ExStrSup_2	ExStrSup	right	VisPeri	VisPeri
+17networks_RH_VisPeri_ExStrSup_3	ExStrSup	right	VisPeri	VisPeri
+17networks_RH_VisPeri_ExStrSup_4	ExStrSup	right	VisPeri	VisPeri
+17networks_RH_VisPeri_Striate_1	Striate	right	VisPeri	VisPeri
+17networks_RH_VisPeri_Striate_2	Striate	right	VisPeri	VisPeri
+17networks_RH_VisCent_ExStr_1	ExStr	right	VisCent	VisCent
+17networks_RH_VisCent_ExStr_10	ExStr	right	VisCent	VisCent
+17networks_RH_VisCent_ExStr_2	ExStr	right	VisCent	VisCent
+17networks_RH_VisCent_ExStr_3	ExStr	right	VisCent	VisCent
+17networks_RH_VisCent_ExStr_4	ExStr	right	VisCent	VisCent
+17networks_RH_VisCent_ExStr_5	ExStr	right	VisCent	VisCent
+17networks_RH_VisCent_ExStr_6	ExStr	right	VisCent	VisCent
+17networks_RH_VisCent_ExStr_7	ExStr	right	VisCent	VisCent
+17networks_RH_VisCent_ExStr_8	ExStr	right	VisCent	VisCent
+17networks_RH_VisCent_ExStr_9	ExStr	right	VisCent	VisCent
+17networks_RH_VisCent_Striate	Striate	right	VisCent	VisCent
+aHIP-rh	aHIP	right		medial_temporal_lobe
+pHIP-rh	pHIP	right		medial_temporal_lobe
+lAMY-rh	lAMY	right		medial_temporal_lobe
+mAMY-rh	mAMY	right		medial_temporal_lobe
+THA-DP-rh	THA-DP	right		thalamus
+THA-VP-rh	THA-VP	right		thalamus
+THA-VA-rh	THA-VA	right		thalamus
+THA-DA-rh	THA-DA	right		thalamus
+NAc-shell-rh	NAc-shell	right		striatum
+NAc-core-rh	NAc-core	right		striatum
+pGP-rh	pGP	right		striatum
+aGP-rh	aGP	right		striatum
+aPUT-rh	aPUT	right		striatum
+pPUT-rh	pPUT	right		striatum
+aCAU-rh	aCAU	right		striatum
+pCAU-rh	pCAU	right		striatum
+aHIP-lh	aHIP	left		medial_temporal_lobe
+pHIP-lh	pHIP	left		medial_temporal_lobe
+lAMY-lh	lAMY	left		medial_temporal_lobe
+mAMY-lh	mAMY	left		medial_temporal_lobe
+THA-DP-lh	THA-DP	left		thalamus
+THA-VP-lh	THA-VP	left		thalamus
+THA-VA-lh	THA-VA	left		thalamus
+THA-DA-lh	THA-DA	left		thalamus
+NAc-shell-lh	NAc-shell	left		striatum
+NAc-core-lh	NAc-core	left		striatum
+pGP-lh	pGP	left		striatum
+aGP-lh	aGP	left		striatum
+aPUT-lh	aPUT	left		striatum
+pPUT-lh	pPUT	left		striatum
+aCAU-lh	aCAU	left		striatum
+pCAU-lh	pCAU	left		striatum
+cerebellum_left	cerebellum	left		cerebellum_left
+cerebellum_right	cerebellum	right		cerebellum_right

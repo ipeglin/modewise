@@ -1,0 +1,11 @@
+# Faces against shapes (Hariri et al. 2002): block averages of the BOLD signal.
+[pipeline]
+name = "faces"
+inputs = { bold = "series", trials = "events" }
+
+# Six ~2 s trials of the same kind make one block; the BOLD response peaks about 5 s later.
+[[step]]
+id = "blocks"
+op = "epoch"
+input = { data = "bold", events = "trials" }
+params = { lag_s = 5.0, merge_gap_s = 2.0 }

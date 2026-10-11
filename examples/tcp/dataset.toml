@@ -1,0 +1,32 @@
+# ds005237 (Transdiagnostic Connectome Project, OpenNeuro, CC0): parcellated BOLD from the
+# dataset's own derivative folder, sampling rate from the BIDS sidecars, task events from events.tsv.
+# Edit `root` to point at your copy. Run `modewise inspect examples/tcp/dataset.toml --load` to check.
+
+root = "/path/to/ds005237"
+filter = { task = ["hammerAP"] }
+
+[[input]]
+name = "bold"
+pattern = "fMRI_timeseries_clean_denoised_GSR_parcellated/NDAR_{subject}/task-{task}_run-{run}_bold_Atlas_hp2000_clean_GSR_parcellated.h5"
+format = "hdf5"
+dataset = "dataset"
+sidecar = "sub-NDAR{subject}/func/sub-NDAR{subject}_task-{task}_run-{run}_bold.json"
+
+[[input]]
+name = "trials"
+pattern = "sub-NDAR{subject}/func/sub-NDAR{subject}_task-{task}_run-{run}_events.tsv"
+format = "events_tsv"
+
+# What each of the 434 channels is: homotopic Schaefer 400 (Yeo 17 networks), Tian scale II and
+# cerebellum per hemisphere. Built from the TCP processing repository by make_channels.py.
+[channels]
+tables = [{ path = "channels.tsv", format = "tsv" }]
+names_for = ["bold"]
+
+# Who each subject is: group, age, sex and site from participants.tsv, and the SHAPS anhedonia
+# total from the phenotype folder (999 marks an invalid total).
+[participants]
+tables = [
+  { path = "participants.tsv", id_pattern = "sub-NDAR{subject}" },
+  { path = "phenotype/shaps01.tsv", id_column = "subjectkey", id_pattern = "NDAR_{subject}", columns = ["shaps_total"], missing = ["999"] },
+]

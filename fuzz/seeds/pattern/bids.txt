@@ -1,0 +1,1 @@
+sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_task-{task}_bold.h5

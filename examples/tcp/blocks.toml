@@ -1,0 +1,19 @@
+# Full-run MVMD with the thesis settings, then face/shape blocks.
+# The lag is an assumption (docs/epochs.md, rule E3): rerun with other values to check
+# sensitivity; the decomposition is cached, so only `blocks` is recomputed.
+
+[pipeline]
+name = "tcp-blocks"
+inputs = { bold = "series", trials = "events" }
+
+[[step]]
+id = "modes"
+op = "mvmd"
+input = "bold"
+params = { num_modes = 10, alpha = 1000.0, init = "exponential", tolerance = 1e-8, tau = 1e-3 }
+
+[[step]]
+id = "blocks"
+op = "epoch"
+input = { data = "modes", events = "trials" }
+params = { lag_s = 5.0, merge_gap_s = 2.0 }

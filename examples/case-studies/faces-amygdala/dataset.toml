@@ -1,0 +1,25 @@
+# TCP (ds005237): the emotional face-matching task (hammerAP), downloaded by ../fetch_tcp.py.
+root = "../data/ds005237"
+filter = { task = ["hammerAP"] }
+
+[[input]]
+name = "bold"
+pattern = "fMRI_timeseries_clean_denoised_GSR_parcellated/NDAR_{subject}/task-{task}_run-{run}_bold_Atlas_hp2000_clean_GSR_parcellated.h5"
+format = "hdf5"
+dataset = "dataset"
+sidecar = "sub-NDAR{subject}/func/sub-NDAR{subject}_task-{task}_run-{run}_bold.json"
+
+[[input]]
+name = "trials"
+pattern = "sub-NDAR{subject}/func/sub-NDAR{subject}_task-{task}_run-{run}_events.tsv"
+format = "events_tsv"
+
+[channels]
+tables = [{ path = "../../tcp/channels.tsv", format = "tsv" }]
+names_for = ["bold"]
+
+[participants]
+tables = [
+  { path = "participants.tsv", id_pattern = "sub-NDAR{subject}" },
+  { path = "phenotype/shaps01.tsv", id_column = "subjectkey", id_pattern = "NDAR_{subject}", columns = ["shaps_total"], missing = ["999"] },
+]

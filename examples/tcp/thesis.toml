@@ -1,0 +1,75 @@
+# The thesis analysis of the hammer task, rebuilt with modewise (docs/thesis-acceptance.md).
+# Same methods and settings as the thesis where the sources agree; where they do not, this
+# follows the consensus documented in docs/:
+# - decompose and transform the full run, then cut the blocks (docs/epochs.md)
+# - an explicit haemodynamic lag; the thesis used none
+# - Pearson FC averaged as Fisher z, without the thesis's ±0.9999 clip (docs/connectivity.md)
+# The ROIs are the thesis's: ventral and medial prefrontal cortex, and the amygdala.
+
+[pipeline]
+name = "thesis"
+inputs = { bold = "series", trials = "events", channels = "channels" }
+
+# Whole-brain MVMD with the thesis settings; regions are selected afterwards (docs/regions.md).
+[[step]]
+id = "modes"
+op = "mvmd"
+input = "bold"
+params = { num_modes = 10, alpha = 1000.0, init = "exponential", tolerance = 1e-8, tau = 1e-3 }
+
+[[step]]
+id = "roi_modes"
+op = "select"
+input = { data = "modes", channels = "channels" }
+params = { rules = [{ region = "PFCv" }, { region = "PFCm" }, { region = "*AMY*" }] }
+
+[[step]]
+id = "roi_bold"
+op = "select"
+input = { data = "bold", channels = "channels" }
+params = { rules = [{ region = "PFCv" }, { region = "PFCm" }, { region = "*AMY*" }] }
+
+# Hilbert spectrum of the ROI modes, on the thesis frequency range (slow-5 to slow-2, 0.01-0.25 Hz).
+[[step]]
+id = "attributes"
+op = "hilbert"
+input = "roi_modes"
+
+[[step]]
+id = "hht"
+op = "hilbert_spectrum"
+input = "attributes"
+params = { f_min = 0.01, f_max = 0.25, n_bins = 224, scale = "log" }
+
+# Morlet CWT of the ROI series, on the same range and number of frequencies as the thesis.
+[[step]]
+id = "cwt"
+op = "cwt"
+input = "roi_bold"
+params = { f_min = 0.01, f_max = 0.25, n_bins = 224 }
+
+# Face and shape blocks, cut from the full-run results.
+[[step]]
+id = "blocks"
+op = "epoch"
+input = { data = "roi_modes", events = "trials" }
+params = { lag_s = 5.0, merge_gap_s = 2.0 }
+
+[[step]]
+id = "hht_blocks"
+op = "epoch"
+input = { data = "hht", events = "trials" }
+params = { lag_s = 5.0, merge_gap_s = 2.0 }
+
+[[step]]
+id = "cwt_blocks"
+op = "epoch"
+input = { data = "cwt", events = "trials" }
+params = { lag_s = 5.0, merge_gap_s = 2.0 }
+
+# Per-mode functional connectivity of the ROIs in each block.
+[[step]]
+id = "fc"
+op = "functional_connectivity"
+input = "blocks"
+params = { measure = "pearson" }

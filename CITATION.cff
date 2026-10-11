@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use modewise in your research, please cite it as below."
+title: "modewise: data-adaptive mode decomposition for multichannel signals"
+type: software
+authors:
+  - given-names: Ian Philip
+    family-names: Eglin
+    affiliation: "Department of Electronic Systems, Norwegian University of Science and Technology (NTNU)"
+version: 0.2.0
+license: BSD-3-Clause
+repository-code: "https://github.com/ipeglin/modewise"
+abstract: >-
+  A toolbox for data-adaptive analysis of multichannel recordings such as fMRI and EEG: mode
+  decompositions (MVMD, VMD, VLMD, the EMD family, wavelet MRA), spectra and time-frequency maps,
+  functional connectivity, epochs, regions and cohort permutation statistics, with a Rust core, a
+  Python package and a command line for cohort batches.
+keywords:
+  - mode decomposition
+  - MVMD
+  - VLMD
+  - EMD
+  - wavelets
+  - functional connectivity
+  - fMRI
+  - EEG
+  - time-frequency analysis

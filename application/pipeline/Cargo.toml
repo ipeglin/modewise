@@ -1,0 +1,29 @@
+[package]
+name = "modewise_pipeline"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+schemars.workspace = true
+modewise_brain.workspace = true
+modewise_connectivity.workspace = true
+modewise_decomposition.workspace = true
+modewise_epochs.workspace = true
+modewise_signals.workspace = true
+modewise_spectral.workspace = true
+rayon.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+thiserror.workspace = true
+toml.workspace = true
+
+[dev-dependencies]
+proptest.workspace = true
+ndarray.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,41 @@
+# modewise
+
+> Data-adaptive signal decomposition for multichannel recordings (fMRI first; EEG, MEG and fNIRS by design): a Rust core with a Python package and a command line. Pipelines of operations (MVMD, EMD family, wavelets, spectra, Hilbert, connectivity, epochs, regions) run over datasets found by file patterns; results go to a cached results folder; feature tables feed permutation statistics.
+
+Links point to the markdown source of each page. `llms-full.txt` holds all of them in one file. List operations and their parameter schemas with `modewise.operations()` (Python) or `modewise ops --json` (shell) instead of guessing names.
+
+## Start here
+
+- [For agents](_sources/agents.md.txt): discovery, workflow, conventions and a complete run
+- [Python](_sources/getting-started/python.md.txt): decompose, build a pipeline, run over a dataset
+- [Rust](_sources/getting-started/rust.md.txt): call methods and run pipelines from Rust
+- [Command line](_sources/getting-started/cli.md.txt): run, inspect, export, Slurm shards
+
+## Examples
+
+- [Examples gallery](_sources/auto_examples/index.rst.txt): short runnable analyses on synthetic data, rebuilt with every release of the docs
+- [Case studies](_sources/case-studies.md.txt): real-data analyses that reproduce published findings, with stamped reports
+
+## Reference
+
+- [Operation reference](_sources/reference/operations.md.txt): every operation's ports and parameters, generated from the code
+- [Python API](_sources/reference/python/modewise/index.rst.txt): every class and function, from the type stubs
+
+## User guide
+
+- [Pipelines](_sources/pipelines.md.txt): the pipeline file format, caching, data kinds, and each operation's method and evidence
+- [Datasets](_sources/datasets.md.txt): dataset specs, file patterns, sidecars, channels and participants
+- [Epochs](_sources/epochs.md.txt): events, the haemodynamic lag, resolvable components
+- [Regions](_sources/regions.md.txt): channel tables, atlases, selecting and averaging regions
+- [Volumes](_sources/volumes.md.txt): NIfTI runs parcellated with label atlases
+- [Time-frequency](_sources/time-frequency.md.txt): Hilbert attributes and spectra, Morlet CWT
+- [Connectivity](_sources/connectivity.md.txt): functional connectivity (Pearson, PLV), per mode and per epoch
+- [Features](_sources/features.md.txt): feature tables from results (edges, mode power, band amplitude)
+- [Statistics](_sources/statistics.md.txt): GLM permutation tests, FWER, FDR, NBS
+
+## Optional
+
+- [EMD family](_sources/emd.md.txt): EMD, EEMD, CEEMDAN, MEMD: sources and differences from reference codes
+- [Wavelets](_sources/wavelets.md.txt): MODWT multiresolution analysis
+- [VLMD](_sources/vlmd.md.txt): variational latent mode decomposition
+- [Thesis acceptance](_sources/thesis-acceptance.md.txt): how modewise reproduces the original thesis pipeline

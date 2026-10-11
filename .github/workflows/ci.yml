@@ -1,0 +1,100 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: rustup show
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy --workspace --all-targets -- -D warnings
+      - run: cargo test --workspace
+      - name: Licence copies in the Python package match the root
+        run: |
+          cmp LICENSE drivers/python/LICENSE
+          cmp THIRD_PARTY_NOTICES.md drivers/python/THIRD_PARTY_NOTICES.md
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-about@0.9.2
+      - name: Dependency licences are up to date
+        run: |
+          cargo about generate --workspace about.hbs -o drivers/python/THIRD_PARTY_LICENSES.md
+          git diff --exit-code drivers/python/THIRD_PARTY_LICENSES.md
+
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: rustup component add llvm-tools
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-llvm-cov
+      - name: Line coverage (fails below 95%)
+        run: |
+          cargo llvm-cov --workspace --exclude modewise_python --fail-under-lines 95 --summary-only
+          cargo llvm-cov report --show-missing-lines | sed -n '/Uncovered Lines/,$p'
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: rustup show
+      - name: Build the documentation site (Sphinx, the examples gallery and rustdoc; warnings are errors)
+        run: |
+          python3 -m venv .docs-venv
+          .docs-venv/bin/pip install -q -r docs/requirements.txt ./drivers/python
+          MPLBACKEND=Agg .docs-venv/bin/python docs/build.py
+      - uses: actions/upload-artifact@v7
+        with:
+          name: modewise-docs-html
+          path: docs/_build/html
+      - uses: actions/upload-pages-artifact@v4
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && !github.event.repository.private
+        with:
+          path: docs/_build/html
+
+  # The site at https://ipeglin.github.io/modewise/ follows main, once the repository is public.
+  pages:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && !github.event.repository.private
+    needs: docs
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4
+
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: PyO3/maturin-action@v1
+        with:
+          working-directory: drivers/python
+          manylinux: "2014"
+          args: --release --out dist
+      - name: Test the wheel on CentOS 7 (manylinux2014), Python 3.10 and 3.12
+        run: |
+          docker run --rm -v "$PWD:/io" -w /io -e MODEWISE_SYSTEM_TESTS=1 quay.io/pypa/manylinux2014_x86_64 bash -euc '
+            for version in cp310-cp310 cp312-cp312; do
+              python=/opt/python/$version/bin/python
+              extras="pytest xarray h5py pandas"
+              if [ "$version" = cp312-cp312 ]; then extras="$extras zarr>=3"; fi
+              echo "== $version"
+              $python -m pip install -q --only-binary=:all: drivers/python/dist/*.whl $extras
+              $python -m pip list 2>/dev/null | grep -iE "^(numpy|xarray|h5py|zarr) "
+              $python -m pytest -q -p no:cacheprovider drivers/python/tests tests/e2e tests/docs tests/system
+            done'
+      - uses: actions/upload-artifact@v7
+        with:
+          name: modewise-wheel-linux-x86_64
+          path: drivers/python/dist/*.whl

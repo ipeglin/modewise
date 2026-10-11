@@ -1,0 +1,24 @@
+[package]
+name = "modewise_fc"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+modewise_connectivity.workspace = true
+modewise_decomposition.workspace = true
+modewise_epochs.workspace = true
+modewise_hilbert.workspace = true
+modewise_method.workspace = true
+modewise_signals.workspace = true
+ndarray.workspace = true
+rayon.workspace = true
+
+[dev-dependencies]
+proptest.workspace = true
+serde_json.workspace = true
+
+[lints]
+workspace = true

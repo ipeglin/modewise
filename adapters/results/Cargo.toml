@@ -1,0 +1,30 @@
+[package]
+name = "modewise_results"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+hdf5-pure.workspace = true
+modewise_epochs.workspace = true
+modewise_pipeline.workspace = true
+modewise_store_zarr.workspace = true
+modewise_study.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+modewise_spectral.workspace = true
+modewise_brain.workspace = true
+modewise_connectivity.workspace = true
+modewise_decomposition.workspace = true
+modewise_epochs.workspace = true
+modewise_operations.workspace = true
+modewise_signals.workspace = true
+ndarray.workspace = true
+
+[lints]
+workspace = true

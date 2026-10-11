@@ -1,0 +1,26 @@
+[package]
+name = "modewise_store_zarr"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+modewise_brain.workspace = true
+modewise_connectivity.workspace = true
+modewise_decomposition.workspace = true
+modewise_epochs.workspace = true
+modewise_pipeline.workspace = true
+modewise_signals.workspace = true
+modewise_spectral.workspace = true
+ndarray.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+zarrs.workspace = true
+
+[dev-dependencies]
+proptest.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,16 @@
+# TCP (ds005237): each subject's first restAP and first restPA run, downloaded by ../fetch_tcp.py.
+# The repetition time is 0.8 s for every TCP run (its sidecars and events agree); giving it here
+# keeps runs whose BIDS sidecar is missing on OpenNeuro.
+root = "../data/ds005237"
+filter = { task = ["restAP", "restPA"], run = ["01"] }
+
+[[input]]
+name = "bold"
+pattern = "fMRI_timeseries_clean_denoised_GSR_parcellated/NDAR_{subject}/task-{task}_run-{run}_bold_Atlas_hp2000_clean_GSR_parcellated.h5"
+format = "hdf5"
+dataset = "dataset"
+sampling_rate_hz = 1.25
+
+[channels]
+tables = [{ path = "../../tcp/channels.tsv", format = "tsv" }]
+names_for = ["bold"]

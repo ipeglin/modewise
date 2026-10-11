@@ -1,0 +1,15 @@
+/target
+/fuzz/target
+/fuzz/corpus
+/fuzz/artifacts
+/fuzz/coverage
+__pycache__/
+*.pyc
+CLAUDE.local.md
+
+docs/_build/
+.docs-venv/
+examples/case-studies/data
+examples/case-studies/*/results
+docs/auto_examples/
+docs/sg_execution_times.rst

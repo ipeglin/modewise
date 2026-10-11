@@ -1,0 +1,37 @@
+[package]
+name = "modewise_operations"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+schemars.workspace = true
+modewise_brain.workspace = true
+modewise_connectivity.workspace = true
+modewise_cwt.workspace = true
+modewise_decomposition.workspace = true
+modewise_epochs.workspace = true
+modewise_fc.workspace = true
+modewise_hilbert.workspace = true
+modewise_method.workspace = true
+modewise_emd.workspace = true
+modewise_wavelet.workspace = true
+modewise_mvmd.workspace = true
+modewise_pipeline.workspace = true
+modewise_signals.workspace = true
+modewise_spectral.workspace = true
+modewise_stft.workspace = true
+modewise_vlmd.workspace = true
+ndarray.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+modewise_signals.workspace = true
+modewise_store_memory.workspace = true
+ndarray.workspace = true
+
+[lints]
+workspace = true

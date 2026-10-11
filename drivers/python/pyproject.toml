@@ -1,0 +1,40 @@
+[build-system]
+requires = ["maturin>=1.9,<2"]
+build-backend = "maturin"
+
+[project]
+name = "modewise"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24"]
+dynamic = ["version"]
+description = "Data-adaptive mode decomposition and analysis of multichannel signals (fMRI, EEG), with a Rust core"
+readme = "README.md"
+license = "BSD-3-Clause"
+authors = [{ name = "Ian Philip Eglin" }]
+keywords = ["mode decomposition", "MVMD", "EMD", "wavelets", "fMRI", "EEG", "connectivity"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Rust",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+# Copies of the files at the repository root; CI checks that they match.
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md", "THIRD_PARTY_LICENSES.md"]
+
+[project.urls]
+Documentation = "https://ipeglin.github.io/modewise/"
+Repository = "https://github.com/ipeglin/modewise"
+Changelog = "https://github.com/ipeglin/modewise/blob/main/CHANGELOG.md"
+
+[project.scripts]
+modewise = "modewise._cli:main"
+
+[project.optional-dependencies]
+test = ["pytest>=8", "h5py>=3", "pandas>=1.5"]
+xarray = ["xarray>=2023.1"]
+
+[tool.maturin]
+python-source = "python"
+module-name = "modewise._core"

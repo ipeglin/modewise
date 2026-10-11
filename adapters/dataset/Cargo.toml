@@ -1,0 +1,30 @@
+[package]
+name = "modewise_dataset"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+modewise_brain.workspace = true
+modewise_epochs.workspace = true
+modewise_hdf5.workspace = true
+modewise_nifti.workspace = true
+modewise_parcellate.workspace = true
+modewise_pipeline.workspace = true
+modewise_signals.workspace = true
+modewise_study.workspace = true
+ndarray.workspace = true
+regex.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+toml.workspace = true
+
+[dev-dependencies]
+proptest.workspace = true
+hdf5-pure.workspace = true
+
+[lints]
+workspace = true

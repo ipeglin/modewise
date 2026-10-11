@@ -1,0 +1,4 @@
+/.venv
+/dist
+*.so
+__pycache__/

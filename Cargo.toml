@@ -1,0 +1,107 @@
+[workspace]
+resolver = "3"
+exclude = ["fuzz"]
+members = [
+  "adapters/dataset",
+  "adapters/hdf5",
+  "adapters/nifti",
+  "adapters/results",
+  "adapters/store-memory",
+  "adapters/store-zarr",
+  "application/cohort",
+  "application/operations",
+  "application/pipeline",
+  "domain/brain",
+  "domain/connectivity",
+  "domain/decomposition",
+  "domain/epochs",
+  "domain/method",
+  "domain/signals",
+  "domain/spectral",
+  "domain/study",
+  "drivers/cli",
+  "drivers/python",
+  "docs/doctests",
+  "methods/cwt",
+  "methods/emd",
+  "methods/fc",
+  "methods/fourier",
+  "methods/hilbert",
+  "methods/mvmd",
+  "methods/parcellate",
+  "methods/stats",
+  "methods/stft",
+  "methods/vlmd",
+  "methods/wavelet",
+]
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.91"
+version = "0.2.0"
+license = "BSD-3-Clause"
+publish = false
+
+[workspace.dependencies]
+anyhow = "1"
+clap = { version = "4", features = ["derive"] }
+hdf5-pure = "0.47"
+modewise_dataset = { path = "adapters/dataset" }
+modewise_cli = { path = "drivers/cli" }
+modewise_brain = { path = "domain/brain" }
+modewise_connectivity = { path = "domain/connectivity" }
+modewise_decomposition = { path = "domain/decomposition" }
+modewise_epochs = { path = "domain/epochs" }
+modewise_hdf5 = { path = "adapters/hdf5" }
+modewise_nifti = { path = "adapters/nifti" }
+modewise_method = { path = "domain/method" }
+modewise_cwt = { path = "methods/cwt" }
+modewise_emd = { path = "methods/emd" }
+modewise_fc = { path = "methods/fc" }
+modewise_fourier = { path = "methods/fourier" }
+modewise_hilbert = { path = "methods/hilbert" }
+modewise_mvmd = { path = "methods/mvmd" }
+modewise_parcellate = { path = "methods/parcellate" }
+modewise_cohort = { path = "application/cohort" }
+modewise_operations = { path = "application/operations" }
+modewise_pipeline = { path = "application/pipeline" }
+modewise_results = { path = "adapters/results" }
+modewise_signals = { path = "domain/signals" }
+modewise_spectral = { path = "domain/spectral" }
+modewise_study = { path = "domain/study" }
+modewise_stats = { path = "methods/stats" }
+modewise_stft = { path = "methods/stft" }
+modewise_vlmd = { path = "methods/vlmd" }
+modewise_wavelet = { path = "methods/wavelet" }
+modewise_store_memory = { path = "adapters/store-memory" }
+modewise_store_zarr = { path = "adapters/store-zarr" }
+ndarray = "0.17"
+proptest = "1"
+nifti = { version = "0.18", features = ["ndarray_volumes"] }
+rand = "0.9"
+rand_chacha = "0.9"
+rand_distr = "0.5"
+rayon = "1.10"
+regex = "1"
+rustfft = "6.4"
+serde = { version = "1", features = ["derive"] }
+schemars = "1.2"
+serde_json = "1"
+sha2 = "0.11"
+thiserror = "2"
+toml = "1"
+tracing = "0.1"
+zarrs = { version = "0.23", default-features = false, features = ["filesystem", "ndarray"] }
+
+[workspace.lints.rust]
+unsafe_code = "deny"
+
+[workspace.lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"
+
+# rustc's own debug-info strip corrupts dylibs linked by the macOS 27 linker
+# (ld-27037: "mis-aligned LINKEDIT string pool" on import). Release builds carry
+# no debug info of their own, so skipping the strip costs little.
+[profile.release]
+strip = false
