@@ -5,6 +5,13 @@
   </picture>
 </h1>
 
+<p align="center">
+  <a href="https://pypi.org/project/modewise/"><img alt="PyPI" src="https://img.shields.io/pypi/v/modewise"></a>
+  <a href="https://doi.org/10.5281/zenodo.23305191"><img alt="DOI" src="https://zenodo.org/badge/DOI/10.5281/zenodo.23305191.svg"></a>
+  <a href="https://ipeglin.github.io/modewise/"><img alt="Documentation" src="https://img.shields.io/badge/docs-ipeglin.github.io%2Fmodewise-blue"></a>
+  <a href="LICENSE"><img alt="Licence: BSD-3-Clause" src="https://img.shields.io/badge/licence-BSD--3--Clause-green"></a>
+</p>
+
 Data-adaptive signal decomposition for multichannel recordings (fMRI, EEG, MEG, fNIRS), with a Rust core and a Python front end. Written for the Brain Kyb Lab at NTNU.
 
 - **Methods:** mode decompositions (MVMD, noise-assisted MVMD, VMD, VLMD, EMD, EEMD, CEEMDAN, MEMD), wavelet multiresolution analysis (MODWT), spectra (periodogram, Welch) and band amplitude (ALFF, fALFF), time–frequency maps (STFT, Morlet CWT, Hilbert spectrum), functional connectivity, and group statistics.
@@ -93,7 +100,7 @@ The documentation site is built from `docs/` (see [docs/README.md](docs/README.m
 
 modewise is developed by Ian Philip Eglin (Department of Electronic Systems, NTNU). It is a general toolbox that grew out of the analysis pipeline from Ian Philip Eglin's master's thesis, which was written at the Brain Kyb Lab, Department of Engineering Cybernetics, NTNU, under the supervision of Marta Molinas.
 
-If you use modewise in research, please cite it: GitHub's "Cite this repository" button uses [CITATION.cff](CITATION.cff).
+If you use modewise in research, please cite it. Every release is archived on Zenodo: [10.5281/zenodo.23305191](https://doi.org/10.5281/zenodo.23305191) always points to the latest version, and each version has its own DOI there (0.2.0: [10.5281/zenodo.23305192](https://doi.org/10.5281/zenodo.23305192)). GitHub's "Cite this repository" button uses [CITATION.cff](CITATION.cff).
 
 ## Licence
 

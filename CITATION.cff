@@ -7,6 +7,15 @@ authors:
     family-names: Eglin
     affiliation: "Department of Electronic Systems, Norwegian University of Science and Technology (NTNU)"
 version: 0.2.0
+date-released: 2026-10-11
+doi: 10.5281/zenodo.23305191
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.23305191
+    description: All versions (resolves to the latest)
+  - type: doi
+    value: 10.5281/zenodo.23305192
+    description: Version 0.2.0
 license: BSD-3-Clause
 repository-code: "https://github.com/ipeglin/modewise"
 abstract: >-
