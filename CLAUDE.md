@@ -44,7 +44,8 @@ Dependencies point inward only. Never import an adapter from domain, methods or 
 - Epochs and frequency components follow `docs/epochs.md` (decompose the full run first, haemodynamic lag explicit, flag components that do not fit in an epoch).
 - Each operation owns its typed parameters. Do not add a global config struct.
 - Never hard-code dataset-specific rules (for example TCP questionnaires) in core crates. Adapters must stay general across storage layouts, modalities (fMRI, EEG, MEG, fNIRS) and outputs (signals, ML handover).
-- No single source is trusted on its own: not the thesis, not one paper, not one reference implementation. Methods, defaults and rules need agreement across independent sources (papers, implementations, theory or synthetic checks), cited in code docs or `docs/`. When sources disagree, or only one exists, document that instead of picking silently.
+- No single source is trusted on its own: not the thesis, not one paper, not one reference implementation. Methods, defaults and rules need agreement across independent sources (papers, implementations, theory or synthetic checks), checked in tests and fixtures. When sources disagree, or only one exists, record that in code comments or tests instead of picking silently.
+- User docs (`docs/`) explain how each method works and end with a `## References` list of papers and sources, cited inline as (Author, year). No evidence tables, strength or consensus labels, or thesis critique there.
 - Follow `TESTING.md`: unit, property, reference accuracy, integration, system and glass-to-glass layers. Every numerical method needs synthetic-signal tests and an accuracy test against a reference implementation. Fixtures live in `methods/*/tests/fixtures/` with the `generate.py` that made them.
 - UI work follows the global workflow: impeccable init, then shape (DESIGN.md), then build with `design-taste-frontend`, then critique/audit, then polish. Keep the impeccable hook enabled.
 

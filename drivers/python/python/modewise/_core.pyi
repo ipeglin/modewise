@@ -585,7 +585,7 @@ def cwt(
     rectify: bool = False,
     labels: Sequence[str] | None = None,
 ) -> TimeFrequencyMap:
-    """Morlet continuous wavelet transform (Torrence & Compo 1998), checked against pycwt.
+    """Morlet continuous wavelet transform (Torrence & Compo 1998).
 
     Frequencies are the geometric centres of n_bins log-spaced bins over [f_min, f_max].
     `reliable` marks values outside the cone of influence. `rectify` divides power by scale

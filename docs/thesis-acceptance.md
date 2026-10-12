@@ -36,7 +36,7 @@ The test is `tests/acceptance/test_thesis.py`. It is opt-in and runs on local da
 | Topic | Thesis | modewise | Reason |
 |---|---|---|---|
 | Decomposition scope | the stored task outputs decompose each block separately; the thesis code was later changed to decompose the run and slice | decompose the full run, then cut | `docs/epochs.md`: a 23-sample block cannot resolve slow-5 or slow-4. The thesis code's own later fix agrees. |
-| Haemodynamic lag | none | explicit (`lag_s = 5.0` in the example; required) | `docs/epochs.md`, rule E3 |
+| Haemodynamic lag | none | explicit (`lag_s = 5.0` in the example; required) | `docs/epochs.md` |
 | Block length | from onset to the next event, about 17.9 s (23–24 samples) | the merged events' own duration, 16.8–17.6 s | events.tsv durations; the thesis blocks include the following cue |
 | Fisher z | r clipped to ±0.9999 first | no clip; diagonal undefined | `docs/connectivity.md`: no source supports the clip |
 | Instantaneous frequency | backward phase difference | centred difference | `docs/time-frequency.md`: no half-sample lag |

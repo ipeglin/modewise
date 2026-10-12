@@ -1,18 +1,28 @@
 # Variational Latent Mode Decomposition (VLMD)
 
-VLMD models a multichannel signal as a few shared **latent components** mixed into the channels by a sparse **loading** matrix. Each latent component is a sum of narrow-band **modes**, and every mode has one centre frequency shared by all latents: `X ≈ Σₖ Θ⁽ᵏ⁾A`.
+VLMD models a multichannel signal as a few shared **latent components** mixed into the channels by a sparse **loading** matrix. Each latent component is a sum of narrow-band **modes**, and every mode has one centre frequency shared by all latents: `X ≈ Σₖ Θ⁽ᵏ⁾A` (Morante & Rehman, 2025). It extends variational mode decomposition (Dragomiretskiy & Zosso, 2014) and its multivariate form (Rehman & Aftab, 2019) with a latent mixing model.
 
-Source: Morante and Rehman (2025), *Latent Mode Decomposition*, [arXiv:2505.17797](https://arxiv.org/abs/2505.17797).
+## How it works
+
+VLMD solves its model with the alternating direction method of multipliers (ADMM; Boyd et al., 2011). Each iteration updates, in turn:
+
+- **Loadings:** each channel's loadings are the lasso fit of that channel on the latent components (Tibshirani, 1996), with no intercept. Each latent's row of loadings is then divided by its largest absolute value when that is above 1, so every loading stays in [−1, 1]; the latent component takes up the scale in the next update.
+- **Latent components:** each latent is fitted, in the frequency domain, to the part of the channels the other latents leave unexplained, while staying close to the sum of its modes. `reg_rho` sets that balance.
+- **Modes:** each mode is a Wiener filter of its latent's residual around its centre frequency ωₖ, `1 / (1 + 4(α/ρ)(f − ωₖ)²)`, as in MVMD; larger α gives narrower modes.
+- **Centre frequencies:** each ωₖ moves to the power-weighted mean frequency of its mode, pooled over latents.
+- **Dual variables:** a step of size `tau` towards making each latent equal to the sum of its modes.
+
+The run stops when `Σₖ((ωₖⁿ⁺¹ − ωₖⁿ)/ωₖⁿ)²` falls below `tolerance`, or after `max_iterations`.
 
 ## Outputs
 
 | Output | Shape | Meaning |
 |---|---|---|
-| `modes` | mode × channel × sample | channel modes `U⁽ᵏ⁾ = Θ⁽ᵏ⁾A` (Eq. 7), what the paper evaluates |
+| `modes` | mode × channel × sample | channel modes `U⁽ᵏ⁾ = Θ⁽ᵏ⁾A` (Eq. 7 in the paper) |
 | `latent_modes` | mode × latent × sample | the latent modes `Θ⁽ᵏ⁾` |
 | `loadings` | latent × channel | the sparse matrix `A`, with every value in [−1, 1] |
 
-The channel modes add up to the latent fit `ZA`, not exactly to the signal. The difference is what the sparse fit leaves out, noise included.
+The channel modes add up to the latent fit `ZA`, not exactly to the signal. The difference is what the sparse fit leaves out, noise included. The reported centre frequencies are the ones used in the last mode update, in Hz.
 
 ## Parameters
 
@@ -22,46 +32,24 @@ The channel modes add up to the latent fit `ZA`, not exactly to the signal. The 
 | `num_latents` | one per channel | L, at most the number of channels (the model assumes L ≤ C) |
 | `alpha` | 100 | bandwidth penalty α: larger values give narrower modes |
 | `reg_lambda` | 0.01 | sparsity λ of the loadings, on the reference code's scale (see below) |
-| `reg_rho` | 1 | ADMM penalty ρ. It sets how closely each latent must equal the sum of its modes, and it scales the bandwidth filter to `1 + 4(α/ρ)(f − ωₖ)²` |
+| `reg_rho` | 1 | ADMM penalty ρ. It sets how closely each latent must equal the sum of its modes, and it scales the bandwidth filter |
 | `tau` | 0.9 | dual step, in [0, 1] |
-| `tolerance` | 1e-3 | stop when `Σₖ((ωₖⁿ⁺¹ − ωₖⁿ)/ωₖⁿ)²` reaches this |
+| `tolerance` | 1e-3 | stop when the relative change of the centre frequencies reaches this |
 | `max_iterations` | 1000 | |
 
-The defaults are the reference code's. The paper's real-data runs used other values:
+The defaults are those of the authors' reference code. The paper's real-data runs used other values:
 - exchange rates: α = 1000, ρ = 0.6, λ = 0.04
 - electricity load: α = 5000, ρ = 5, λ = 0.5
 
-Its synthetic-data runs were tuned against the ground truth.
+**The scale of λ.** The paper writes the loading step as `‖X − ZA‖² + λ‖A‖₁`. The reference code calls scikit-learn's `Lasso` (Pedregosa et al., 2011) with `alpha = λ·10⁻³`, which minimises `(1/2T)‖x − Zᵀa‖² + alpha·‖a‖₁` for each channel. modewise uses the code's scale, so the published parameter values carry over. The paper's λ equals 2T·λ·10⁻³.
 
-**The scale of λ.** The paper writes the loading step as `‖X − ZA‖² + λ‖A‖₁`. The reference code instead calls scikit-learn's `Lasso` with `alpha = λ·10⁻³`, which minimises `(1/2T)‖x − Zᵀa‖² + alpha·‖a‖₁` for each channel. modewise uses the code's scale, because the published parameter values were run with the code. The paper's λ equals 2T·λ·10⁻³.
+**Choosing λ for neuroimaging data.** The paper applies VLMD to synthetic, economic and power-grid data. On BOLD data the default λ gives dense loadings; raise it for sparse ones.
 
-## Where the paper and the reference code disagree
+## Speed
 
-The reference code is [Dmocrito/vlmd](https://github.com/Dmocrito/vlmd) at commit `d5cbd2b`. modewise follows the paper's equations and our MVMD conventions. It does not port the reference code (GPL-3). Each disagreement below is decided by agreement with a second source.
+The loading step is a lasso per channel, solved by coordinate descent on the Gram matrix (Friedman, Hastie & Tibshirani, 2010), in parallel over channels. With a small λ and correlated latents, as in BOLD, plain coordinate descent can need thousands of sweeps, so modewise also solves the optimality conditions exactly for the current signs, and accepts that solution only if the conditions hold.
 
-| Topic | Paper | Reference code | modewise | Why |
-|---|---|---|---|---|
-| Loading step (Eq. 10) | exact minimiser, no intercept | `Lasso(tol=0.2)`, intercept fitted | exact minimiser, no intercept | The paper and convex theory agree: a minimiser does not depend on the solver. The code's result does: its output changed between scikit-learn 1.5 and 1.9 on identical input, so it is not a stable target. On synthetic data, recovery was similar either way (sometimes better, sometimes worse). |
-| Keeping `|a| ≤ 1` | Algorithm 1 divides each **channel column** by `max{1, max(a_c)}` | divides each **latent row** by its largest absolute value, when above 1 | rows, absolute value | The paper justifies the bound by scale equivalence. Rescaling a latent row, with its latent signal rescaled inversely, leaves `ZA` unchanged; rescaling a channel column does not. |
-| Stopping rule | `Σ|Δω|²` | `Σ(Δω/ω)²` | the code's | It is unit-free. In cycles per sample, the absolute rule stops too early at fMRI frequencies. Near-zero frequencies can make the relative rule slow to settle, but `max_iterations` bounds the run. |
-| Dual step | Eq. 22 has none; Algorithm 1 uses τ = 0.9 | τ = 0.9 | τ = 0.9 | Algorithm 1 and the code agree |
-| Frequencies in Hz | — | divides by the sampling rate | multiplies by it | The code's division is a bug that its default sampling rate of 1 hides |
-| Reported centre frequencies | — | the ones used in the last filter step | the same | the same convention as our MVMD |
-
-The paper's synthetic-data generator is not in the repository, so the synthetic tests use our own signals built from the same model.
-
-## Evidence
-
-| Check | Result |
-|---|---|
-| Loading step vs scikit-learn `Lasso(fit_intercept=False)`, 4 penalties, correlated latents | within 1e-9 |
-| Full VLMD vs the reference with its loading step solved exactly, 3 cases (defaults; sparse with ρ, τ and λ changed; odd length with an iteration cap) | iteration counts identical; frequencies, loadings, latent and channel modes within 1e-9 (agreement measured below 1e-11) |
-| Two tones mixed into four channels | frequencies within 0.002 cycles/sample; each channel mode peaks at its tone |
-| Property tests on random signals | finite output, `|a| ≤ 1`, sorted frequencies within [0, Nyquist] |
-
-**Speed.** The loading step is a lasso per channel, solved on the Gram matrix in parallel. With a small λ and correlated latents (as in BOLD), plain coordinate descent needed thousands of sweeps per channel per iteration. modewise therefore also solves the optimality conditions exactly for the current signs, and accepts the result only if those conditions hold.
-
-When there are many latents, the latent components become band-limited after the first iterations. They are then nearly collinear, the loading step has no well-determined minimiser, and coordinate descent crawls. Each loading step therefore stops at 1000 sweeps, the reference's own budget (scikit-learn `max_iter=1000`), or earlier once the duality gap closes. A warning reports how many channels hit the limit.
+With many latents, the latent components become band-limited after the first iterations and nearly collinear, and coordinate descent slows down. Each loading step therefore stops after 1000 sweeps, or earlier once the duality gap closes; a warning reports how many channels reached the limit.
 
 Measured on one ds005237 run (434 channels, 493 samples, K = 6, 10 threads):
 
@@ -72,9 +60,23 @@ Measured on one ds005237 run (434 channels, 493 samples, K = 6, 10 threads):
 | 200 | about 1 s per iteration |
 | 434 (the default: one per channel) | about 25 s per iteration |
 
-Choose `num_latents` well below the number of channels. The paper did the same: 5 latents for 8 channels, and 30 for 251.
+Choose `num_latents` well below the number of channels, as the paper does: 5 latents for 8 channels, and 30 for 251.
 
-## Open questions
+## Comparing with the reference code
 
-- The paper tests VLMD on synthetic, economic and power-grid data only. Whether it suits neuroimaging data has not been tested; for the lab this is a research question.
-- With λ = 0.01, the default, BOLD loadings come out dense. Sparse loadings need a larger λ, and no published guidance for neuro data exists yet.
+modewise follows the paper's equations. It does not use the reference code ([Dmocrito/vlmd](https://github.com/Dmocrito/vlmd), GPL-3), which differs in a few places:
+
+- It fits the loadings with `Lasso(tol=0.2)` and an intercept; modewise solves the lasso to convergence without an intercept, as in the paper's Eq. 10.
+- Algorithm 1 in the paper bounds the loadings per channel column; the code and modewise bound them per latent row, a scale the latent component can absorb without changing `ZA`.
+- The paper stops on the absolute change `Σ|Δω|²`; the code and modewise use the relative change, which does not depend on the frequency unit.
+- The code divides frequencies by the sampling rate to get Hz; modewise multiplies by it.
+
+## References
+
+- Boyd, S., Parikh, N., Chu, E., Peleato, B., & Eckstein, J. (2011). Distributed optimization and statistical learning via the alternating direction method of multipliers. *Foundations and Trends in Machine Learning*, 3(1), 1–122. https://doi.org/10.1561/2200000016
+- Dragomiretskiy, K., & Zosso, D. (2014). Variational mode decomposition. *IEEE Transactions on Signal Processing*, 62(3), 531–544. https://doi.org/10.1109/TSP.2013.2288675
+- Friedman, J., Hastie, T., & Tibshirani, R. (2010). Regularization paths for generalized linear models via coordinate descent. *Journal of Statistical Software*, 33(1), 1–22. https://doi.org/10.18637/jss.v033.i01
+- Morante, M., & Rehman, N. (2025). Latent mode decomposition. arXiv:2505.17797. https://arxiv.org/abs/2505.17797
+- Pedregosa, F., Varoquaux, G., Gramfort, A., et al. (2011). Scikit-learn: Machine learning in Python. *Journal of Machine Learning Research*, 12, 2825–2830.
+- Rehman, N., & Aftab, H. (2019). Multivariate variational mode decomposition. *IEEE Transactions on Signal Processing*, 67(23), 6039–6052. https://doi.org/10.1109/TSP.2019.2951223
+- Tibshirani, R. (1996). Regression shrinkage and selection via the lasso. *Journal of the Royal Statistical Society B*, 58(1), 267–288.

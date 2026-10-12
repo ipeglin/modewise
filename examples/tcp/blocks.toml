@@ -1,5 +1,5 @@
 # Full-run MVMD with the thesis settings, then face/shape blocks.
-# The lag is an assumption (docs/epochs.md, rule E3): rerun with other values to check
+# The lag is an assumption (docs/epochs.md): rerun with other values to check
 # sensitivity; the decomposition is cached, so only `blocks` is recomputed.
 
 [pipeline]

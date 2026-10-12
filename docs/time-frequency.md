@@ -1,22 +1,35 @@
-# Instantaneous attributes and time-frequency maps
+# Time–frequency maps
 
-How modewise turns signals and modes into time-frequency descriptions, which conventions it follows, and how strong the evidence is for each. No single source is trusted on its own (see `TESTING.md`).
+How modewise describes signals and modes over time and frequency: instantaneous amplitude and
+frequency from the Hilbert transform, the Hilbert spectrum, and the Morlet continuous wavelet
+transform.
 
-## Hilbert: instantaneous amplitude and frequency (S7a, implemented)
+## Instantaneous amplitude and frequency
 
-| Choice | Sources | Strength |
-|---|---|---|
-| Analytic signal by FFT: zero the negative frequencies, double the positive ones | [Marple 1999, IEEE TSP 47(9)](https://www.mathworks.com/help/signal/ref/hilbert.html) (as cited by MATLAB); [scipy.signal.hilbert](https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.hilbert.html) | consensus; MATLAB and scipy implement the same method |
-| Amplitude = `|z|` | Huang et al. 1998; the `emd` package (Quinn et al. 2021); legacy thesis code | consensus |
-| Frequency = centred difference of the unwrapped phase, `(φ[n+1] − φ[n−1]) · fs / 4π`, using one-sample phase steps so it stays valid up to Nyquist. At the edges, the slope of a straight line through 3 points | [`emd`](https://joss.theoj.org/papers/10.21105/joss.02977) uses a 3-point Savitzky-Golay derivative of the unwrapped phase, which is the same estimator. By default `emd` also median-filters the phase over 5 samples, zero-padded at the edges, which changes the last samples; modewise does not smooth. The legacy code used a backward difference, which lags by half a sample | two implementations; the centred form has no time lag (tested with a chirp); the agreement check against `emd` caught a first version that wrapped above fs/4 |
-| Instantaneous frequency is only meaningful for narrow-band, single-component signals (Bedrosian and Nuttall conditions) | Huang 2009 via secondary sources ([JADE, arXiv:2604.14185](https://arxiv.org/pdf/2604.14185); [noise and IF, arXiv:1008.4176](https://arxiv.org/pdf/1008.4176)) | consensus. Modes are near narrow-band by construction. Negative frequencies are reported, not clamped. |
-| Hilbert spectrum: put each sample's power (amplitude²) in the frequency bin of its instantaneous frequency; bins are `[low, high)`; values outside the grid are dropped and counted | Huang et al. 1998; `emd.spectra.hilberthuang` (default `mode='power'`, half-open bins) | two implementations |
+`hilbert` turns each mode into its analytic signal z = x + i·H(x), computed by FFT: the negative
+frequencies are set to zero and the positive ones doubled (Marple, 1999).
 
-**Edges.** The FFT treats a signal as periodic, so a jump between the last and first sample distorts the analytic signal near both ends. By default (`padding = "mirror"`), modewise appends the reversed signal before the FFT, which removes the jump. A test shows this matches a split symmetric extension exactly, because the FFT method is unaffected by rotating the sequence. `padding = "none"` matches scipy exactly. Instantaneous frequency is least reliable within about one period of either end. That is one more reason to epoch only after working on the full run (`docs/epochs.md`).
+- **Amplitude** is |z| (Huang et al., 1998).
+- **Frequency** is the rate of change of the unwrapped phase φ, by a centred difference:
+  (φ[n+1] − φ[n−1]) · fs / 4π, with a straight-line fit through three points at the two ends. A
+  centred difference has no time lag, and phase steps of one sample keep it valid up to Nyquist.
+  Negative values are reported as they are.
 
-**Not adopted from the thesis.** The legacy code applied `log1p` to amplitudes and divided by each channel's maximum. That is feature scaling for a neural network, not part of the method. No independent source makes it a default, so modewise leaves it to the ML step.
+Instantaneous frequency is meaningful for narrow-band signals with one component at a time
+(Boashash, 1992), which is what the modes of a decomposition are meant to be.
 
-### In Python
+**Edges.** The FFT treats a signal as periodic, so a jump between its last and first sample would
+distort the analytic signal near both ends. By default (`padding = "mirror"`) modewise appends the
+reversed signal before the FFT, which removes the jump; `padding = "none"` uses the signal as it is.
+Instantaneous frequency is least reliable within about one period of either end, which is one more
+reason to work on the full run and cut epochs afterwards ([epochs](epochs.md)).
+
+## Hilbert spectrum
+
+`hilbert_spectrum` puts each sample's power (amplitude², or amplitude with `weight = "amplitude"`)
+into the frequency bin of its instantaneous frequency and sums over modes (Huang et al., 1998).
+Bins are half-open, [low, high), on a linear or logarithmic grid; samples outside the grid are left
+out.
 
 ```python
 import numpy as np
@@ -32,28 +45,31 @@ spectrum = modewise.hilbert_spectrum(attributes, 0.01, 0.25, 24, scale="log")
 print(spectrum.power.shape)                                # (channel, frequency, sample)
 ```
 
-## Wavelets (S7b, implemented)
+## Morlet wavelets
 
-| Choice | Sources | Strength |
-|---|---|---|
-| Complex Morlet with ω0 = 6, unit-energy normalisation, computed by FFT | [Torrence & Compo 1998](https://experts.colorado.edu/display/pubid_107382); legacy thesis code; MNE uses Morlet as well | consensus on Morlet; the ω0 and normalisation conventions differ between tools, so record which one is used |
-| Cone of influence for Morlet: e-folding time √2·s | Torrence & Compo's reference IDL code ([wavelet.pro](https://themis.ssl.berkeley.edu/socware/tdas_2_00/idl/ssl_general/tools/tplot/wvlt/wavelet.pro)); [MathWorks](https://www.mathworks.com/help/wavelet/ug/boundary-effects-and-the-cone-of-influence.html); a pycwt-derived implementation | consensus |
-| Equivalent Fourier period = 4πs / (ω0 + √(2 + ω0²)) | Torrence & Compo 1998, after Meyers et al. 1993; the same code | consensus |
-| Divide power by scale to remove the bias towards low frequencies | [Liu, Liang & Weisberg 2007, JAOT 24(12)](https://new6.marine.usf.edu/Liu/Papers/Liu_etal_2007_JAOT_wavelet.pdf) | single source, widely cited. Offered as an option, not a default, until more evidence is gathered. |
-| Wavelet width described by full width at half maximum rather than "cycles" | [Cohen 2019, NeuroImage 199](https://www.biorxiv.org/content/10.1101/397182.full.pdf) | single source; an option to consider |
+`cwt` convolves each channel with complex Morlet wavelets, following Torrence & Compo (1998):
 
-**Implemented conventions** (all as in pycwt, which follows Torrence & Compo):
-- frequencies are chosen by the user (geometric centres of log-spaced bins), and scales are `1/(λf)`
-- the signal is zero-padded to the next power of two (pycwt does this on its scipy path, so the fixture is generated without pyFFTW)
-- the Nyquist bin counts as a negative frequency (numpy `fftfreq`)
-- the cone of influence uses the distance to the record boundary half a sample beyond the end samples: `λ/√2 · δt · (min(i, n−1−i) + 0.5)`
-
-**Evidence:** power within 1e-9 of peak, identical frequencies, and an identical mask for an even-length and a power-of-two length signal. The comparison caught two mismatches before agreement: the Nyquist sign and the half-sample offset in the cone.
-
-### Morlet CWT in Python
+- **Wavelet:** a Gaussian-windowed complex exponential with wavenumber ω0 (6 by default),
+  normalised to unit energy, applied by FFT. The signal is zero-padded to the next power of two.
+- **Frequencies** are the geometric centres of log-spaced bins between `f_min` and `f_max`. Each
+  frequency f is analysed at the scale whose equivalent Fourier period, 4πs / (ω0 + √(2 + ω0²)),
+  equals 1/f.
+- **Cone of influence:** near the edges, the wavelet reaches past the recording. Values within the
+  e-folding time √2·s of either end are marked unreliable (`reliable`), and `epoch` treats a
+  frequency as resolvable only where the whole epoch is outside the cone.
+- **Rectification:** wavelet power is biased towards low frequencies; `rectify = true` divides it
+  by the scale to remove that bias (Liu, Liang & Weisberg, 2007). It is off by default.
 
 ```python
 scalogram = modewise.cwt(x, fs, 0.02, 0.25, 32)
 peak = scalogram.frequencies_hz[np.argmax(scalogram.power[0].mean(axis=1))]
 print(round(peak, 3), scalogram.reliable.mean())           # the strongest frequency; share inside the cone
 ```
+
+## References
+
+- Boashash, B. (1992). Estimating and interpreting the instantaneous frequency of a signal. *Proceedings of the IEEE*, 80(4), 520–538. https://doi.org/10.1109/5.135376
+- Huang, N. E., et al. (1998). The empirical mode decomposition and the Hilbert spectrum for nonlinear and non-stationary time series analysis. *Proceedings of the Royal Society A*, 454, 903–995. https://doi.org/10.1098/rspa.1998.0193
+- Liu, Y., Liang, X. S., & Weisberg, R. H. (2007). Rectification of the bias in the wavelet power spectrum. *Journal of Atmospheric and Oceanic Technology*, 24(12), 2093–2102. https://doi.org/10.1175/2007JTECHO511.1
+- Marple, S. L. (1999). Computing the discrete-time "analytic" signal via FFT. *IEEE Transactions on Signal Processing*, 47(9), 2600–2603. https://doi.org/10.1109/78.782222
+- Torrence, C., & Compo, G. P. (1998). A practical guide to wavelet analysis. *Bulletin of the American Meteorological Society*, 79(1), 61–78.
