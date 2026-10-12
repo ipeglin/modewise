@@ -21,7 +21,7 @@ struct Params {
     /// Morlet wavenumber (Torrence and Compo use 6).
     #[serde(default = "six")]
     omega0: f64,
-    /// Divide power by scale (Liu et al. 2007; single source, so off by default).
+    /// Divide power by scale to remove the bias towards low frequencies (Liu et al. 2007).
     #[serde(default)]
     rectify: bool,
 }

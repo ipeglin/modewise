@@ -45,182 +45,117 @@ params = { measure = "pearson" }
 
 ## Operations
 
-`modewise ops` lists them with their ports. [reference/operations.md](reference/operations.md) is generated from the code and lists every parameter with its type and default; `modewise ops --json` gives the same as JSON Schema. Each method's evidence follows the policy in `TESTING.md`: several independent checks, no single source trusted alone.
+`modewise ops` lists the operations with their ports, and the [operation reference](reference/operations.md) lists every parameter with its type and default (`modewise ops --json` gives the same as JSON Schema). This section explains what each operation does.
 
 ### `mvmd`: multivariate variational mode decomposition
 
-`signal` (series) → `modes` (decomposition)
+`signal` (series) → `modes` (decomposition). Parameters: [`mvmd`](reference/operations.md#mvmd).
 
-**Parameters:** [`mvmd`](reference/operations.md#mvmd) in the generated reference.
-
-**Method:** Rehman & Aftab (2019), *IEEE Transactions on Signal Processing*.
-
-**Evidence:**
-- matches the reference implementation [Dmocrito/mvmd](https://github.com/Dmocrito/mvmd) to better than 1e-12
-- recovers the frequencies of synthetic tones
-- reproduces the legacy thesis outputs
-
-Defaults follow the reference implementation. The thesis used `alpha = 1000`, `init = "exponential"`, `tolerance = 1e-8` and `tau = 1e-3` (see `examples/tcp/blocks.toml`).
+MVMD splits all channels together into K modes, each a band-limited oscillation around a centre frequency shared by every channel (Rehman & Aftab, 2019). It solves for the modes and centre frequencies jointly with the alternating direction method of multipliers, working on the half spectrum of the mirror-extended signal. `alpha` sets how narrow the modes are, and `tau` how strictly they must add up to the signal (`0` lets noise stay out of the modes). Modes come out from low to high frequency, aligned across channels.
 
 ### `vmd`: variational mode decomposition, per channel
 
-`signal` (series) → `modes` (decomposition). Parameters as `mvmd`.
+`signal` (series) → `modes` (decomposition). Parameters: [`vmd`](reference/operations.md#vmd).
 
-**Method:** Dragomiretskiy & Zosso (2014). VMD is MVMD with one channel (Rehman & Aftab 2019), so modewise runs the MVMD solver on each channel on its own. Mode k is the k-th lowest frequency of its channel, so modes are **not aligned across channels**: `channel_centre_frequencies_hz` (mode × channel) gives each channel's frequency, and a mode's `centre_frequencies_hz` is the median over channels. Comparing mode k across channels (for example connectivity per mode) compares different bands; use `mvmd` when modes must line up.
-
-**Evidence:**
-- matches [vmdpy](https://github.com/vrcarva/vmdpy) per channel within 1e-6 at a fixed iteration count, on noise-free tones
-- one known difference: vmdpy, like the original VMD.m, drops the Nyquist bin. With broadband noise the two then differ by about 1e-4 (relative), and a tone at Nyquist is lost in vmdpy but kept here.
-- recovers each channel's own tones, including one at Nyquist
+VMD (Dragomiretskiy & Zosso, 2014) is the one-channel case of MVMD, so modewise runs the same solver on each channel on its own. Mode k is the k-th lowest frequency of its channel, so modes are **not aligned across channels**: `channel_centre_frequencies_hz` (mode × channel) holds each channel's frequencies, and a mode's `centre_frequencies_hz` is their median. Use `mvmd` when mode k must be the same band in every channel, for example for connectivity per mode.
 
 ### `na_mvmd`: noise-assisted MVMD
 
-`signal` (series) → `modes` (decomposition). Parameters as `mvmd`, plus:
+`signal` (series) → `modes` (decomposition). Parameters: [`na_mvmd`](reference/operations.md#na_mvmd).
 
-**Parameters:** [`na_mvmd`](reference/operations.md#na_mvmd) in the generated reference.
-
-**Method:** Zisou, Apostolidis & Hadjileontiadis (ICASSP 2021), following their `na_mvmd.m`: scale each channel to unit SD (ddof 1), append the noise channels, run MVMD, drop the noise channels and scale the modes back. The noise excites MVMD's filter-bank behaviour, so surplus modes settle on noise instead of splitting a real component; the choice of K matters less. The paper's centre-frequency update, the centroid of the generalised cross-spectrum, reduces for one snapshot to Σ_c Σ_f f|û_c|² / Σ_c Σ_f |û_c|², which is the pooled update the MVMD reference code already uses. Their repository has no licence, so modewise follows the paper and does not copy the code.
-
-**Evidence:**
-- equals `mvmd` on the scaled signal with the same noise channels, then rescaled
-- with K above the number of tones, MVMD splits the tones across every mode, while NA-MVMD moves surplus modes to the noise
-
-The thesis configuration had NA-MVMD as an option (one channel, SD 0.8) but never used it for results.
+Noise-assisted MVMD (Zisou, Apostolidis & Hadjileontiadis, 2021) scales each channel to unit standard deviation, appends channels of white noise, runs MVMD, then drops the noise channels and scales the modes back. The noise gives surplus modes somewhere to settle, so a K larger than the number of components no longer splits a component across several modes. The noise is seeded, so runs are reproducible.
 
 ### `emd`, `eemd`, `ceemdan` and `memd`: empirical mode decomposition
 
-`signal` (series) → `modes` (decomposition). `emd`, `eemd` and `ceemdan` decompose each channel on its own; `memd` decomposes all channels together (at least 3).
+`signal` (series) → `modes` (decomposition). Parameters: [`emd`](reference/operations.md#emd), [`eemd`](reference/operations.md#eemd), [`ceemdan`](reference/operations.md#ceemdan), [`memd`](reference/operations.md#memd).
 
-**Parameters:** [`emd`](reference/operations.md#emd), [`eemd`](reference/operations.md#eemd), [`ceemdan`](reference/operations.md#ceemdan), [`memd`](reference/operations.md#memd) in the generated reference.
-
-**Method:** Huang et al. (1998); Wu & Huang (2009); Colominas, Schlotthauer & Torres (2014); Rehman & Mandic (2010). `docs/emd.md` gives the sources for each choice, the output layout (mode 0 is the residual; `emd` modes are aligned by IMF index from the top), and where modewise differs from memd.m.
-
-**Evidence:**
-- `emd` matches PyEMD within 1e-9 at a fixed number of siftings
-- `memd` matches MEMD-Python within 1e-8
-- `eemd` and `ceemdan` match the authors' procedures (eemd.m, iceemdan.m) on the same noise within 1e-9
-- the envelope splines match scipy within 1e-9
+Empirical mode decomposition (Huang et al., 1998) sifts out oscillations from fast to slow until only a trend is left. `eemd` (Wu & Huang, 2009) and `ceemdan` (Colominas, Schlotthauer & Torres, 2014) add white noise to reduce mode mixing, and `memd` (Rehman & Mandic, 2010) sifts all channels together so every channel gets the same modes. Mode 0 is the residual. [EMD](emd.md) explains the sifting, the stop rules and the output layout.
 
 ### `modwt_mra`: wavelet multiresolution analysis
 
-`signal` (series) → `modes` (decomposition), each channel on its own with the same filter bank (aligned).
+`signal` (series) → `modes` (decomposition). Parameters: [`modwt_mra`](reference/operations.md#modwt_mra).
 
-**Parameters:** [`modwt_mra`](reference/operations.md#modwt_mra) in the generated reference.
-
-**Method:** maximal overlap DWT, Percival & Walden (2000). Mode 0 is S_J and the last mode D₁. `docs/wavelets.md` gives the sources and the bands at common sampling rates.
-
-**Evidence:**
-- matches PyWavelets `mra(transform="swt")` within 1e-10 for five wavelets
-- additive at any length, shift-invariant, energy-preserving
+The maximal overlap discrete wavelet transform (Percival & Walden, 2000) splits each channel into octave bands, details D₁…D_J and a smooth S_J, that add up to the signal. Every channel uses the same filter bank, so modes are aligned. [Wavelets](wavelets.md) lists the bands at common sampling rates.
 
 ### `vlmd`: variational latent mode decomposition
 
-`signal` (series) → `modes` (decomposition), `latent_modes` (decomposition), `loadings` (loadings). Refer to them as `step.modes`, `step.latent_modes` and `step.loadings`.
+`signal` (series) → `modes` (decomposition), `latent_modes` (decomposition), `loadings` (loadings). Refer to them as `step.modes`, `step.latent_modes` and `step.loadings`. Parameters: [`vlmd`](reference/operations.md#vlmd).
 
-**Parameters:** [`vlmd`](reference/operations.md#vlmd) in the generated reference.
-
-**Method:** Morante & Rehman (2025), arXiv:2505.17797. The channel modes are `Θ⁽ᵏ⁾A`: they sum to the latent fit, not exactly to the signal. `docs/vlmd.md` lists where the paper and its reference code disagree, and which one modewise follows.
-
-**Evidence:**
-- matches the reference implementation [Dmocrito/vlmd](https://github.com/Dmocrito/vlmd) within 1e-9, with its loading step solved exactly
-- the loading step matches scikit-learn's `Lasso` within 1e-9
-- recovers the frequencies of tones mixed across channels
+VLMD (Morante & Rehman, 2025) describes many channels with a few latent signals, decomposes those into modes, and maps them back to the channels through sparse loadings. The channel modes add up to the latent fit rather than exactly to the signal. [VLMD](vlmd.md) has the details.
 
 ### `stft`: short-time Fourier transform
 
-`signal` (series) → `power` (time_frequency, |X|²)
+`signal` (series) → `power` (time_frequency, |X|²). Parameters: [`stft`](reference/operations.md#stft).
 
-**Parameters:** [`stft`](reference/operations.md#stft) in the generated reference.
-
-Frames start at sample 0, and incomplete frames at the end are dropped. Each frame's time is the centre of its window.
-
-**Evidence:** matches `scipy.signal.stft` to 1e-9 of peak power, and puts a pure tone's peak in the right bin.
+Power of a sliding periodic Hann window. Frames start at sample 0, incomplete frames at the end are dropped, and each frame's time is the centre of its window.
 
 ### `spectrum`: power spectral density
 
-`signal` (series) → `power` (time_frequency with one frame; power per Hz)
+`signal` (series) → `power` (time_frequency with one frame, power per Hz). Parameters: [`spectrum`](reference/operations.md#spectrum).
 
-**Parameters:** [`spectrum`](reference/operations.md#spectrum) in the generated reference.
-
-The defaults are a periodogram: scipy `periodogram`'s defaults, and the whole-run FFT used for ALFF (Zang et al. 2007). With `segment_s`, it is Welch's method; scipy `welch` uses a Hann window by default, so set `window = "hann"` to match. Density scaling is one-sided: every bin except DC and an even-length Nyquist counts twice.
-
-**Evidence:** matches `scipy.signal.periodogram` and `scipy.signal.welch` (boxcar and Hann, constant, linear and no detrend, even and odd segments) within 1e-10 relative.
+By default a periodogram of the whole run with the mean removed, which is also the spectrum ALFF is computed from (Zang et al., 2007). With `segment_s` it is Welch's method (Welch, 1967): the average of overlapping, windowed segments, which trades frequency resolution for a steadier estimate. The density is one-sided: every bin except DC and an even-length Nyquist counts twice.
 
 ### `hilbert`: instantaneous amplitude and frequency
 
-`modes` (decomposition) → `attributes` (instantaneous: amplitude and frequency, mode × channel × sample)
+`modes` (decomposition) → `attributes` (instantaneous: amplitude and frequency, mode × channel × sample). Parameters: [`hilbert`](reference/operations.md#hilbert).
 
-**Parameters:** [`hilbert`](reference/operations.md#hilbert) in the generated reference.
-
-**Method:** amplitude is `|z|`. Frequency is the centred difference of the unwrapped phase.
-
-**Evidence:**
-- the analytic signal matches scipy to 1e-12
-- amplitude and frequency match the `emd` package to 1e-9
-- a chirp is tracked without lag
-- no wrapping up to Nyquist
-
-Conventions and sources are in `docs/time-frequency.md`.
+The analytic signal of each mode gives its instantaneous amplitude (`|z|`) and frequency (the centred difference of the unwrapped phase), as in Huang et al. (1998) and Boashash (1992). [Time–frequency maps](time-frequency.md) explains the conventions.
 
 ### `hilbert_spectrum`: power by instantaneous frequency
 
-`attributes` (instantaneous) → `power` (time_frequency, channel × frequency bin × sample)
+`attributes` (instantaneous) → `power` (time_frequency, channel × frequency bin × sample). Parameters: [`hilbert_spectrum`](reference/operations.md#hilbert_spectrum).
 
-**Parameters:** [`hilbert_spectrum`](reference/operations.md#hilbert_spectrum) in the generated reference.
-
-Each sample's weight goes to the bin of its instantaneous frequency, summed over modes. Samples outside the grid are dropped.
-
-**Evidence:** matches `emd.spectra.hilberthuang` to 1e-9 of the peak.
+Each sample's power (or amplitude) goes to the bin of its instantaneous frequency, summed over modes: the Hilbert spectrum of Huang et al. (1998). Samples outside the grid are dropped.
 
 ### `cwt`: continuous wavelet transform
 
-`signal` (series) → `power` (time_frequency, channel × frequency × sample, with a cone-of-influence mask)
+`signal` (series) → `power` (time_frequency, channel × frequency × sample, with a cone-of-influence mask). Parameters: [`cwt`](reference/operations.md#cwt).
 
-**Parameters:** [`cwt`](reference/operations.md#cwt) in the generated reference.
-
-**Method:** complex Morlet after Torrence & Compo (1998). The signal is zero-padded to the next power of two. The cone of influence (e-folding time √2·s) marks values near the edges as unreliable, and `epoch` treats a frequency as resolvable only where the whole epoch is outside it.
-
-**Evidence:** matches [pycwt](https://github.com/regeirk/pycwt) in power (1e-9 of peak), frequencies and cone-of-influence mask; recovers the frequency of a tone.
+Complex Morlet wavelets after Torrence & Compo (1998), on log-spaced frequencies. The signal is zero-padded to the next power of two. The cone of influence (e-folding time √2·s) marks values near the edges as unreliable, and `epoch` treats a frequency as resolvable only where the whole epoch is outside it.
 
 ### `functional_connectivity`: undirected dependence between channels
 
-`data` (series, decomposition, or epochs of either) → `matrices` (connectivity, window × component × channel × channel)
+`data` (series, decomposition, or epochs of either) → `matrices` (connectivity, window × component × channel × channel). Parameters: [`functional_connectivity`](reference/operations.md#functional_connectivity).
 
-**Parameters:** [`functional_connectivity`](reference/operations.md#functional_connectivity) in the generated reference.
-
-**Method and sources:** `docs/connectivity.md`. The matrices show statistical dependence, not direction or cause (effective connectivity is a different claim). PLV phases come from the full run before epochs are cut. Epoch results carry the epochs' `resolvable` flags. For one matrix per slow band, `reconstruct` the band's modes first.
-
-**Evidence:**
-- Pearson matches `numpy.corrcoef`, and PLV matches a direct scipy implementation, both within 1e-12, for whole runs and windows
-- a quarter-cycle lag gives PLV ≈ 1 and r ≈ 0
-- matrices are symmetric and bounded, with a unit diagonal (property tests)
+Pearson correlation or the phase locking value (Lachaux et al., 1999), per mode and per epoch. The matrices show statistical dependence, not direction or cause. PLV phases come from the full run before epochs are cut. For one matrix per band, `reconstruct` the band's modes first. [Connectivity](connectivity.md) has the details.
 
 ### `select`: keep chosen regions
 
-`data` (series, decomposition, instantaneous, time–frequency, epochs, functional connectivity, loadings or channels) and `channels` (channels) → `selected` (same kind as `data`)
+`data` (series, decomposition, instantaneous, time–frequency, epochs, functional connectivity, loadings or channels) and `channels` (channels) → `selected` (same kind as `data`). Parameters: [`select`](reference/operations.md#select).
 
-**Parameters:** [`select`](reference/operations.md#select) in the generated reference.
-
-Placed before a decomposition, it decomposes only the selected regions; placed after, it keeps their whole-brain modes. `docs/regions.md` compares the two.
+Placed before a decomposition, it decomposes only the selected regions; placed after, it keeps their whole-brain modes. [Regions](regions.md) compares the two.
 
 ### `region_average`: one signal or matrix per region
 
-`data` (series, decomposition, time–frequency, epochs or functional connectivity) and `channels` → `averaged` (same kind as `data`)
+`data` (series, decomposition, time–frequency, epochs or functional connectivity) and `channels` → `averaged` (same kind as `data`). Parameters: [`region_average`](reference/operations.md#region_average).
 
-**Parameters:** [`region_average`](reference/operations.md#region_average) in the generated reference.
-
-Signals are averaged across the group's channels. Connectivity becomes group × group, with Pearson r averaged as Fisher z. Details are in `docs/regions.md`.
+Signals are averaged across each group's channels. Connectivity becomes group × group, with Pearson r averaged as Fisher z.
 
 ### `reconstruct`: sum chosen modes
 
-`modes` (decomposition) → `signal` (series)
+`modes` (decomposition) → `signal` (series). Parameters: [`reconstruct`](reference/operations.md#reconstruct).
 
-**Parameters:** [`reconstruct`](reference/operations.md#reconstruct) in the generated reference.
+Adds the chosen modes back into a series, for example to keep one band.
 
 ### `epoch`: cut a full-run result around events
 
-`data` (series, decomposition, instantaneous, or a time-frequency map with one column per sample: CWT or Hilbert spectrum, not STFT) and `events` (events) → `epochs`
+`data` (series, decomposition, instantaneous, or a time–frequency map with one column per sample: CWT or Hilbert spectrum, not STFT) and `events` (events) → `epochs`. Parameters: [`epoch`](reference/operations.md#epoch).
 
-**Parameters:** [`epoch`](reference/operations.md#epoch) in the generated reference.
+An epoch holds the samples whose times (`i / fs`) fall in `[onset + lag, end + lag)`. Windows outside the recording are dropped and listed with a reason, never padded. [Epochs](epochs.md) explains the rules.
 
-An epoch holds the samples whose times (`i / fs`) fall in `[onset + lag, end + lag)`. Windows outside the recording are dropped and listed with a reason, never padded. Rules, conventions and sources are in `docs/epochs.md`.
+## References
+
+- Boashash, B. (1992). Estimating and interpreting the instantaneous frequency of a signal. *Proceedings of the IEEE*, 80(4), 520–538. https://doi.org/10.1109/5.135376
+- Colominas, M. A., Schlotthauer, G., & Torres, M. E. (2014). Improved complete ensemble EMD: A suitable tool for biomedical signal processing. *Biomedical Signal Processing and Control*, 14, 19–29. https://doi.org/10.1016/j.bspc.2014.06.009
+- Dragomiretskiy, K., & Zosso, D. (2014). Variational mode decomposition. *IEEE Transactions on Signal Processing*, 62(3), 531–544. https://doi.org/10.1109/TSP.2013.2288675
+- Huang, N. E., et al. (1998). The empirical mode decomposition and the Hilbert spectrum for nonlinear and non-stationary time series analysis. *Proceedings of the Royal Society A*, 454, 903–995. https://doi.org/10.1098/rspa.1998.0193
+- Lachaux, J.-P., Rodriguez, E., Martinerie, J., & Varela, F. J. (1999). Measuring phase synchrony in brain signals. *Human Brain Mapping*, 8(4), 194–208.
+- Morante, M., & Rehman, N. ur (2025). Variational latent mode decomposition. arXiv:2505.17797.
+- Percival, D. B., & Walden, A. T. (2000). *Wavelet Methods for Time Series Analysis*. Cambridge University Press.
+- Rehman, N. ur, & Aftab, H. (2019). Multivariate variational mode decomposition. *IEEE Transactions on Signal Processing*, 67(23), 6039–6052. https://doi.org/10.1109/TSP.2019.2951223
+- Rehman, N., & Mandic, D. P. (2010). Multivariate empirical mode decomposition. *Proceedings of the Royal Society A*, 466(2117), 1291–1302. https://doi.org/10.1098/rspa.2009.0502
+- Torrence, C., & Compo, G. P. (1998). A practical guide to wavelet analysis. *Bulletin of the American Meteorological Society*, 79(1), 61–78.
+- Welch, P. D. (1967). The use of fast Fourier transform for the estimation of power spectra. *IEEE Transactions on Audio and Electroacoustics*, 15(2), 70–73. https://doi.org/10.1109/TAU.1967.1161901
+- Wu, Z., & Huang, N. E. (2009). Ensemble empirical mode decomposition: A noise-assisted data analysis method. *Advances in Adaptive Data Analysis*, 1(1), 1–41. https://doi.org/10.1142/S1793536909000047
+- Zang, Y.-F., et al. (2007). Altered baseline brain activity in children with ADHD revealed by resting-state functional MRI. *Brain and Development*, 29(2), 83–91. https://doi.org/10.1016/j.braindev.2006.07.002
+- Zisou, C. A., Apostolidis, G. K., & Hadjileontiadis, L. J. (2021). Noise-assisted multivariate variational mode decomposition. In *Proceedings of IEEE ICASSP 2021*.

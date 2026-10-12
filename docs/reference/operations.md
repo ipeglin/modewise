@@ -38,7 +38,7 @@ Morlet continuous wavelet transform power on log-spaced frequencies, with a cone
 | `f_min` | number | required | Lowest frequency in Hz, above 0. The transform analyses the geometric centres of log-spaced bins. |
 | `n_bins` | integer | required | Number of log-spaced frequencies. |
 | `omega0` | number | `6.0` | Morlet wavenumber (Torrence and Compo use 6). |
-| `rectify` | boolean | `false` | Divide power by scale (Liu et al. 2007; single source, so off by default). |
+| `rectify` | boolean | `false` | Divide power by scale to remove the bias towards low frequencies (Liu et al. 2007). |
 
 ## `eemd`
 
@@ -89,7 +89,7 @@ Cuts windows around events out of a full-run series, decomposition, instantaneou
 | `lag_s` | number | required | Required: shift added to event times (haemodynamic delay in fMRI; 0 for EEG). |
 | `conditions` | list of string | — | Keep only these event labels; all by default. |
 | `merge_gap_s` | number | — | Merge consecutive same-label events (trials) into blocks when gaps are at most this long. |
-| `min_cycles` | number | `1.0` | A mode or frequency is resolvable in an epoch when frequency × epoch length ≥ this, and, for maps with a cone of influence, the whole epoch is outside it (provisional default; docs/epochs.md). |
+| `min_cycles` | number | `1.0` | A mode or frequency is resolvable in an epoch when frequency × epoch length ≥ this, and, for maps with a cone of influence, the whole epoch is outside it (docs/epochs.md). |
 | `window` | `duration` or table (`tmax_s`, `tmin_s`) | `"duration"` | `"duration"` uses each event's own length (blocks); `{ tmin_s = -0.2, tmax_s = 0.5 }` uses a fixed window around each onset (trials). |
 
 ## `functional_connectivity`

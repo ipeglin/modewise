@@ -74,7 +74,7 @@ Online: **https://ipeglin.github.io/modewise/**.
 
 The documentation site is built from `docs/` (see [docs/README.md](docs/README.md)); start with [docs/index.md](docs/index.md) and the getting-started pages for [Python](docs/getting-started/python.md), [Rust](docs/getting-started/rust.md) and the [command line](docs/getting-started/cli.md). Coding agents should start with [docs/agents.md](docs/agents.md); the site also serves `llms.txt` and `llms-full.txt`.
 
-- [docs/pipelines.md](docs/pipelines.md): pipeline files and each operation's parameters and evidence.
+- [docs/pipelines.md](docs/pipelines.md): pipeline files and each operation's parameters.
 - [docs/reference/operations.md](docs/reference/operations.md): every operation with its parameters, types and defaults, generated from the code (`modewise ops --json` for tools and agents).
 - [docs/datasets.md](docs/datasets.md): dataset specs, patterns, formats.
 - [docs/epochs.md](docs/epochs.md): how epochs relate to decompositions, with sources.
@@ -87,7 +87,7 @@ The documentation site is built from `docs/` (see [docs/README.md](docs/README.m
 - [docs/wavelets.md](docs/wavelets.md): MODWT multiresolution analysis, with the octave bands at common sampling rates.
 - [docs/emd.md](docs/emd.md): EMD, EEMD, CEEMDAN and MEMD, their sources, and where modewise differs from memd.m.
 - [docs/vlmd.md](docs/vlmd.md): VLMD, and where the paper and its reference code disagree.
-- [TESTING.md](TESTING.md): how modewise is tested; no single source is trusted on its own.
+- [TESTING.md](TESTING.md): how modewise is tested.
 
 ## Citing and credits
 

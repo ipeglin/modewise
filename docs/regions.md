@@ -11,8 +11,6 @@ Each channel has:
 - a **hemisphere**: left, right, or none. Midline structures such as the vermis, the brainstem and EEG Cz have none.
 - **tags**: open key–value pairs, so several region definitions can sit side by side. Examples: `yeo17 = DefaultB`, `yeo7 = Default`, `lobe = frontal`, `tcp_network = striatum`.
 
-The model follows the parcel labels of an earlier rewrite of the thesis analysis code, with tags added for the network labels the thesis pipeline selected on.
-
 ## Atlas label files
 
 | `format` | Reads | Gives |
@@ -64,16 +62,10 @@ print(table.select([{"region": "*AMY*"}, {"tags": {"yeo17": "Default*"}, "hemisp
 
 Both orders are supported; where `select` sits in the pipeline decides which:
 
-- **Decompose all channels, then select** (`mvmd` → `select`). Modes are fitted to the whole brain, so they are the same whichever regions you study. This was the thesis default.
-- **Select, then decompose** (`select` → `mvmd`). Modes are fitted to the selected regions only. This is the thesis's "ROI-stratified" MVMD.
+- **Decompose all channels, then select** (`mvmd` → `select`). Modes are fitted to the whole brain, so they are the same whichever regions you study.
+- **Select, then decompose** (`select` → `mvmd`). Modes are fitted to the selected regions only.
 
-| Evidence | Finding |
-|---|---|
-| Thesis, Results, "Effect of ROI Subsampling Order" (one subject, visual comparison) | similar slow-band modes; small shifts in centre frequency; slight smoothing in the whole-brain-first result, most visible in slow-3 |
-| The thesis author's wider testing (reported, not documented) | little to no effect; selecting first sometimes gave modes less representative of the whole brain |
-| modewise system test (ds005237, one hammerAP run, thesis MVMD settings, K = 10; 434 channels versus 17 ROI channels: PFCv, PFCm, amygdala) | centre frequencies differ by at most ~0.02 Hz; matching ROI modes correlate at a median of 0.99–1.00 up to 0.2 Hz, and 0.86–0.89 between 0.30 and 0.46 Hz |
-
-The sources agree that the order matters little for the slow bands. The measurement covers one recording, so treat it as a check, not a general result. Prefer whole-brain-first when results from different region sets must be comparable.
+For slow bands the order changes little. On one ds005237 run with the MVMD settings of `examples/tcp/thesis.toml` (K = 10), decomposing 434 channels and decomposing 17 selected channels gave centre frequencies within about 0.02 Hz, and matching modes of the selected regions correlated at a median of 0.99–1.00 up to 0.2 Hz (0.86–0.89 between 0.30 and 0.46 Hz). Prefer whole-brain-first when results from different region sets must be comparable.
 
 ## Summarising regions
 

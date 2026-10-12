@@ -32,7 +32,7 @@ struct Params {
     /// Keep only these event labels; all by default.
     #[serde(default)]
     conditions: Option<Vec<String>>,
-    /// A mode or frequency is resolvable in an epoch when frequency × epoch length ≥ this, and, for maps with a cone of influence, the whole epoch is outside it (provisional default; docs/epochs.md).
+    /// A mode or frequency is resolvable in an epoch when frequency × epoch length ≥ this, and, for maps with a cone of influence, the whole epoch is outside it (docs/epochs.md).
     #[serde(default = "one")]
     min_cycles: f64,
     /// Merge consecutive same-label events (trials) into blocks when gaps are at most this long.

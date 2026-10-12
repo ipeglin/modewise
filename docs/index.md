@@ -47,7 +47,7 @@ case-studies
 ```
 
 ```{toctree}
-:caption: Methods and evidence
+:caption: Methods
 :maxdepth: 1
 
 emd
