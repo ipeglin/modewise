@@ -22,7 +22,7 @@ params = { lag_s = 5.0 }
 
 **References** name a pipeline input, a step (when it has one output), or `step.output`.
 
-**Caching.** Each result is stored under a hash of the operation, its version, its parameters (with defaults filled in) and the keys of its inputs. Inputs are keyed by their content. Rerunning with a changed parameter recomputes that step and the steps after it, and nothing else. Every run records a manifest: parameters, data keys, what was cached, and timings.
+**Caching.** Each result is stored under a hash of the operation, its version, its parameters (with defaults filled in) and the keys of its inputs. Inputs are keyed by their content but not stored, since they stay where they were read from. Rerunning with a changed parameter recomputes that step and the steps after it, and nothing else. Every run records a manifest: parameters, data keys, what was cached, and timings.
 
 **Keeping outputs.** By default every step's outputs are stored. Add `keep = false` to a step whose outputs are only an intermediate, such as modes that a later step turns into connectivity or band powers. Its outputs then live in memory during the run and take no disk space; later steps still run and are cached as usual. The step is computed again only when a later step has to run, for example after its parameters change. A step with `keep = false` that no other step uses is refused, since its result would be lost, and reading its output afterwards says it was not stored.
 
