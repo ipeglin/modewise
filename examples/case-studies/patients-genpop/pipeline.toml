@@ -1,0 +1,58 @@
+# Resting-state connectivity for the whole signal and for three octave bands of the MODWT MRA.
+[pipeline]
+name = "rest_fc"
+inputs = ["bold"]
+
+[[step]]
+id = "full"
+op = "functional_connectivity"
+input = "bold"
+params = { measure = "pearson" }
+
+# Octaves at 1.25 Hz: mode 1 is D6 (about 0.010–0.020 Hz), mode 2 is D5 (0.020–0.039 Hz) and
+# mode 3 is D4 (0.039–0.078 Hz). Only the connectivity is stored.
+[[step]]
+id = "octaves"
+op = "modwt_mra"
+input = "bold"
+params = { wavelet = "sym4", levels = 6, boundary = "reflection" }
+keep = false
+
+[[step]]
+id = "d6"
+op = "reconstruct"
+input = "octaves"
+params = { modes = [1] }
+keep = false
+
+[[step]]
+id = "d5"
+op = "reconstruct"
+input = "octaves"
+params = { modes = [2] }
+keep = false
+
+[[step]]
+id = "d4"
+op = "reconstruct"
+input = "octaves"
+params = { modes = [3] }
+keep = false
+
+[[step]]
+id = "d6_fc"
+op = "functional_connectivity"
+input = "d6"
+params = { measure = "pearson" }
+
+[[step]]
+id = "d5_fc"
+op = "functional_connectivity"
+input = "d5"
+params = { measure = "pearson" }
+
+[[step]]
+id = "d4_fc"
+op = "functional_connectivity"
+input = "d4"
+params = { measure = "pearson" }
