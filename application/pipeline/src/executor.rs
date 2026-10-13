@@ -38,7 +38,8 @@ impl RunResult {
     }
 }
 
-/// Runs a plan. Steps whose outputs are already in the store are skipped.
+/// Runs a plan. Steps whose outputs are already in the store are skipped. Inputs are never
+/// stored: the caller still has them, so only their keys are recorded.
 pub fn run(
     plan: &Plan,
     inputs: &BTreeMap<String, Artifact>,
@@ -64,9 +65,6 @@ pub fn run(
                 });
             }
         };
-        if !store.contains(&key)? {
-            store.put(&key, Arc::new(artifact.clone()))?;
-        }
         keys.insert(name.clone(), key);
     }
 
@@ -113,12 +111,18 @@ pub fn run(
         };
     }
 
-    // Unstored outputs live here until their last consumer has run.
+    // Inputs and unstored outputs live here until their last consumer has run.
     let mut scratch: HashMap<ArtifactKey, Arc<Artifact>> = HashMap::new();
     let mut uses: HashMap<ArtifactKey, usize> = HashMap::new();
     for (_, k) in step_keys.iter().enumerate().filter(|(i, _)| needed[*i]) {
         for key in k.inputs.values() {
             *uses.entry(key.clone()).or_default() += 1;
+        }
+    }
+    for name in &plan.inputs {
+        let key = &keys[name];
+        if uses.contains_key(key) {
+            scratch.insert(key.clone(), Arc::new(inputs[name].clone()));
         }
     }
     for (i, step) in plan.steps.iter().enumerate() {
@@ -280,6 +284,24 @@ mod tests {
                 1,
             );
         PipelineSpec::from_toml(&text).unwrap()
+    }
+
+    #[test]
+    fn inputs_are_used_but_never_stored() {
+        let ops = ops();
+        let store = TestStore::default();
+        let plan = Plan::new(&chain(3.0), &ops.registry).unwrap();
+        let result = run(&plan, &inputs(&[1.0, 2.0]), &store).unwrap();
+        assert!(!store.contains(&result.manifest.inputs["x"]).unwrap());
+        let Some(Artifact::Series(out)) = store
+            .get(result.output_key("second").unwrap())
+            .unwrap()
+            .as_deref()
+            .cloned()
+        else {
+            panic!("second is stored")
+        };
+        assert_eq!(out.data().row(0).to_vec(), [6.0, 12.0]);
     }
 
     #[test]
