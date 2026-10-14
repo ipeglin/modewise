@@ -63,6 +63,7 @@ pub struct Scale {
     name: &'static str,
     inputs: &'static [Port],
     outputs: &'static [Port],
+    optional: &'static [&'static str],
     pub runs: AtomicUsize,
 }
 
@@ -72,6 +73,7 @@ impl Scale {
             name,
             inputs,
             outputs,
+            optional: &[],
             runs: AtomicUsize::new(0),
         })
     }
@@ -85,6 +87,10 @@ impl Operation for Scale {
             inputs: self.inputs,
             outputs: self.outputs,
         }
+    }
+
+    fn optional_inputs(&self) -> &'static [&'static str] {
+        self.optional
     }
 
     fn resolve(&self, params: Value) -> Result<Value, String> {
@@ -121,6 +127,13 @@ pub fn ops() -> Ops {
     let mut registry = Registry::new();
     registry.register(scale.clone());
     registry.register(Scale::new("pair", PAIR_IN, SERIES_OUT));
+    registry.register(Arc::new(Scale {
+        name: "maybe_pair",
+        inputs: PAIR_IN,
+        outputs: SERIES_OUT,
+        optional: &["right"],
+        runs: AtomicUsize::new(0),
+    }));
     registry.register(Scale::new("split", SERIES_IN, TWO_OUT));
     registry.register(Scale::new("needs_modes", DECOMPOSITION_IN, SERIES_OUT));
     registry.register(Arc::new(Liar));

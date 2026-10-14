@@ -33,6 +33,7 @@ epochs
 regions
 volumes
 regression
+glm
 time-frequency
 connectivity
 features

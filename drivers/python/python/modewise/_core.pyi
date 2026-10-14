@@ -376,7 +376,7 @@ class Results:
         self,
         pipeline: str,
         output: str,
-        features: Literal["edges", "mode_power", "band_amplitude", "mean"] = "edges",
+        features: Literal["edges", "mode_power", "band_amplitude", "mean", "coefficients"] = "edges",
         *,
         resolvable_only: bool = True,
         participants: Participants | None = None,
@@ -390,6 +390,8 @@ class Results:
         (√power) of each channel in each named band [low, high) Hz, ALFF, or with relative=True
         its share of all frequencies above 0, fALFF; one row per recording and band. mean: from
         epochs of a series, each condition's mean signal per channel (block averages).
+        coefficients: from loadings such as `glm` betas or t, one row per condition, channels
+        as features.
         resolvable_only skips epochs too short for a component."""
     def stack(self, pipeline: str, output: str) -> tuple[list[str], NDArray[np.float64]]:
         """One output across recordings as a single array, recording first (for deep learning)."""

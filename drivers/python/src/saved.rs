@@ -100,8 +100,9 @@ impl Results {
 
     /// One table over every recording of a pipeline (docs/features.md). `features` is "edges"
     /// (functional connectivity), "mode_power" (a decomposition or its epochs) or
-    /// "band_amplitude" (a spectrum: ALFF per band, or fALFF with `relative`) or "mean" (epochs of
-    /// a series: each condition's block average per channel).
+    /// "band_amplitude" (a spectrum: ALFF per band, or fALFF with `relative`), "mean" (epochs of
+    /// a series: each condition's block average per channel) or "coefficients" (loadings such as
+    /// GLM betas: one row per condition).
     #[pyo3(signature = (pipeline, output, features = "edges", *, resolvable_only = true, participants = None, subject_entity = "subject", bands = None, relative = false))]
     #[allow(clippy::too_many_arguments)]
     fn feature_table(
@@ -120,6 +121,7 @@ impl Results {
             ("edges", None) => modewise_cohort::Features::Edges { resolvable_only },
             ("mode_power", None) => modewise_cohort::Features::ModePower { resolvable_only },
             ("mean", None) => modewise_cohort::Features::Mean,
+            ("coefficients", None) => modewise_cohort::Features::Coefficients,
             ("band_amplitude", Some(bands)) => modewise_cohort::Features::BandAmplitude {
                 bands: bands
                     .iter()
@@ -146,7 +148,7 @@ impl Results {
             }
             (other, None) => {
                 return Err(crate::convert::value_error(format!(
-                    "features must be 'edges', 'mode_power', 'band_amplitude' or 'mean', got {other:?}"
+                    "features must be 'edges', 'mode_power', 'band_amplitude', 'mean' or 'coefficients', got {other:?}"
                 )));
             }
         };

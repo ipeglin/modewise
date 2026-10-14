@@ -27,6 +27,7 @@ fn registry_lists_builtin_operations() {
             "emd",
             "epoch",
             "functional_connectivity",
+            "glm",
             "hilbert",
             "hilbert_spectrum",
             "memd",

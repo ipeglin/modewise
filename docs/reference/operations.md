@@ -104,6 +104,19 @@ Functional connectivity per component (and per epoch): Pearson correlation or ph
 | `measure` | `pearson`, `plv` | required | `pearson` (correlation) or `plv` (phase locking value). |
 | `fisher_z` | boolean | `false` | Return atanh(r) (pearson only); the diagonal becomes NaN. |
 
+## `glm`
+
+Fits a task GLM to every channel: one regressor per event condition (the events convolved with the canonical haemodynamic response), with the mean, a trend, slow drifts and optional confounds; gives betas and t per condition and channel (docs/glm.md).
+
+- **Inputs:** `data` (series), `events` (events), `confounds` (series, optional)
+- **Outputs:** `betas` (loadings), `t` (loadings)
+
+| Parameter | Type | Default | Meaning |
+|---|---|---|---|
+| `detrend` | boolean | `true` | Also model a linear trend. The mean is always modelled. |
+| `high_pass_hz` | number | — | Also model slow drifts below this frequency (Hz) with discrete cosine regressors; none by default. |
+| `noise` | `ar1`, `ols` | `"ar1"` | Noise model: "ar1" prewhitens each channel with its own AR(1) coefficient; "ols" assumes independent samples. |
+
 ## `hilbert`
 
 Instantaneous amplitude and frequency of every mode from its analytic signal (docs/time-frequency.md).

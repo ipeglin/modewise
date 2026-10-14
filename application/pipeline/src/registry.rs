@@ -36,6 +36,16 @@ mod tests {
     #[test]
     fn lists_registered_names_in_order() {
         let names: Vec<_> = ops().registry.names().collect();
-        assert_eq!(names, ["liar", "needs_modes", "pair", "scale", "split"]);
+        assert_eq!(
+            names,
+            [
+                "liar",
+                "maybe_pair",
+                "needs_modes",
+                "pair",
+                "scale",
+                "split"
+            ]
+        );
     }
 }
