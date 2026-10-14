@@ -1,0 +1,21 @@
+--- adapters/dataset/src/timeseries_tsv.rs
++++ delete ! in read
+@@ -12,17 +12,17 @@
+ /// anywhere else is an error.
+ pub fn read(
+     path: &Path,
+     patterns: &[String],
+     fs: SamplingRate,
+ ) -> Result<MultichannelSeries, String> {
+     let text = std::fs::read_to_string(path)
+         .map_err(|e| format!("time series file {}: {e}", path.display()))?;
+-    let mut lines = text.lines().filter(|l| !l.trim().is_empty());
++    let mut lines = text.lines().filter(|l|  /* ~ changed by cargo-mutants ~ */l.trim().is_empty());
+     let header: Vec<&str> = lines
+         .next()
+         .ok_or_else(|| format!("{} is empty", path.display()))?
+         .split('\t')
+         .map(str::trim)
+         .collect();
+     let mut chosen: Vec<usize> = Vec::new();
+     for pattern in patterns {

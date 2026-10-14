@@ -1,0 +1,21 @@
+--- adapters/dataset/src/spec.rs
++++ replace && with || in InputSpec::validate
+@@ -130,17 +130,17 @@
+             (Some(hz), _) => SamplingRateSource::Hz(*hz),
+             (None, Some(sidecar)) => SamplingRateSource::Sidecar(sidecar),
+             (None, None) => SamplingRateSource::Hz(f64::NAN),
+         }
+     }
+ 
+     fn validate(&self) -> Result<(), DatasetError> {
+         let invalid = |m: &str| DatasetError::Spec(format!("input {:?}: {m}", self.name));
+-        if self.format != Format::TimeseriesTsv && !self.columns.is_empty() {
++        if self.format != Format::TimeseriesTsv || /* ~ changed by cargo-mutants ~ */ !self.columns.is_empty() {
+             return Err(invalid("`columns` only applies to timeseries_tsv inputs"));
+         }
+         match self.format {
+             Format::Hdf5 => {
+                 if self.sampling_rate_hz.is_some() == self.sidecar.is_some() {
+                     return Err(invalid(
+                         "give exactly one of `sampling_rate_hz` or `sidecar`",
+                     ));

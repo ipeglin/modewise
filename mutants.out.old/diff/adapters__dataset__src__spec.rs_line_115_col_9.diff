@@ -1,0 +1,24 @@
+--- adapters/dataset/src/spec.rs
++++ replace <impl From<LayoutName> for Layout>::from -> Self with Default::default()
+@@ -107,20 +107,17 @@
+ pub enum LayoutName {
+     #[default]
+     ChannelsByTime,
+     TimeByChannels,
+ }
+ 
+ impl From<LayoutName> for Layout {
+     fn from(name: LayoutName) -> Self {
+-        match name {
+-            LayoutName::ChannelsByTime => Layout::ChannelsByTime,
+-            LayoutName::TimeByChannels => Layout::TimeByChannels,
+-        }
++        Default::default() /* ~ changed by cargo-mutants ~ */
+     }
+ }
+ 
+ pub(crate) enum SamplingRateSource<'a> {
+     Hz(f64),
+     Sidecar(&'a str),
+ }
+ 

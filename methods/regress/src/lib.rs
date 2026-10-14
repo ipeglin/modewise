@@ -127,7 +127,7 @@ fn orthonormal_basis(design: ArrayView2<f64>) -> Array2<f64> {
         if norm <= tolerance {
             break;
         }
-        let mut q = remaining.swap_remove(best) / norm;
+        let mut q = remaining.swap_remove(best);
         for b in &basis {
             q = &q - &(b * q.dot(b));
         }
@@ -149,7 +149,7 @@ mod tests {
     #![allow(clippy::unwrap_used)]
 
     use super::*;
-    use ndarray::{Array2, array};
+    use ndarray::{Array1, Array2, array, stack};
 
     #[test]
     fn cosine_order_follows_the_cutoff() {
@@ -216,6 +216,33 @@ mod tests {
                 .iter()
                 .all(|v| v.abs() < 1e-12)
         );
+    }
+
+    #[test]
+    fn units_of_the_regressors_do_not_matter() {
+        let signal = array![[1.0, 4.0, 2.0, 8.0, 5.0, 7.0]];
+        let v = array![0.5, -0.1, 0.9, 0.3, -0.2, 0.4];
+        let fit = |scale: f64| {
+            let x = stack![Axis(1), Array1::ones(6), &v * scale];
+            residuals(signal.view(), x.view()).unwrap()
+        };
+        let reference = fit(1.0);
+        for scale in [1e-14, 1e14] {
+            assert!((&fit(scale) - &reference).iter().all(|d| d.abs() < 1e-10));
+        }
+    }
+
+    #[test]
+    fn nearly_collinear_columns_stay_orthonormal() {
+        let a = array![1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0];
+        let b = array![0.3, -0.7, 0.1, 0.9, -0.4, 0.2, -0.8, 0.5];
+        let x = stack![Axis(1), a, &a + &(&b * 1e-7)];
+        let q = orthonormal_basis(x.view());
+        let gram = q.t().dot(&q);
+        let error = (&gram - &Array2::<f64>::eye(q.ncols()))
+            .iter()
+            .fold(0.0f64, |m, v| m.max(v.abs()));
+        assert!(error < 1e-13, "{error}");
     }
 
     #[test]

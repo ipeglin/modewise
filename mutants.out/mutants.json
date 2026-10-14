@@ -1,0 +1,482 @@
+[
+  {
+    "diff": "--- application/operations/src/regress.rs\n+++ replace yes -> bool with false\n@@ -16,17 +16,17 @@\n     #[serde(default = \"yes\")]\n     detrend: bool,\n     /// Also remove slow drifts below this frequency (Hz) with discrete cosine regressors in the same fit; none by default.\n     #[serde(default)]\n     high_pass_hz: Option<f64>,\n }\n \n fn yes() -> bool {\n-    true\n+    false /* ~ changed by cargo-mutants ~ */\n }\n \n impl Params {\n     fn nuisance(&self) -> Nuisance {\n         Nuisance {\n             detrend: self.detrend,\n             high_pass_hz: self.high_pass_hz,\n         }\n",
+    "file": "application/operations/src/regress.rs",
+    "function": {
+      "function_name": "yes",
+      "return_type": "-> bool",
+      "span": {
+        "end": {
+          "column": 2,
+          "line": 25
+        },
+        "start": {
+          "column": 1,
+          "line": 23
+        }
+      }
+    },
+    "genre": "FnValue",
+    "name": "application/operations/src/regress.rs:24:5: replace yes -> bool with false",
+    "package": "modewise_operations",
+    "replacement": "false",
+    "span": {
+      "end": {
+        "column": 9,
+        "line": 24
+      },
+      "start": {
+        "column": 5,
+        "line": 24
+      }
+    }
+  },
+  {
+    "diff": "--- application/operations/src/regress.rs\n+++ replace Params::nuisance -> Nuisance with Default::default()\n@@ -21,20 +21,17 @@\n }\n \n fn yes() -> bool {\n     true\n }\n \n impl Params {\n     fn nuisance(&self) -> Nuisance {\n-        Nuisance {\n-            detrend: self.detrend,\n-            high_pass_hz: self.high_pass_hz,\n-        }\n+        Default::default() /* ~ changed by cargo-mutants ~ */\n     }\n }\n \n /// Nuisance regression: confounds, trend and slow drifts out of every channel (docs/regression.md).\n pub struct RegressOperation;\n \n impl Operation for RegressOperation {\n     fn summary(&self) -> &'static str {\n",
+    "file": "application/operations/src/regress.rs",
+    "function": {
+      "function_name": "Params::nuisance",
+      "return_type": "-> Nuisance",
+      "span": {
+        "end": {
+          "column": 6,
+          "line": 33
+        },
+        "start": {
+          "column": 5,
+          "line": 28
+        }
+      }
+    },
+    "genre": "FnValue",
+    "name": "application/operations/src/regress.rs:29:9: replace Params::nuisance -> Nuisance with Default::default()",
+    "package": "modewise_operations",
+    "replacement": "Default::default()",
+    "span": {
+      "end": {
+        "column": 10,
+        "line": 32
+      },
+      "start": {
+        "column": 9,
+        "line": 29
+      }
+    }
+  },
+  {
+    "diff": "--- application/operations/src/regress.rs\n+++ replace <impl Operation for RegressOperation>::summary -> &'static str with \"\"\n@@ -33,17 +33,17 @@\n     }\n }\n \n /// Nuisance regression: confounds, trend and slow drifts out of every channel (docs/regression.md).\n pub struct RegressOperation;\n \n impl Operation for RegressOperation {\n     fn summary(&self) -> &'static str {\n-        \"Removes confound regressors, the mean, a linear trend and slow cosine drifts from every channel in one least-squares fit (docs/regression.md).\"\n+        \"\" /* ~ changed by cargo-mutants ~ */\n     }\n \n     fn params_schema(&self) -> serde_json::Value {\n         modewise_pipeline::schema_of::<Params>()\n     }\n \n     fn descriptor(&self) -> OperationDescriptor {\n         OperationDescriptor {\n",
+    "file": "application/operations/src/regress.rs",
+    "function": {
+      "function_name": "<impl Operation for RegressOperation>::summary",
+      "return_type": "-> &'static str",
+      "span": {
+        "end": {
+          "column": 6,
+          "line": 42
+        },
+        "start": {
+          "column": 5,
+          "line": 40
+        }
+      }
+    },
+    "genre": "FnValue",
+    "name": "application/operations/src/regress.rs:41:9: replace <impl Operation for RegressOperation>::summary -> &'static str with \"\"",
+    "package": "modewise_operations",
+    "replacement": "\"\"",
+    "span": {
+      "end": {
+        "column": 153,
+        "line": 41
+      },
+      "start": {
+        "column": 9,
+        "line": 41
+      }
+    }
+  },
+  {
+    "diff": "--- application/operations/src/regress.rs\n+++ replace <impl Operation for RegressOperation>::summary -> &'static str with \"xyzzy\"\n@@ -33,17 +33,17 @@\n     }\n }\n \n /// Nuisance regression: confounds, trend and slow drifts out of every channel (docs/regression.md).\n pub struct RegressOperation;\n \n impl Operation for RegressOperation {\n     fn summary(&self) -> &'static str {\n-        \"Removes confound regressors, the mean, a linear trend and slow cosine drifts from every channel in one least-squares fit (docs/regression.md).\"\n+        \"xyzzy\" /* ~ changed by cargo-mutants ~ */\n     }\n \n     fn params_schema(&self) -> serde_json::Value {\n         modewise_pipeline::schema_of::<Params>()\n     }\n \n     fn descriptor(&self) -> OperationDescriptor {\n         OperationDescriptor {\n",
+    "file": "application/operations/src/regress.rs",
+    "function": {
+      "function_name": "<impl Operation for RegressOperation>::summary",
+      "return_type": "-> &'static str",
+      "span": {
+        "end": {
+          "column": 6,
+          "line": 42
+        },
+        "start": {
+          "column": 5,
+          "line": 40
+        }
+      }
+    },
+    "genre": "FnValue",
+    "name": "application/operations/src/regress.rs:41:9: replace <impl Operation for RegressOperation>::summary -> &'static str with \"xyzzy\"",
+    "package": "modewise_operations",
+    "replacement": "\"xyzzy\"",
+    "span": {
+      "end": {
+        "column": 153,
+        "line": 41
+      },
+      "start": {
+        "column": 9,
+        "line": 41
+      }
+    }
+  },
+  {
+    "diff": "--- application/operations/src/regress.rs\n+++ replace <impl Operation for RegressOperation>::params_schema -> serde_json::Value with Default::default()\n@@ -37,17 +37,17 @@\n pub struct RegressOperation;\n \n impl Operation for RegressOperation {\n     fn summary(&self) -> &'static str {\n         \"Removes confound regressors, the mean, a linear trend and slow cosine drifts from every channel in one least-squares fit (docs/regression.md).\"\n     }\n \n     fn params_schema(&self) -> serde_json::Value {\n-        modewise_pipeline::schema_of::<Params>()\n+        Default::default() /* ~ changed by cargo-mutants ~ */\n     }\n \n     fn descriptor(&self) -> OperationDescriptor {\n         OperationDescriptor {\n             name: \"regress\",\n             version: env!(\"CARGO_PKG_VERSION\"),\n             inputs: &[\n                 Port {\n",
+    "file": "application/operations/src/regress.rs",
+    "function": {
+      "function_name": "<impl Operation for RegressOperation>::params_schema",
+      "return_type": "-> serde_json::Value",
+      "span": {
+        "end": {
+          "column": 6,
+          "line": 46
+        },
+        "start": {
+          "column": 5,
+          "line": 44
+        }
+      }
+    },
+    "genre": "FnValue",
+    "name": "application/operations/src/regress.rs:45:9: replace <impl Operation for RegressOperation>::params_schema -> serde_json::Value with Default::default()",
+    "package": "modewise_operations",
+    "replacement": "Default::default()",
+    "span": {
+      "end": {
+        "column": 49,
+        "line": 45
+      },
+      "start": {
+        "column": 9,
+        "line": 45
+      }
+    }
+  },
+  {
+    "diff": "--- application/operations/src/regress.rs\n+++ replace <impl Operation for RegressOperation>::descriptor -> OperationDescriptor with Default::default()\n@@ -41,34 +41,17 @@\n         \"Removes confound regressors, the mean, a linear trend and slow cosine drifts from every channel in one least-squares fit (docs/regression.md).\"\n     }\n \n     fn params_schema(&self) -> serde_json::Value {\n         modewise_pipeline::schema_of::<Params>()\n     }\n \n     fn descriptor(&self) -> OperationDescriptor {\n-        OperationDescriptor {\n-            name: \"regress\",\n-            version: env!(\"CARGO_PKG_VERSION\"),\n-            inputs: &[\n-                Port {\n-                    name: \"data\",\n-                    kinds: &[ArtifactKind::Series],\n-                },\n-                Port {\n-                    name: \"regressors\",\n-                    kinds: &[ArtifactKind::Series],\n-                },\n-            ],\n-            outputs: &[Port {\n-                name: \"signal\",\n-                kinds: &[ArtifactKind::Series],\n-            }],\n-        }\n+        Default::default() /* ~ changed by cargo-mutants ~ */\n     }\n \n     fn resolve(&self, params: Value) -> Result<Value, String> {\n         let (typed, resolved) = resolve_params::<Params>(params)?;\n         if let Some(hz) = typed.high_pass_hz\n             && !(hz.is_finite() && hz > 0.0)\n         {\n             return Err(format!(\"high_pass_hz must be above 0, got {hz}\"));\n",
+    "file": "application/operations/src/regress.rs",
+    "function": {
+      "function_name": "<impl Operation for RegressOperation>::descriptor",
+      "return_type": "-> OperationDescriptor",
+      "span": {
+        "end": {
+          "column": 6,
+          "line": 67
+        },
+        "start": {
+          "column": 5,
+          "line": 48
+        }
+      }
+    },
+    "genre": "FnValue",
+    "name": "application/operations/src/regress.rs:49:9: replace <impl Operation for RegressOperation>::descriptor -> OperationDescriptor with Default::default()",
+    "package": "modewise_operations",
+    "replacement": "Default::default()",
+    "span": {
+      "end": {
+        "column": 10,
+        "line": 66
+      },
+      "start": {
+        "column": 9,
+        "line": 49
+      }
+    }
+  },
+  {
+    "diff": "--- application/operations/src/regress.rs\n+++ replace <impl Operation for RegressOperation>::resolve -> Result<Value, String> with Ok(Default::default())\n@@ -62,23 +62,17 @@\n             outputs: &[Port {\n                 name: \"signal\",\n                 kinds: &[ArtifactKind::Series],\n             }],\n         }\n     }\n \n     fn resolve(&self, params: Value) -> Result<Value, String> {\n-        let (typed, resolved) = resolve_params::<Params>(params)?;\n-        if let Some(hz) = typed.high_pass_hz\n-            && !(hz.is_finite() && hz > 0.0)\n-        {\n-            return Err(format!(\"high_pass_hz must be above 0, got {hz}\"));\n-        }\n-        Ok(resolved)\n+        Ok(Default::default()) /* ~ changed by cargo-mutants ~ */\n     }\n \n     fn run(&self, params: &Value, inputs: &Inputs) -> Result<Outputs, String> {\n         let p: Params = serde_json::from_value(params.clone()).map_err(|e| e.to_string())?;\n         let Artifact::Series(data) = input(inputs, \"data\")? else {\n             return Err(\"input \\\"data\\\" must be a series\".into());\n         };\n         let Artifact::Series(regressors) = input(inputs, \"regressors\")? else {\n",
+    "file": "application/operations/src/regress.rs",
+    "function": {
+      "function_name": "<impl Operation for RegressOperation>::resolve",
+      "return_type": "-> Result<Value, String>",
+      "span": {
+        "end": {
+          "column": 6,
+          "line": 77
+        },
+        "start": {
+          "column": 5,
+          "line": 69
+        }
+      }
+    },
+    "genre": "FnValue",
+    "name": "application/operations/src/regress.rs:70:9: replace <impl Operation for RegressOperation>::resolve -> Result<Value, String> with Ok(Default::default())",
+    "package": "modewise_operations",
+    "replacement": "Ok(Default::default())",
+    "span": {
+      "end": {
+        "column": 21,
+        "line": 76
+      },
+      "start": {
+        "column": 9,
+        "line": 70
+      }
+    }
+  },
+  {
+    "diff": "--- application/operations/src/regress.rs\n+++ replace && with || in <impl Operation for RegressOperation>::resolve\n@@ -64,17 +64,17 @@\n                 kinds: &[ArtifactKind::Series],\n             }],\n         }\n     }\n \n     fn resolve(&self, params: Value) -> Result<Value, String> {\n         let (typed, resolved) = resolve_params::<Params>(params)?;\n         if let Some(hz) = typed.high_pass_hz\n-            && !(hz.is_finite() && hz > 0.0)\n+            || /* ~ changed by cargo-mutants ~ */ !(hz.is_finite() && hz > 0.0)\n         {\n             return Err(format!(\"high_pass_hz must be above 0, got {hz}\"));\n         }\n         Ok(resolved)\n     }\n \n     fn run(&self, params: &Value, inputs: &Inputs) -> Result<Outputs, String> {\n         let p: Params = serde_json::from_value(params.clone()).map_err(|e| e.to_string())?;\n",
+    "file": "application/operations/src/regress.rs",
+    "function": {
+      "function_name": "<impl Operation for RegressOperation>::resolve",
+      "return_type": "-> Result<Value, String>",
+      "span": {
+        "end": {
+          "column": 6,
+          "line": 77
+        },
+        "start": {
+          "column": 5,
+          "line": 69
+        }
+      }
+    },
+    "genre": "BinaryOperator",
+    "name": "application/operations/src/regress.rs:72:13: replace && with || in <impl Operation for RegressOperation>::resolve",
+    "package": "modewise_operations",
+    "replacement": "||",
+    "span": {
+      "end": {
+        "column": 15,
+        "line": 72
+      },
+      "start": {
+        "column": 13,
+        "line": 72
+      }
+    }
+  },
+  {
+    "diff": "--- application/operations/src/regress.rs\n+++ delete ! in <impl Operation for RegressOperation>::resolve\n@@ -64,17 +64,17 @@\n                 kinds: &[ArtifactKind::Series],\n             }],\n         }\n     }\n \n     fn resolve(&self, params: Value) -> Result<Value, String> {\n         let (typed, resolved) = resolve_params::<Params>(params)?;\n         if let Some(hz) = typed.high_pass_hz\n-            && !(hz.is_finite() && hz > 0.0)\n+            &&  /* ~ changed by cargo-mutants ~ */(hz.is_finite() && hz > 0.0)\n         {\n             return Err(format!(\"high_pass_hz must be above 0, got {hz}\"));\n         }\n         Ok(resolved)\n     }\n \n     fn run(&self, params: &Value, inputs: &Inputs) -> Result<Outputs, String> {\n         let p: Params = serde_json::from_value(params.clone()).map_err(|e| e.to_string())?;\n",
+    "file": "application/operations/src/regress.rs",
+    "function": {
+      "function_name": "<impl Operation for RegressOperation>::resolve",
+      "return_type": "-> Result<Value, String>",
+      "span": {
+        "end": {
+          "column": 6,
+          "line": 77
+        },
+        "start": {
+          "column": 5,
+          "line": 69
+        }
+      }
+    },
+    "genre": "UnaryOperator",
+    "name": "application/operations/src/regress.rs:72:16: delete ! in <impl Operation for RegressOperation>::resolve",
+    "package": "modewise_operations",
+    "replacement": "",
+    "span": {
+      "end": {
+        "column": 17,
+        "line": 72
+      },
+      "start": {
+        "column": 16,
+        "line": 72
+      }
+    }
+  },
+  {
+    "diff": "--- application/operations/src/regress.rs\n+++ replace && with || in <impl Operation for RegressOperation>::resolve\n@@ -64,17 +64,17 @@\n                 kinds: &[ArtifactKind::Series],\n             }],\n         }\n     }\n \n     fn resolve(&self, params: Value) -> Result<Value, String> {\n         let (typed, resolved) = resolve_params::<Params>(params)?;\n         if let Some(hz) = typed.high_pass_hz\n-            && !(hz.is_finite() && hz > 0.0)\n+            && !(hz.is_finite() || /* ~ changed by cargo-mutants ~ */ hz > 0.0)\n         {\n             return Err(format!(\"high_pass_hz must be above 0, got {hz}\"));\n         }\n         Ok(resolved)\n     }\n \n     fn run(&self, params: &Value, inputs: &Inputs) -> Result<Outputs, String> {\n         let p: Params = serde_json::from_value(params.clone()).map_err(|e| e.to_string())?;\n",
+    "file": "application/operations/src/regress.rs",
+    "function": {
+      "function_name": "<impl Operation for RegressOperation>::resolve",
+      "return_type": "-> Result<Value, String>",
+      "span": {
+        "end": {
+          "column": 6,
+          "line": 77
+        },
+        "start": {
+          "column": 5,
+          "line": 69
+        }
+      }
+    },
+    "genre": "BinaryOperator",
+    "name": "application/operations/src/regress.rs:72:33: replace && with || in <impl Operation for RegressOperation>::resolve",
+    "package": "modewise_operations",
+    "replacement": "||",
+    "span": {
+      "end": {
+        "column": 35,
+        "line": 72
+      },
+      "start": {
+        "column": 33,
+        "line": 72
+      }
+    }
+  },
+  {
+    "diff": "--- application/operations/src/regress.rs\n+++ replace > with == in <impl Operation for RegressOperation>::resolve\n@@ -64,17 +64,17 @@\n                 kinds: &[ArtifactKind::Series],\n             }],\n         }\n     }\n \n     fn resolve(&self, params: Value) -> Result<Value, String> {\n         let (typed, resolved) = resolve_params::<Params>(params)?;\n         if let Some(hz) = typed.high_pass_hz\n-            && !(hz.is_finite() && hz > 0.0)\n+            && !(hz.is_finite() && hz == /* ~ changed by cargo-mutants ~ */ 0.0)\n         {\n             return Err(format!(\"high_pass_hz must be above 0, got {hz}\"));\n         }\n         Ok(resolved)\n     }\n \n     fn run(&self, params: &Value, inputs: &Inputs) -> Result<Outputs, String> {\n         let p: Params = serde_json::from_value(params.clone()).map_err(|e| e.to_string())?;\n",
+    "file": "application/operations/src/regress.rs",
+    "function": {
+      "function_name": "<impl Operation for RegressOperation>::resolve",
+      "return_type": "-> Result<Value, String>",
+      "span": {
+        "end": {
+          "column": 6,
+          "line": 77
+        },
+        "start": {
+          "column": 5,
+          "line": 69
+        }
+      }
+    },
+    "genre": "BinaryOperator",
+    "name": "application/operations/src/regress.rs:72:39: replace > with == in <impl Operation for RegressOperation>::resolve",
+    "package": "modewise_operations",
+    "replacement": "==",
+    "span": {
+      "end": {
+        "column": 40,
+        "line": 72
+      },
+      "start": {
+        "column": 39,
+        "line": 72
+      }
+    }
+  },
+  {
+    "diff": "--- application/operations/src/regress.rs\n+++ replace > with < in <impl Operation for RegressOperation>::resolve\n@@ -64,17 +64,17 @@\n                 kinds: &[ArtifactKind::Series],\n             }],\n         }\n     }\n \n     fn resolve(&self, params: Value) -> Result<Value, String> {\n         let (typed, resolved) = resolve_params::<Params>(params)?;\n         if let Some(hz) = typed.high_pass_hz\n-            && !(hz.is_finite() && hz > 0.0)\n+            && !(hz.is_finite() && hz < /* ~ changed by cargo-mutants ~ */ 0.0)\n         {\n             return Err(format!(\"high_pass_hz must be above 0, got {hz}\"));\n         }\n         Ok(resolved)\n     }\n \n     fn run(&self, params: &Value, inputs: &Inputs) -> Result<Outputs, String> {\n         let p: Params = serde_json::from_value(params.clone()).map_err(|e| e.to_string())?;\n",
+    "file": "application/operations/src/regress.rs",
+    "function": {
+      "function_name": "<impl Operation for RegressOperation>::resolve",
+      "return_type": "-> Result<Value, String>",
+      "span": {
+        "end": {
+          "column": 6,
+          "line": 77
+        },
+        "start": {
+          "column": 5,
+          "line": 69
+        }
+      }
+    },
+    "genre": "BinaryOperator",
+    "name": "application/operations/src/regress.rs:72:39: replace > with < in <impl Operation for RegressOperation>::resolve",
+    "package": "modewise_operations",
+    "replacement": "<",
+    "span": {
+      "end": {
+        "column": 40,
+        "line": 72
+      },
+      "start": {
+        "column": 39,
+        "line": 72
+      }
+    }
+  },
+  {
+    "diff": "--- application/operations/src/regress.rs\n+++ replace > with >= in <impl Operation for RegressOperation>::resolve\n@@ -64,17 +64,17 @@\n                 kinds: &[ArtifactKind::Series],\n             }],\n         }\n     }\n \n     fn resolve(&self, params: Value) -> Result<Value, String> {\n         let (typed, resolved) = resolve_params::<Params>(params)?;\n         if let Some(hz) = typed.high_pass_hz\n-            && !(hz.is_finite() && hz > 0.0)\n+            && !(hz.is_finite() && hz >= /* ~ changed by cargo-mutants ~ */ 0.0)\n         {\n             return Err(format!(\"high_pass_hz must be above 0, got {hz}\"));\n         }\n         Ok(resolved)\n     }\n \n     fn run(&self, params: &Value, inputs: &Inputs) -> Result<Outputs, String> {\n         let p: Params = serde_json::from_value(params.clone()).map_err(|e| e.to_string())?;\n",
+    "file": "application/operations/src/regress.rs",
+    "function": {
+      "function_name": "<impl Operation for RegressOperation>::resolve",
+      "return_type": "-> Result<Value, String>",
+      "span": {
+        "end": {
+          "column": 6,
+          "line": 77
+        },
+        "start": {
+          "column": 5,
+          "line": 69
+        }
+      }
+    },
+    "genre": "BinaryOperator",
+    "name": "application/operations/src/regress.rs:72:39: replace > with >= in <impl Operation for RegressOperation>::resolve",
+    "package": "modewise_operations",
+    "replacement": ">=",
+    "span": {
+      "end": {
+        "column": 40,
+        "line": 72
+      },
+      "start": {
+        "column": 39,
+        "line": 72
+      }
+    }
+  },
+  {
+    "diff": "--- application/operations/src/regress.rs\n+++ replace <impl Operation for RegressOperation>::run -> Result<Outputs, String> with Ok(Default::default())\n@@ -72,37 +72,17 @@\n             && !(hz.is_finite() && hz > 0.0)\n         {\n             return Err(format!(\"high_pass_hz must be above 0, got {hz}\"));\n         }\n         Ok(resolved)\n     }\n \n     fn run(&self, params: &Value, inputs: &Inputs) -> Result<Outputs, String> {\n-        let p: Params = serde_json::from_value(params.clone()).map_err(|e| e.to_string())?;\n-        let Artifact::Series(data) = input(inputs, \"data\")? else {\n-            return Err(\"input \\\"data\\\" must be a series\".into());\n-        };\n-        let Artifact::Series(regressors) = input(inputs, \"regressors\")? else {\n-            return Err(\"input \\\"regressors\\\" must be a series\".into());\n-        };\n-        let fs = data.sampling_rate();\n-        if regressors.sampling_rate() != fs {\n-            return Err(format!(\n-                \"regressors are sampled at {} Hz, the data at {} Hz\",\n-                regressors.sampling_rate().hz(),\n-                fs.hz()\n-            ));\n-        }\n-        let x = design(p.nuisance(), data.n_samples(), fs.hz(), regressors.data())\n-            .map_err(|e| e.to_string())?;\n-        let clean = residuals(data.data(), x.view()).map_err(|e| e.to_string())?;\n-        let signal = MultichannelSeries::new(clean, fs, data.labels().to_vec())\n-            .map_err(|e| e.to_string())?;\n-        Ok(Outputs::from([(\"signal\".into(), Artifact::Series(signal))]))\n+        Ok(Default::default()) /* ~ changed by cargo-mutants ~ */\n     }\n }\n \n #[cfg(test)]\n mod tests {\n     #![allow(clippy::unwrap_used)]\n \n     use std::sync::Arc;\n",
+    "file": "application/operations/src/regress.rs",
+    "function": {
+      "function_name": "<impl Operation for RegressOperation>::run",
+      "return_type": "-> Result<Outputs, String>",
+      "span": {
+        "end": {
+          "column": 6,
+          "line": 101
+        },
+        "start": {
+          "column": 5,
+          "line": 79
+        }
+      }
+    },
+    "genre": "FnValue",
+    "name": "application/operations/src/regress.rs:80:9: replace <impl Operation for RegressOperation>::run -> Result<Outputs, String> with Ok(Default::default())",
+    "package": "modewise_operations",
+    "replacement": "Ok(Default::default())",
+    "span": {
+      "end": {
+        "column": 73,
+        "line": 100
+      },
+      "start": {
+        "column": 9,
+        "line": 80
+      }
+    }
+  },
+  {
+    "diff": "--- application/operations/src/regress.rs\n+++ replace != with == in <impl Operation for RegressOperation>::run\n@@ -80,17 +80,17 @@\n         let p: Params = serde_json::from_value(params.clone()).map_err(|e| e.to_string())?;\n         let Artifact::Series(data) = input(inputs, \"data\")? else {\n             return Err(\"input \\\"data\\\" must be a series\".into());\n         };\n         let Artifact::Series(regressors) = input(inputs, \"regressors\")? else {\n             return Err(\"input \\\"regressors\\\" must be a series\".into());\n         };\n         let fs = data.sampling_rate();\n-        if regressors.sampling_rate() != fs {\n+        if regressors.sampling_rate() == /* ~ changed by cargo-mutants ~ */ fs {\n             return Err(format!(\n                 \"regressors are sampled at {} Hz, the data at {} Hz\",\n                 regressors.sampling_rate().hz(),\n                 fs.hz()\n             ));\n         }\n         let x = design(p.nuisance(), data.n_samples(), fs.hz(), regressors.data())\n             .map_err(|e| e.to_string())?;\n",
+    "file": "application/operations/src/regress.rs",
+    "function": {
+      "function_name": "<impl Operation for RegressOperation>::run",
+      "return_type": "-> Result<Outputs, String>",
+      "span": {
+        "end": {
+          "column": 6,
+          "line": 101
+        },
+        "start": {
+          "column": 5,
+          "line": 79
+        }
+      }
+    },
+    "genre": "BinaryOperator",
+    "name": "application/operations/src/regress.rs:88:39: replace != with == in <impl Operation for RegressOperation>::run",
+    "package": "modewise_operations",
+    "replacement": "==",
+    "span": {
+      "end": {
+        "column": 41,
+        "line": 88
+      },
+      "start": {
+        "column": 39,
+        "line": 88
+      }
+    }
+  }
+]

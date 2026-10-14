@@ -1,0 +1,4230 @@
+{
+  "outcomes": [
+    {
+      "scenario": "Baseline",
+      "summary": "Success",
+      "log_path": "log/baseline.log",
+      "diff_path": null,
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 25.321025542,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 2.741556791,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:49:5: replace default_channels_name -> String with String::new()",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "default_channels_name",
+            "return_type": "-> String",
+            "span": {
+              "start": {
+                "line": 48,
+                "column": 1
+              },
+              "end": {
+                "line": 50,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 49,
+              "column": 5
+            },
+            "end": {
+              "line": 49,
+              "column": 22
+            }
+          },
+          "replacement": "String::new()",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_49_col_5.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_49_col_5.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 1.8947875,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.799066708,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:49:5: replace default_channels_name -> String with \"xyzzy\".into()",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "default_channels_name",
+            "return_type": "-> String",
+            "span": {
+              "start": {
+                "line": 48,
+                "column": 1
+              },
+              "end": {
+                "line": 50,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 49,
+              "column": 5
+            },
+            "end": {
+              "line": 49,
+              "column": 22
+            }
+          },
+          "replacement": "\"xyzzy\".into()",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_49_col_5_001.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_49_col_5_001.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 1.824177375,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.81223175,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:115:9: replace <impl From<LayoutName> for Layout>::from -> Self with Default::default()",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "<impl From<LayoutName> for Layout>::from",
+            "return_type": "-> Self",
+            "span": {
+              "start": {
+                "line": 114,
+                "column": 5
+              },
+              "end": {
+                "line": 119,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 115,
+              "column": 9
+            },
+            "end": {
+              "line": 118,
+              "column": 10
+            }
+          },
+          "replacement": "Default::default()",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_115_col_9.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_115_col_9.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.01837975,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 1.14237,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:129:9: replace InputSpec::sampling_rate_source -> SamplingRateSource<'_> with Default::default()",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "InputSpec::sampling_rate_source",
+            "return_type": "-> SamplingRateSource<'_>",
+            "span": {
+              "start": {
+                "line": 128,
+                "column": 5
+              },
+              "end": {
+                "line": 134,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 129,
+              "column": 9
+            },
+            "end": {
+              "line": 133,
+              "column": 10
+            }
+          },
+          "replacement": "Default::default()",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "Unviable",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_129_col_9.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_129_col_9.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 0.459705416,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:137:9: replace InputSpec::validate -> Result<(), DatasetError> with Ok(())",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "InputSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 136,
+                "column": 5
+              },
+              "end": {
+                "line": 220,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 137,
+              "column": 9
+            },
+            "end": {
+              "line": 219,
+              "column": 15
+            }
+          },
+          "replacement": "Ok(())",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_137_col_9.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_137_col_9.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.35890125,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 1.162275667,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:138:49: replace && with || in InputSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "InputSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 136,
+                "column": 5
+              },
+              "end": {
+                "line": 220,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 138,
+              "column": 49
+            },
+            "end": {
+              "line": 138,
+              "column": 51
+            }
+          },
+          "replacement": "||",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_138_col_49.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_138_col_49.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.604959917,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.860934709,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:138:24: replace != with == in InputSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "InputSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 136,
+                "column": 5
+              },
+              "end": {
+                "line": 220,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 138,
+              "column": 24
+            },
+            "end": {
+              "line": 138,
+              "column": 26
+            }
+          },
+          "replacement": "==",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_138_col_24.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_138_col_24.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.2576975,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 2.5816114580000002,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:138:52: delete ! in InputSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "InputSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 136,
+                "column": 5
+              },
+              "end": {
+                "line": 220,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 138,
+              "column": 52
+            },
+            "end": {
+              "line": 138,
+              "column": 53
+            }
+          },
+          "replacement": "",
+          "genre": "UnaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_138_col_52.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_138_col_52.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.264632375,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.781068333,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:143:52: replace == with != in InputSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "InputSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 136,
+                "column": 5
+              },
+              "end": {
+                "line": 220,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 143,
+              "column": 52
+            },
+            "end": {
+              "line": 143,
+              "column": 54
+            }
+          },
+          "replacement": "!=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_143_col_52.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_143_col_52.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 1.989373666,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.759321208,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:156:45: replace || with && in InputSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "InputSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 136,
+                "column": 5
+              },
+              "end": {
+                "line": 220,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 156,
+              "column": 45
+            },
+            "end": {
+              "line": 156,
+              "column": 47
+            }
+          },
+          "replacement": "&&",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_156_col_45.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_156_col_45.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 1.935898791,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 1.436756333,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:156:20: delete ! in InputSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "InputSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 136,
+                "column": 5
+              },
+              "end": {
+                "line": 220,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 156,
+              "column": 20
+            },
+            "end": {
+              "line": 156,
+              "column": 21
+            }
+          },
+          "replacement": "",
+          "genre": "UnaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_156_col_20.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_156_col_20.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.219786833,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.802419375,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:156:65: replace != with == in InputSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "InputSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 136,
+                "column": 5
+              },
+              "end": {
+                "line": 220,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 156,
+              "column": 65
+            },
+            "end": {
+              "line": 156,
+              "column": 67
+            }
+          },
+          "replacement": "==",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_156_col_65.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_156_col_65.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 1.9695952079999999,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.8619725,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:163:52: replace && with || in InputSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "InputSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 136,
+                "column": 5
+              },
+              "end": {
+                "line": 220,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 163,
+              "column": 52
+            },
+            "end": {
+              "line": 163,
+              "column": 54
+            }
+          },
+          "replacement": "||",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_163_col_52.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_163_col_52.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 1.934008167,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 1.437882625,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:173:43: replace || with && in InputSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "InputSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 136,
+                "column": 5
+              },
+              "end": {
+                "line": 220,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 173,
+              "column": 43
+            },
+            "end": {
+              "line": 173,
+              "column": 45
+            }
+          },
+          "replacement": "&&",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_173_col_43.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_173_col_43.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 1.971101875,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 1.545849542,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:180:52: replace == with != in InputSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "InputSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 136,
+                "column": 5
+              },
+              "end": {
+                "line": 220,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 180,
+              "column": 52
+            },
+            "end": {
+              "line": 180,
+              "column": 54
+            }
+          },
+          "replacement": "!=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_180_col_52.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_180_col_52.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 1.954434333,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 2.677296875,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:194:33: delete ! in InputSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "InputSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 136,
+                "column": 5
+              },
+              "end": {
+                "line": 220,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 194,
+              "column": 33
+            },
+            "end": {
+              "line": 194,
+              "column": 34
+            }
+          },
+          "replacement": "",
+          "genre": "UnaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_194_col_33.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_194_col_33.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.081640875,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 2.6973329169999998,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:195:54: replace != with == in InputSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "InputSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 136,
+                "column": 5
+              },
+              "end": {
+                "line": 220,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 195,
+              "column": 54
+            },
+            "end": {
+              "line": 195,
+              "column": 56
+            }
+          },
+          "replacement": "==",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_195_col_54.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_195_col_54.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.095372958,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 2.694180791,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:209:33: delete ! in InputSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "InputSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 136,
+                "column": 5
+              },
+              "end": {
+                "line": 220,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 209,
+              "column": 33
+            },
+            "end": {
+              "line": 209,
+              "column": 34
+            }
+          },
+          "replacement": "",
+          "genre": "UnaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_209_col_33.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_209_col_33.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.022374375,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.805314084,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:210:54: replace != with == in InputSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "InputSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 136,
+                "column": 5
+              },
+              "end": {
+                "line": 220,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 210,
+              "column": 54
+            },
+            "end": {
+              "line": 210,
+              "column": 56
+            }
+          },
+          "replacement": "==",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_210_col_54.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_210_col_54.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.169180666,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.819357709,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:225:9: replace DatasetSpec::from_toml -> Result<Self, DatasetError> with Ok(Default::default())",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "DatasetSpec::from_toml",
+            "return_type": "-> Result<Self, DatasetError>",
+            "span": {
+              "start": {
+                "line": 224,
+                "column": 5
+              },
+              "end": {
+                "line": 236,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 225,
+              "column": 9
+            },
+            "end": {
+              "line": 235,
+              "column": 17
+            }
+          },
+          "replacement": "Ok(Default::default())",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "Unviable",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_225_col_9.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_225_col_9.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 0.452762,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:241:9: replace ChannelsSpec::validate -> Result<(), DatasetError> with Ok(())",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "ChannelsSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 240,
+                "column": 5
+              },
+              "end": {
+                "line": 270,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 241,
+              "column": 9
+            },
+            "end": {
+              "line": 269,
+              "column": 15
+            }
+          },
+          "replacement": "Ok(())",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_241_col_9.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_241_col_9.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.295009709,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.778406917,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:245:41: replace == with != in ChannelsSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "ChannelsSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 240,
+                "column": 5
+              },
+              "end": {
+                "line": 270,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 245,
+              "column": 41
+            },
+            "end": {
+              "line": 245,
+              "column": 43
+            }
+          },
+          "replacement": "!=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_245_col_41.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_245_col_41.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.42894675,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.790876834,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:251:28: replace match guard i.format == Format::EventsTsv with true in ChannelsSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "ChannelsSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 240,
+                "column": 5
+              },
+              "end": {
+                "line": 270,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 251,
+              "column": 28
+            },
+            "end": {
+              "line": 251,
+              "column": 57
+            }
+          },
+          "replacement": "true",
+          "genre": "MatchArmGuard"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_251_col_28.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_251_col_28.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.366482458,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.838870875,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:251:28: replace match guard i.format == Format::EventsTsv with false in ChannelsSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "ChannelsSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 240,
+                "column": 5
+              },
+              "end": {
+                "line": 270,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 251,
+              "column": 28
+            },
+            "end": {
+              "line": 251,
+              "column": 57
+            }
+          },
+          "replacement": "false",
+          "genre": "MatchArmGuard"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_251_col_28_001.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_251_col_28_001.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.258093833,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.855760417,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:256:28: replace match guard i.format == Format::TimeseriesTsv with true in ChannelsSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "ChannelsSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 240,
+                "column": 5
+              },
+              "end": {
+                "line": 270,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 256,
+              "column": 28
+            },
+            "end": {
+              "line": 256,
+              "column": 61
+            }
+          },
+          "replacement": "true",
+          "genre": "MatchArmGuard"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_256_col_28.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_256_col_28.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.19331425,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.805301083,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:256:28: replace match guard i.format == Format::TimeseriesTsv with false in ChannelsSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "ChannelsSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 240,
+                "column": 5
+              },
+              "end": {
+                "line": 270,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 256,
+              "column": 28
+            },
+            "end": {
+              "line": 256,
+              "column": 61
+            }
+          },
+          "replacement": "false",
+          "genre": "MatchArmGuard"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_256_col_28_001.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_256_col_28_001.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.1421694589999998,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 2.857154875,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:261:28: replace match guard i.labels_file.is_some() with true in ChannelsSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "ChannelsSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 240,
+                "column": 5
+              },
+              "end": {
+                "line": 270,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 261,
+              "column": 28
+            },
+            "end": {
+              "line": 261,
+              "column": 51
+            }
+          },
+          "replacement": "true",
+          "genre": "MatchArmGuard"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_261_col_28.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_261_col_28.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.166996416,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.8733615,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:261:28: replace match guard i.labels_file.is_some() with false in ChannelsSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "ChannelsSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 240,
+                "column": 5
+              },
+              "end": {
+                "line": 270,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 261,
+              "column": 28
+            },
+            "end": {
+              "line": 261,
+              "column": 51
+            }
+          },
+          "replacement": "false",
+          "genre": "MatchArmGuard"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_261_col_28_001.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_261_col_28_001.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.323641125,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.838676917,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:249:50: replace == with != in ChannelsSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "ChannelsSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 240,
+                "column": 5
+              },
+              "end": {
+                "line": 270,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 249,
+              "column": 50
+            },
+            "end": {
+              "line": 249,
+              "column": 52
+            }
+          },
+          "replacement": "!=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_249_col_50.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_249_col_50.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.248823667,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.81292425,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:251:37: replace == with != in ChannelsSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "ChannelsSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 240,
+                "column": 5
+              },
+              "end": {
+                "line": 270,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 251,
+              "column": 37
+            },
+            "end": {
+              "line": 251,
+              "column": 39
+            }
+          },
+          "replacement": "!=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_251_col_37.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_251_col_37.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.116039333,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.744031708,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/spec.rs:256:37: replace == with != in ChannelsSpec::validate",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/spec.rs",
+          "function": {
+            "function_name": "ChannelsSpec::validate",
+            "return_type": "-> Result<(), DatasetError>",
+            "span": {
+              "start": {
+                "line": 240,
+                "column": 5
+              },
+              "end": {
+                "line": 270,
+                "column": 6
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 256,
+              "column": 37
+            },
+            "end": {
+              "line": 256,
+              "column": 39
+            }
+          },
+          "replacement": "!=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__spec.rs_line_256_col_37.log",
+      "diff_path": "diff/adapters__dataset__src__spec.rs_line_256_col_37.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.117671708,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.830312542,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:18:5: replace read -> Result<MultichannelSeries, String> with Ok(Default::default())",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "read",
+            "return_type": "-> Result<MultichannelSeries, String>",
+            "span": {
+              "start": {
+                "line": 9,
+                "column": 1
+              },
+              "end": {
+                "line": 80,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 18,
+              "column": 5
+            },
+            "end": {
+              "line": 79,
+              "column": 94
+            }
+          },
+          "replacement": "Ok(Default::default())",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "Unviable",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_18_col_5.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_18_col_5.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 0.556584,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:20:45: delete ! in read",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "read",
+            "return_type": "-> Result<MultichannelSeries, String>",
+            "span": {
+              "start": {
+                "line": 9,
+                "column": 1
+              },
+              "end": {
+                "line": 80,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 20,
+              "column": 45
+            },
+            "end": {
+              "line": 20,
+              "column": 46
+            }
+          },
+          "replacement": "",
+          "genre": "UnaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_20_col_45.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_20_col_45.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.422548125,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.512081917,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:40:16: delete ! in read",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "read",
+            "return_type": "-> Result<MultichannelSeries, String>",
+            "span": {
+              "start": {
+                "line": 9,
+                "column": 1
+              },
+              "end": {
+                "line": 80,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 40,
+              "column": 16
+            },
+            "end": {
+              "line": 40,
+              "column": 17
+            }
+          },
+          "replacement": "",
+          "genre": "UnaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_40_col_16.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_40_col_16.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.140363458,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.521444792,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:63:30: replace && with || in read",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "read",
+            "return_type": "-> Result<MultichannelSeries, String>",
+            "span": {
+              "start": {
+                "line": 9,
+                "column": 1
+              },
+              "end": {
+                "line": 80,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 63,
+              "column": 30
+            },
+            "end": {
+              "line": 63,
+              "column": 32
+            }
+          },
+          "replacement": "||",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_63_col_30.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_63_col_30.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.287293625,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.516708667,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:63:21: replace == with != in read",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "read",
+            "return_type": "-> Result<MultichannelSeries, String>",
+            "span": {
+              "start": {
+                "line": 9,
+                "column": 1
+              },
+              "end": {
+                "line": 80,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 63,
+              "column": 21
+            },
+            "end": {
+              "line": 63,
+              "column": 23
+            }
+          },
+          "replacement": "!=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_63_col_21.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_63_col_21.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.2619920000000002,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.509684208,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:63:35: replace == with != in read",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "read",
+            "return_type": "-> Result<MultichannelSeries, String>",
+            "span": {
+              "start": {
+                "line": 9,
+                "column": 1
+              },
+              "end": {
+                "line": 80,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 63,
+              "column": 35
+            },
+            "end": {
+              "line": 63,
+              "column": 37
+            }
+          },
+          "replacement": "!=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_63_col_35.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_63_col_35.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.219210875,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.581872333,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:84:5: replace matches -> bool with true",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 84,
+              "column": 5
+            },
+            "end": {
+              "line": 102,
+              "column": 37
+            }
+          },
+          "replacement": "true",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_84_col_5.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_84_col_5.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.823708625,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.508664958,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:84:5: replace matches -> bool with false",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 84,
+              "column": 5
+            },
+            "end": {
+              "line": 102,
+              "column": 37
+            }
+          },
+          "replacement": "false",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_84_col_5_001.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_84_col_5_001.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.110370125,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.554956375,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:86:13: replace < with == in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 86,
+              "column": 13
+            },
+            "end": {
+              "line": 86,
+              "column": 14
+            }
+          },
+          "replacement": "==",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_86_col_13.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_86_col_13.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 3.169939834,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.514169458,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:86:13: replace < with > in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 86,
+              "column": 13
+            },
+            "end": {
+              "line": 86,
+              "column": 14
+            }
+          },
+          "replacement": ">",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_86_col_13_001.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_86_col_13_001.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.313553,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.535770958,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:86:13: replace < with <= in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 86,
+              "column": 13
+            },
+            "end": {
+              "line": 86,
+              "column": 14
+            }
+          },
+          "replacement": "<=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_86_col_13_002.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_86_col_13_002.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.051284458,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.5100685,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:87:24: replace && with || in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 87,
+              "column": 24
+            },
+            "end": {
+              "line": 87,
+              "column": 26
+            }
+          },
+          "replacement": "||",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_87_col_24.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_87_col_24.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.682443333,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.7056295,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:87:14: replace < with > in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 87,
+              "column": 14
+            },
+            "end": {
+              "line": 87,
+              "column": 15
+            }
+          },
+          "replacement": ">",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_87_col_14_001.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_87_col_14_001.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 10.71861475,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.561031459,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:87:14: replace < with <= in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 87,
+              "column": 14
+            },
+            "end": {
+              "line": 87,
+              "column": 15
+            }
+          },
+          "replacement": "<=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_87_col_14_002.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_87_col_14_002.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 3.357926042,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.622059083,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:87:40: replace || with && in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 87,
+              "column": 40
+            },
+            "end": {
+              "line": 87,
+              "column": 42
+            }
+          },
+          "replacement": "&&",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_87_col_40.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_87_col_40.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.304856875,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.533189417,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:87:33: replace == with != in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 87,
+              "column": 33
+            },
+            "end": {
+              "line": 87,
+              "column": 35
+            }
+          },
+          "replacement": "!=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_87_col_33.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_87_col_33.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.156528042,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.559333833,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:87:48: replace == with != in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 87,
+              "column": 48
+            },
+            "end": {
+              "line": 87,
+              "column": 50
+            }
+          },
+          "replacement": "!=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_87_col_48.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_87_col_48.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 1.9449767919999998,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.523049792,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:88:15: replace += with -= in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 88,
+              "column": 15
+            },
+            "end": {
+              "line": 88,
+              "column": 17
+            }
+          },
+          "replacement": "-=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_88_col_15.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_88_col_15.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.355523833,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.575660584,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:88:15: replace += with *= in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 88,
+              "column": 15
+            },
+            "end": {
+              "line": 88,
+              "column": 17
+            }
+          },
+          "replacement": "*=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_88_col_15_001.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_88_col_15_001.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.12908275,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.545782,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:89:15: replace += with -= in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 89,
+              "column": 15
+            },
+            "end": {
+              "line": 89,
+              "column": 17
+            }
+          },
+          "replacement": "-=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_89_col_15.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_89_col_15.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 3.161138084,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.579396625,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:87:14: replace < with == in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 87,
+              "column": 14
+            },
+            "end": {
+              "line": 87,
+              "column": 15
+            }
+          },
+          "replacement": "==",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_87_col_14.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_87_col_14.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 34.926342416,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.474800417,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:89:15: replace += with *= in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 89,
+              "column": 15
+            },
+            "end": {
+              "line": 89,
+              "column": 17
+            }
+          },
+          "replacement": "*=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_89_col_15_001.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_89_col_15_001.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.3927600829999998,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.571711084,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:90:31: replace && with || in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 90,
+              "column": 31
+            },
+            "end": {
+              "line": 90,
+              "column": 33
+            }
+          },
+          "replacement": "||",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_90_col_31.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_90_col_31.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.479948833,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.421945917,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:90:21: replace < with == in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 90,
+              "column": 21
+            },
+            "end": {
+              "line": 90,
+              "column": 22
+            }
+          },
+          "replacement": "==",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_90_col_21.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_90_col_21.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.286508125,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.565358167,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:90:21: replace < with > in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 90,
+              "column": 21
+            },
+            "end": {
+              "line": 90,
+              "column": 22
+            }
+          },
+          "replacement": ">",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_90_col_21_001.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_90_col_21_001.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.465431208,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.414968541,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:90:21: replace < with <= in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 90,
+              "column": 21
+            },
+            "end": {
+              "line": 90,
+              "column": 22
+            }
+          },
+          "replacement": "<=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_90_col_21_002.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_90_col_21_002.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.338244416,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.598557375,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:90:39: replace == with != in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 90,
+              "column": 39
+            },
+            "end": {
+              "line": 90,
+              "column": 41
+            }
+          },
+          "replacement": "!=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_90_col_39.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_90_col_39.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.3877505,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.46343825,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:93:15: replace += with -= in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 93,
+              "column": 15
+            },
+            "end": {
+              "line": 93,
+              "column": 17
+            }
+          },
+          "replacement": "-=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_93_col_15.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_93_col_15.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.461649833,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.74509575,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:95:19: replace + with - in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 95,
+              "column": 19
+            },
+            "end": {
+              "line": 95,
+              "column": 20
+            }
+          },
+          "replacement": "-",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_95_col_19.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_95_col_19.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.094844,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.570267875,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:95:19: replace + with * in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 95,
+              "column": 19
+            },
+            "end": {
+              "line": 95,
+              "column": 20
+            }
+          },
+          "replacement": "*",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "MissedMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_95_col_19_001.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_95_col_19_001.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.126868833,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 3.465172916,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:96:18: replace += with -= in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 96,
+              "column": 18
+            },
+            "end": {
+              "line": 96,
+              "column": 20
+            }
+          },
+          "replacement": "-=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_96_col_18.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_96_col_18.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.126388416,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.556741709,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:93:15: replace += with *= in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 93,
+              "column": 15
+            },
+            "end": {
+              "line": 93,
+              "column": 17
+            }
+          },
+          "replacement": "*=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "Timeout",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_93_col_15_001.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_93_col_15_001.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.645601958,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 20.05830425,
+          "process_status": "Timeout",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:102:30: replace == with != in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 102,
+              "column": 30
+            },
+            "end": {
+              "line": 102,
+              "column": 32
+            }
+          },
+          "replacement": "!=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_102_col_30.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_102_col_30.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.122735958,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.463067459,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "adapters/dataset/src/timeseries_tsv.rs:96:18: replace += with *= in matches",
+          "package": "modewise_dataset",
+          "file": "adapters/dataset/src/timeseries_tsv.rs",
+          "function": {
+            "function_name": "matches",
+            "return_type": "-> bool",
+            "span": {
+              "start": {
+                "line": 82,
+                "column": 1
+              },
+              "end": {
+                "line": 103,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 96,
+              "column": 18
+            },
+            "end": {
+              "line": 96,
+              "column": 20
+            }
+          },
+          "replacement": "*=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "Timeout",
+      "log_path": "log/adapters__dataset__src__timeseries_tsv.rs_line_96_col_18_001.log",
+      "diff_path": "diff/adapters__dataset__src__timeseries_tsv.rs_line_96_col_18_001.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 2.182232333,
+          "process_status": "Success",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 20.052172333,
+          "process_status": "Timeout",
+          "argv": [
+            "/Users/ipeglin/.rustup/toolchains/1.92.0-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=modewise_dataset@0.2.0"
+          ]
+        }
+      ]
+    }
+  ],
+  "total_mutants": 65,
+  "missed": 1,
+  "caught": 59,
+  "timeout": 2,
+  "unviable": 3,
+  "success": 0,
+  "start_time": "2026-10-14T16:42:38.177733Z",
+  "end_time": "2026-10-14T16:49:31.849715Z",
+  "cargo_mutants_version": "27.1.0"
+}

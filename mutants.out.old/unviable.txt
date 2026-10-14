@@ -1,0 +1,3 @@
+adapters/dataset/src/spec.rs:129:9: replace InputSpec::sampling_rate_source -> SamplingRateSource<'_> with Default::default()
+adapters/dataset/src/spec.rs:225:9: replace DatasetSpec::from_toml -> Result<Self, DatasetError> with Ok(Default::default())
+adapters/dataset/src/timeseries_tsv.rs:18:5: replace read -> Result<MultichannelSeries, String> with Ok(Default::default())

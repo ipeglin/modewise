@@ -1,0 +1,82 @@
+--- adapters/dataset/src/timeseries_tsv.rs
++++ replace read -> Result<MultichannelSeries, String> with Ok(Default::default())
+@@ -10,78 +10,17 @@
+ /// and then file order. `n/a` in the first row (derivatives and framewise displacement have no
+ /// first value) takes the second row's value, as nilearn's `load_confounds` does; `n/a`
+ /// anywhere else is an error.
+ pub fn read(
+     path: &Path,
+     patterns: &[String],
+     fs: SamplingRate,
+ ) -> Result<MultichannelSeries, String> {
+-    let text = std::fs::read_to_string(path)
+-        .map_err(|e| format!("time series file {}: {e}", path.display()))?;
+-    let mut lines = text.lines().filter(|l| !l.trim().is_empty());
+-    let header: Vec<&str> = lines
+-        .next()
+-        .ok_or_else(|| format!("{} is empty", path.display()))?
+-        .split('\t')
+-        .map(str::trim)
+-        .collect();
+-    let mut chosen: Vec<usize> = Vec::new();
+-    for pattern in patterns {
+-        let found: Vec<usize> = (0..header.len())
+-            .filter(|&i| matches(pattern, header[i]))
+-            .collect();
+-        if found.is_empty() {
+-            return Err(format!(
+-                "{}: no column matches {pattern:?} (columns: {})",
+-                path.display(),
+-                header.join(", ")
+-            ));
+-        }
+-        for i in found {
+-            if !chosen.contains(&i) {
+-                chosen.push(i);
+-            }
+-        }
+-    }
+-
+-    let rows: Vec<Vec<&str>> = lines
+-        .map(|l| l.split('\t').map(str::trim).collect())
+-        .collect();
+-    let mut data = Array2::zeros((chosen.len(), rows.len()));
+-    for (r, cells) in rows.iter().enumerate() {
+-        for (c, &column) in chosen.iter().enumerate() {
+-            let place = || {
+-                format!(
+-                    "{} row {}, column {:?}",
+-                    path.display(),
+-                    r + 1,
+-                    header[column]
+-                )
+-            };
+-            let mut cell = *cells
+-                .get(column)
+-                .ok_or_else(|| format!("{}: missing", place()))?;
+-            if cell == "n/a" && r == 0 {
+-                cell = rows
+-                    .get(1)
+-                    .and_then(|next| next.get(column))
+-                    .copied()
+-                    .unwrap_or(cell);
+-            }
+-            data[[c, r]] = match cell {
+-                "n/a" => return Err(format!("{}: n/a is only filled in the first row", place())),
+-                value => value
+-                    .parse()
+-                    .map_err(|_| format!("{}: {value:?} is not a number", place()))?,
+-            };
+-        }
+-    }
+-    let labels = chosen.iter().map(|&i| header[i].to_string()).collect();
+-    MultichannelSeries::new(data, fs, labels).map_err(|e| format!("{}: {e}", path.display()))
++    Ok(Default::default()) /* ~ changed by cargo-mutants ~ */
+ }
+ 
+ /// Shell-style match: `*` is any run of characters, `?` any one character.
+ fn matches(pattern: &str, name: &str) -> bool {
+     let (p, n): (Vec<char>, Vec<char>) = (pattern.chars().collect(), name.chars().collect());
+     let (mut i, mut j, mut star, mut mark) = (0, 0, None, 0);
+     while j < n.len() {
+         if i < p.len() && (p[i] == '?' || p[i] == n[j]) {

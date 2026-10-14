@@ -1,0 +1,24 @@
+--- application/operations/src/regress.rs
++++ replace Params::nuisance -> Nuisance with Default::default()
+@@ -21,20 +21,17 @@
+ }
+ 
+ fn yes() -> bool {
+     true
+ }
+ 
+ impl Params {
+     fn nuisance(&self) -> Nuisance {
+-        Nuisance {
+-            detrend: self.detrend,
+-            high_pass_hz: self.high_pass_hz,
+-        }
++        Default::default() /* ~ changed by cargo-mutants ~ */
+     }
+ }
+ 
+ /// Nuisance regression: confounds, trend and slow drifts out of every channel (docs/regression.md).
+ pub struct RegressOperation;
+ 
+ impl Operation for RegressOperation {
+     fn summary(&self) -> &'static str {

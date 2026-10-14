@@ -1,0 +1,59 @@
+adapters/dataset/src/spec.rs:49:5: replace default_channels_name -> String with String::new()
+adapters/dataset/src/spec.rs:49:5: replace default_channels_name -> String with "xyzzy".into()
+adapters/dataset/src/spec.rs:115:9: replace <impl From<LayoutName> for Layout>::from -> Self with Default::default()
+adapters/dataset/src/spec.rs:137:9: replace InputSpec::validate -> Result<(), DatasetError> with Ok(())
+adapters/dataset/src/spec.rs:138:49: replace && with || in InputSpec::validate
+adapters/dataset/src/spec.rs:138:24: replace != with == in InputSpec::validate
+adapters/dataset/src/spec.rs:138:52: delete ! in InputSpec::validate
+adapters/dataset/src/spec.rs:143:52: replace == with != in InputSpec::validate
+adapters/dataset/src/spec.rs:156:45: replace || with && in InputSpec::validate
+adapters/dataset/src/spec.rs:156:20: delete ! in InputSpec::validate
+adapters/dataset/src/spec.rs:156:65: replace != with == in InputSpec::validate
+adapters/dataset/src/spec.rs:163:52: replace && with || in InputSpec::validate
+adapters/dataset/src/spec.rs:173:43: replace || with && in InputSpec::validate
+adapters/dataset/src/spec.rs:180:52: replace == with != in InputSpec::validate
+adapters/dataset/src/spec.rs:194:33: delete ! in InputSpec::validate
+adapters/dataset/src/spec.rs:195:54: replace != with == in InputSpec::validate
+adapters/dataset/src/spec.rs:209:33: delete ! in InputSpec::validate
+adapters/dataset/src/spec.rs:210:54: replace != with == in InputSpec::validate
+adapters/dataset/src/spec.rs:241:9: replace ChannelsSpec::validate -> Result<(), DatasetError> with Ok(())
+adapters/dataset/src/spec.rs:245:41: replace == with != in ChannelsSpec::validate
+adapters/dataset/src/spec.rs:251:28: replace match guard i.format == Format::EventsTsv with true in ChannelsSpec::validate
+adapters/dataset/src/spec.rs:251:28: replace match guard i.format == Format::EventsTsv with false in ChannelsSpec::validate
+adapters/dataset/src/spec.rs:256:28: replace match guard i.format == Format::TimeseriesTsv with true in ChannelsSpec::validate
+adapters/dataset/src/spec.rs:256:28: replace match guard i.format == Format::TimeseriesTsv with false in ChannelsSpec::validate
+adapters/dataset/src/spec.rs:261:28: replace match guard i.labels_file.is_some() with true in ChannelsSpec::validate
+adapters/dataset/src/spec.rs:261:28: replace match guard i.labels_file.is_some() with false in ChannelsSpec::validate
+adapters/dataset/src/spec.rs:249:50: replace == with != in ChannelsSpec::validate
+adapters/dataset/src/spec.rs:251:37: replace == with != in ChannelsSpec::validate
+adapters/dataset/src/spec.rs:256:37: replace == with != in ChannelsSpec::validate
+adapters/dataset/src/timeseries_tsv.rs:20:45: delete ! in read
+adapters/dataset/src/timeseries_tsv.rs:40:16: delete ! in read
+adapters/dataset/src/timeseries_tsv.rs:63:30: replace && with || in read
+adapters/dataset/src/timeseries_tsv.rs:63:21: replace == with != in read
+adapters/dataset/src/timeseries_tsv.rs:63:35: replace == with != in read
+adapters/dataset/src/timeseries_tsv.rs:84:5: replace matches -> bool with true
+adapters/dataset/src/timeseries_tsv.rs:84:5: replace matches -> bool with false
+adapters/dataset/src/timeseries_tsv.rs:86:13: replace < with == in matches
+adapters/dataset/src/timeseries_tsv.rs:86:13: replace < with > in matches
+adapters/dataset/src/timeseries_tsv.rs:86:13: replace < with <= in matches
+adapters/dataset/src/timeseries_tsv.rs:87:24: replace && with || in matches
+adapters/dataset/src/timeseries_tsv.rs:87:14: replace < with > in matches
+adapters/dataset/src/timeseries_tsv.rs:87:14: replace < with <= in matches
+adapters/dataset/src/timeseries_tsv.rs:87:40: replace || with && in matches
+adapters/dataset/src/timeseries_tsv.rs:87:33: replace == with != in matches
+adapters/dataset/src/timeseries_tsv.rs:87:48: replace == with != in matches
+adapters/dataset/src/timeseries_tsv.rs:88:15: replace += with -= in matches
+adapters/dataset/src/timeseries_tsv.rs:88:15: replace += with *= in matches
+adapters/dataset/src/timeseries_tsv.rs:89:15: replace += with -= in matches
+adapters/dataset/src/timeseries_tsv.rs:87:14: replace < with == in matches
+adapters/dataset/src/timeseries_tsv.rs:89:15: replace += with *= in matches
+adapters/dataset/src/timeseries_tsv.rs:90:31: replace && with || in matches
+adapters/dataset/src/timeseries_tsv.rs:90:21: replace < with == in matches
+adapters/dataset/src/timeseries_tsv.rs:90:21: replace < with > in matches
+adapters/dataset/src/timeseries_tsv.rs:90:21: replace < with <= in matches
+adapters/dataset/src/timeseries_tsv.rs:90:39: replace == with != in matches
+adapters/dataset/src/timeseries_tsv.rs:93:15: replace += with -= in matches
+adapters/dataset/src/timeseries_tsv.rs:95:19: replace + with - in matches
+adapters/dataset/src/timeseries_tsv.rs:96:18: replace += with -= in matches
+adapters/dataset/src/timeseries_tsv.rs:102:30: replace == with != in matches

@@ -1,0 +1,103 @@
+--- adapters/dataset/src/spec.rs
++++ replace InputSpec::validate -> Result<(), DatasetError> with Ok(())
+@@ -129,99 +129,17 @@
+         match (&self.sampling_rate_hz, &self.sidecar) {
+             (Some(hz), _) => SamplingRateSource::Hz(*hz),
+             (None, Some(sidecar)) => SamplingRateSource::Sidecar(sidecar),
+             (None, None) => SamplingRateSource::Hz(f64::NAN),
+         }
+     }
+ 
+     fn validate(&self) -> Result<(), DatasetError> {
+-        let invalid = |m: &str| DatasetError::Spec(format!("input {:?}: {m}", self.name));
+-        if self.format != Format::TimeseriesTsv && !self.columns.is_empty() {
+-            return Err(invalid("`columns` only applies to timeseries_tsv inputs"));
+-        }
+-        match self.format {
+-            Format::Hdf5 => {
+-                if self.sampling_rate_hz.is_some() == self.sidecar.is_some() {
+-                    return Err(invalid(
+-                        "give exactly one of `sampling_rate_hz` or `sidecar`",
+-                    ));
+-                }
+-                if self.dataset.is_none() {
+-                    return Err(invalid(
+-                        "hdf5 inputs need `dataset`, the path inside the file",
+-                    ));
+-                }
+-                if self.label_column.is_some() {
+-                    return Err(invalid("`label_column` only applies to events_tsv inputs"));
+-                }
+-                if !self.atlases.is_empty() || self.standardize != StandardizeName::None {
+-                    return Err(invalid(
+-                        "`atlases` and `standardize` only apply to nifti inputs",
+-                    ));
+-                }
+-            }
+-            Format::Nifti => {
+-                if self.sampling_rate_hz.is_some() && self.sidecar.is_some() {
+-                    return Err(invalid(
+-                        "give at most one of `sampling_rate_hz` or `sidecar`; without either, the NIfTI header's TR is used",
+-                    ));
+-                }
+-                if self.atlases.is_empty() {
+-                    return Err(invalid(
+-                        "nifti inputs need `atlases`, the label volumes to average over",
+-                    ));
+-                }
+-                if self.dataset.is_some() || self.label_column.is_some() {
+-                    return Err(invalid(
+-                        "`dataset` and `label_column` do not apply to nifti inputs",
+-                    ));
+-                }
+-            }
+-            Format::TimeseriesTsv => {
+-                if self.sampling_rate_hz.is_some() == self.sidecar.is_some() {
+-                    return Err(invalid(
+-                        "give exactly one of `sampling_rate_hz` or `sidecar`",
+-                    ));
+-                }
+-                if self.columns.is_empty() {
+-                    return Err(invalid(
+-                        "timeseries_tsv inputs need `columns`, the names or globs to read",
+-                    ));
+-                }
+-                let other = [
+-                    ("dataset", self.dataset.is_some()),
+-                    ("labels_file", self.labels_file.is_some()),
+-                    ("label_column", self.label_column.is_some()),
+-                    ("atlases", !self.atlases.is_empty()),
+-                    ("standardize", self.standardize != StandardizeName::None),
+-                ];
+-                if let Some((field, _)) = other.iter().find(|(_, set)| *set) {
+-                    return Err(invalid(&format!(
+-                        "`{field}` does not apply to timeseries_tsv inputs"
+-                    )));
+-                }
+-            }
+-            Format::EventsTsv => {
+-                let signal_only = [
+-                    ("dataset", self.dataset.is_some()),
+-                    ("sampling_rate_hz", self.sampling_rate_hz.is_some()),
+-                    ("sidecar", self.sidecar.is_some()),
+-                    ("labels_file", self.labels_file.is_some()),
+-                    ("atlases", !self.atlases.is_empty()),
+-                    ("standardize", self.standardize != StandardizeName::None),
+-                ];
+-                if let Some((field, _)) = signal_only.iter().find(|(_, set)| *set) {
+-                    return Err(invalid(&format!(
+-                        "`{field}` does not apply to events_tsv inputs"
+-                    )));
+-                }
+-            }
+-        }
+-        Ok(())
++        Ok(()) /* ~ changed by cargo-mutants ~ */
+     }
+ }
+ 
+ impl DatasetSpec {
+     pub fn from_toml(text: &str) -> Result<Self, DatasetError> {
+         let spec: Self = toml::from_str(text).map_err(|e| DatasetError::Spec(e.to_string()))?;
+         if spec.inputs.is_empty() {
+             return Err(DatasetError::Spec("declare at least one [[input]]".into()));

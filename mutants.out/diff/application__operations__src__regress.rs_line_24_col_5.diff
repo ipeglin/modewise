@@ -1,0 +1,21 @@
+--- application/operations/src/regress.rs
++++ replace yes -> bool with false
+@@ -16,17 +16,17 @@
+     #[serde(default = "yes")]
+     detrend: bool,
+     /// Also remove slow drifts below this frequency (Hz) with discrete cosine regressors in the same fit; none by default.
+     #[serde(default)]
+     high_pass_hz: Option<f64>,
+ }
+ 
+ fn yes() -> bool {
+-    true
++    false /* ~ changed by cargo-mutants ~ */
+ }
+ 
+ impl Params {
+     fn nuisance(&self) -> Nuisance {
+         Nuisance {
+             detrend: self.detrend,
+             high_pass_hz: self.high_pass_hz,
+         }

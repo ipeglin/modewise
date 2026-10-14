@@ -1,0 +1,38 @@
+--- application/operations/src/regress.rs
++++ replace <impl Operation for RegressOperation>::descriptor -> OperationDescriptor with Default::default()
+@@ -41,34 +41,17 @@
+         "Removes confound regressors, the mean, a linear trend and slow cosine drifts from every channel in one least-squares fit (docs/regression.md)."
+     }
+ 
+     fn params_schema(&self) -> serde_json::Value {
+         modewise_pipeline::schema_of::<Params>()
+     }
+ 
+     fn descriptor(&self) -> OperationDescriptor {
+-        OperationDescriptor {
+-            name: "regress",
+-            version: env!("CARGO_PKG_VERSION"),
+-            inputs: &[
+-                Port {
+-                    name: "data",
+-                    kinds: &[ArtifactKind::Series],
+-                },
+-                Port {
+-                    name: "regressors",
+-                    kinds: &[ArtifactKind::Series],
+-                },
+-            ],
+-            outputs: &[Port {
+-                name: "signal",
+-                kinds: &[ArtifactKind::Series],
+-            }],
+-        }
++        Default::default() /* ~ changed by cargo-mutants ~ */
+     }
+ 
+     fn resolve(&self, params: Value) -> Result<Value, String> {
+         let (typed, resolved) = resolve_params::<Params>(params)?;
+         if let Some(hz) = typed.high_pass_hz
+             && !(hz.is_finite() && hz > 0.0)
+         {
+             return Err(format!("high_pass_hz must be above 0, got {hz}"));

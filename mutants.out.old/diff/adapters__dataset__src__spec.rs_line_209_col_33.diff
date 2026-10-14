@@ -1,0 +1,21 @@
+--- adapters/dataset/src/spec.rs
++++ delete ! in InputSpec::validate
+@@ -201,17 +201,17 @@
+                 }
+             }
+             Format::EventsTsv => {
+                 let signal_only = [
+                     ("dataset", self.dataset.is_some()),
+                     ("sampling_rate_hz", self.sampling_rate_hz.is_some()),
+                     ("sidecar", self.sidecar.is_some()),
+                     ("labels_file", self.labels_file.is_some()),
+-                    ("atlases", !self.atlases.is_empty()),
++                    ("atlases",  /* ~ changed by cargo-mutants ~ */self.atlases.is_empty()),
+                     ("standardize", self.standardize != StandardizeName::None),
+                 ];
+                 if let Some((field, _)) = signal_only.iter().find(|(_, set)| *set) {
+                     return Err(invalid(&format!(
+                         "`{field}` does not apply to events_tsv inputs"
+                     )));
+                 }
+             }

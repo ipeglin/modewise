@@ -1,0 +1,21 @@
+--- adapters/dataset/src/spec.rs
++++ replace != with == in InputSpec::validate
+@@ -187,17 +187,17 @@
+                         "timeseries_tsv inputs need `columns`, the names or globs to read",
+                     ));
+                 }
+                 let other = [
+                     ("dataset", self.dataset.is_some()),
+                     ("labels_file", self.labels_file.is_some()),
+                     ("label_column", self.label_column.is_some()),
+                     ("atlases", !self.atlases.is_empty()),
+-                    ("standardize", self.standardize != StandardizeName::None),
++                    ("standardize", self.standardize == /* ~ changed by cargo-mutants ~ */ StandardizeName::None),
+                 ];
+                 if let Some((field, _)) = other.iter().find(|(_, set)| *set) {
+                     return Err(invalid(&format!(
+                         "`{field}` does not apply to timeseries_tsv inputs"
+                     )));
+                 }
+             }
+             Format::EventsTsv => {

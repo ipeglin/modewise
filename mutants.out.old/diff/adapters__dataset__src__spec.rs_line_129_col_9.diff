@@ -1,0 +1,25 @@
+--- adapters/dataset/src/spec.rs
++++ replace InputSpec::sampling_rate_source -> SamplingRateSource<'_> with Default::default()
+@@ -121,21 +121,17 @@
+ 
+ pub(crate) enum SamplingRateSource<'a> {
+     Hz(f64),
+     Sidecar(&'a str),
+ }
+ 
+ impl InputSpec {
+     pub(crate) fn sampling_rate_source(&self) -> SamplingRateSource<'_> {
+-        match (&self.sampling_rate_hz, &self.sidecar) {
+-            (Some(hz), _) => SamplingRateSource::Hz(*hz),
+-            (None, Some(sidecar)) => SamplingRateSource::Sidecar(sidecar),
+-            (None, None) => SamplingRateSource::Hz(f64::NAN),
+-        }
++        Default::default() /* ~ changed by cargo-mutants ~ */
+     }
+ 
+     fn validate(&self) -> Result<(), DatasetError> {
+         let invalid = |m: &str| DatasetError::Spec(format!("input {:?}: {m}", self.name));
+         if self.format != Format::TimeseriesTsv && !self.columns.is_empty() {
+             return Err(invalid("`columns` only applies to timeseries_tsv inputs"));
+         }
+         match self.format {

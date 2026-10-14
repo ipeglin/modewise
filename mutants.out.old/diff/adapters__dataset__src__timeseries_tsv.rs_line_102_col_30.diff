@@ -1,0 +1,21 @@
+--- adapters/dataset/src/timeseries_tsv.rs
++++ replace == with != in matches
+@@ -94,17 +94,17 @@
+         } else if let Some(s) = star {
+             i = s + 1;
+             mark += 1;
+             j = mark;
+         } else {
+             return false;
+         }
+     }
+-    p[i..].iter().all(|&c| c == '*')
++    p[i..].iter().all(|&c| c != /* ~ changed by cargo-mutants ~ */ '*')
+ }
+ 
+ #[cfg(test)]
+ mod tests {
+     #![allow(clippy::unwrap_used)]
+ 
+     use super::*;
+ 

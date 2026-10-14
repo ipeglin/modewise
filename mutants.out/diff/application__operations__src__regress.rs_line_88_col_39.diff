@@ -1,0 +1,21 @@
+--- application/operations/src/regress.rs
++++ replace != with == in <impl Operation for RegressOperation>::run
+@@ -80,17 +80,17 @@
+         let p: Params = serde_json::from_value(params.clone()).map_err(|e| e.to_string())?;
+         let Artifact::Series(data) = input(inputs, "data")? else {
+             return Err("input \"data\" must be a series".into());
+         };
+         let Artifact::Series(regressors) = input(inputs, "regressors")? else {
+             return Err("input \"regressors\" must be a series".into());
+         };
+         let fs = data.sampling_rate();
+-        if regressors.sampling_rate() != fs {
++        if regressors.sampling_rate() == /* ~ changed by cargo-mutants ~ */ fs {
+             return Err(format!(
+                 "regressors are sampled at {} Hz, the data at {} Hz",
+                 regressors.sampling_rate().hz(),
+                 fs.hz()
+             ));
+         }
+         let x = design(p.nuisance(), data.n_samples(), fs.hz(), regressors.data())
+             .map_err(|e| e.to_string())?;
