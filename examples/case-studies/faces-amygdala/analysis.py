@@ -3,8 +3,8 @@
 In the face-matching task, people match faces with fearful or angry expressions, or match
 shapes. Faces drive the amygdala more than shapes, one of the most replicated results in
 affective neuroimaging, along with the ventral visual stream that processes faces. This tests
-it on every TCP (ds005237) subject's hammerAP run with block averages and paired permutation
-tests, then looks, exploratorily, at whether the amygdala response tracks anhedonia (SHAPS) or
+it on every TCP (ds005237) subject's hammerAP run with block averages and with a task GLM, each
+with paired permutation tests, then looks, exploratorily, at whether the amygdala response tracks anhedonia (SHAPS) or
 differs between patients and the general population.
 
 Usage: python examples/case-studies/fetch_tcp.py hammerAP
@@ -73,7 +73,27 @@ def main() -> None:
         lines.append(f"| {report.feature_names[i]} | {report.t[i]:+.1f} | {report.p_fwer[i]:.4f} |")
     lines.append("")
 
-    # 2. Exploratory: does each subject's amygdala response track anhedonia, or differ by group?
+    # 2. The same contrast from a task GLM: each subject's face and shape betas, paired.
+    betas = results.feature_table("faces", "glm.betas", "coefficients", participants=dataset.participants)
+    glm = modewise.test_paired(betas, ("face", "shape"), n_permutations=10000, seed=1)
+    assert glm.feature_names == report.feature_names
+    glm_significant = glm.p_fwer < 0.05
+    lines += [
+        "## Faces − shapes from a task GLM (AR(1) noise, paired sign-flip test on betas, FWER over 434 regions)",
+        "",
+        f"- faces > shapes: {np.sum(glm_significant & (glm.t > 0))} regions",
+        f"- shapes > faces: {np.sum(glm_significant & (glm.t < 0))} regions",
+        f"- Across regions, the t values of the GLM and of the block averages correlate at r = {np.corrcoef(report.t, glm.t)[0, 1]:.3f}.",
+        "",
+        "| region | t (face − shape) | FWER p |",
+        "|---|---|---|",
+    ]
+    for name in AMYGDALA:
+        i = glm.feature_names.index(name)
+        lines.append(f"| **{name}** | {glm.t[i]:+.1f} | {glm.p_fwer[i]:.4f} |")
+    lines.append("")
+
+    # 3. Exploratory: does each subject's amygdala response track anhedonia, or differ by group?
     columns = [table.feature_names.index(a) for a in AMYGDALA]
     face = {r: v for r, v, c in zip(table.recordings, table.values[:, columns].mean(1), table.conditions) if c == "face"}
     shape = {r: v for r, v, c in zip(table.recordings, table.values[:, columns].mean(1), table.conditions) if c == "shape"}
@@ -99,8 +119,9 @@ def main() -> None:
         "- The TCP series had the global signal regressed out. That shifts every region's signal by the "
         "brain-wide mean, so regions with no face response tend to show shapes > faces; the count above "
         "reflects this, not a shape response.",
-        "- Blocks are averages of the BOLD signal 5 s after each block's events (a fixed lag), not a "
-        "GLM with a haemodynamic response function; for a contrast of long blocks the two agree closely.",
+        "- Blocks are averages of the BOLD signal 5 s after each block's events (a fixed lag). The GLM "
+        "instead models every trial with the canonical haemodynamic response, so the two methods share "
+        "only the data.",
         "",
     ]
     (HERE / "REPORT.md").write_text("\n".join(lines))

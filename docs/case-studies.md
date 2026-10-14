@@ -40,14 +40,16 @@ match shapes. Faces drive the amygdala more than shapes, one of the most replica
 affective neuroimaging, along with the ventral visual stream that processes faces. This case
 study cuts each TCP subject's face-matching run into face and shape blocks with a 5 s
 haemodynamic lag (`epoch`), averages each block (the `mean` feature), and tests faces against
-shapes in every region with `test_paired`. Exploratory follow-ups ask whether the amygdala
+shapes in every region with `test_paired`. It repeats the contrast with a [task GLM](glm.md),
+which models every trial with the canonical haemodynamic response. Exploratory follow-ups ask whether the amygdala
 response tracks anhedonia (SHAPS) or differs between patients and the general population, using a
 `FeatureTable` built from the per-subject contrasts. The files are in
 `examples/case-studies/faces-amygdala/`.
 
 What it shows: all four amygdala parcels respond more to faces (t = 12.7 to 25.9, FWER p < 0.001),
-and the strongest responses are in extrastriate visual cortex. The exploratory tests find no
-relation with anhedonia and no group difference.
+and the strongest responses are in extrastriate visual cortex. The GLM gives the same picture: its
+t values correlate with those of the block averages at r = 0.998 across regions. The exploratory
+tests find no relation with anhedonia and no group difference.
 
 ```{include} ../examples/case-studies/faces-amygdala/REPORT.md
 :start-line: 4

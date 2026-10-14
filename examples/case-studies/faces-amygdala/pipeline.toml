@@ -1,4 +1,4 @@
-# Faces against shapes (Hariri et al. 2002): block averages of the BOLD signal.
+# Faces against shapes (Hariri et al. 2002): block averages of the BOLD signal, and a task GLM.
 [pipeline]
 name = "faces"
 inputs = { bold = "series", trials = "events" }
@@ -9,3 +9,11 @@ id = "blocks"
 op = "epoch"
 input = { data = "bold", events = "trials" }
 params = { lag_s = 5.0, merge_gap_s = 2.0 }
+
+# The same contrast with a task GLM: each trial is a box convolved with the canonical response,
+# fitted with AR(1) noise and cosine drifts below SPM's 128 s cutoff.
+[[step]]
+id = "glm"
+op = "glm"
+input = { data = "bold", events = "trials" }
+params = { high_pass_hz = 0.0078 }
