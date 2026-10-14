@@ -32,6 +32,7 @@ datasets
 epochs
 regions
 volumes
+regression
 time-frequency
 connectivity
 features

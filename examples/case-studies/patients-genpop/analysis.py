@@ -5,8 +5,8 @@ diagnoses and a general-population comparison group. This compares their resting
 connectivity edge by edge, for the whole signal and for three octave bands of the MODWT MRA, with
 the network-based statistic (Zalesky et al. 2010): edges whose group difference passes a t
 threshold form connected components, and each component is tested against the largest component
-in permuted data. Age, sex and scanning site are covariates. There is no hypothesis here; the
-report states whatever comes out.
+in permuted data. Age, sex, scanning site and head motion (mean framewise displacement) are
+covariates. There is no hypothesis here; the report states whatever comes out.
 
 Usage: python examples/case-studies/fetch_tcp.py restAP
        python examples/case-studies/patients-genpop/analysis.py [--workers N] [--permutations N]
@@ -34,7 +34,8 @@ BANDS = {
 }
 THRESHOLDS = (3.0, 3.5)
 DIRECTIONS = {"less": "Patient < GenPop", "greater": "Patient > GenPop"}
-COVARIATES = ["age", "sex", "Site"]
+COVARIATES = ["age", "sex", "Site", "mean_fd"]
+FD_TABLE = HERE.parent / "data" / "ds005237" / "motion_FD" / "TCP_FD_rest_AP_1.csv"
 
 
 def stamp(subjects: int) -> str:
@@ -48,6 +49,21 @@ def networks() -> dict[str, str]:
     """Each channel's network: its Yeo 17-network label for cortex, its TCP network otherwise."""
     with open(HERE.parent.parent / "tcp" / "channels.tsv", newline="") as f:
         return {row["name"]: row["yeo17"] or row["tcp_network"] for row in csv.DictReader(f, delimiter="\t")}
+
+
+def mean_fd() -> dict[str, float]:
+    """Each subject's mean framewise displacement (mm) in the first restAP run. The table has one
+    row per subject (NDAR_<subject>) and one value per volume. Its first three values are 0 for
+    every subject, which scales every mean by the same factor and leaves the tests unchanged."""
+    with open(FD_TABLE, newline="", encoding="utf-8-sig") as f:
+        return {row[0].removeprefix("NDAR_"): float(np.mean([float(v) for v in row[1:]])) for row in csv.reader(f)}
+
+
+def with_mean_fd(table: modewise.FeatureTable, fd: dict[str, float]) -> modewise.FeatureTable:
+    """The table with a mean_fd column for its covariates."""
+    metadata = {**table.metadata, "mean_fd": [str(fd[s]) for s in table.subjects]}
+    return modewise.FeatureTable(table.values, table.feature_names, table.recordings, subjects=table.subjects,
+                                 conditions=table.conditions, metadata=metadata)
 
 
 def finite_edges(table: modewise.FeatureTable) -> tuple[modewise.FeatureTable, list[str]]:
@@ -81,20 +97,26 @@ def main() -> None:
     pipeline.run_dataset(dataset, HERE / "results", workers=args.workers, progress=False)
     results = modewise.Results(HERE / "results")
     network_of = networks()
+    fd = mean_fd()
 
     full = results.feature_table("rest_fc", "full", "edges", participants=dataset.participants)
     groups = Counter(full.metadata["Group"])
+    fd_by_group = {g: np.median([fd[s] for s, m in zip(full.subjects, full.metadata["Group"]) if m == g])
+                   for g in ("Patient", "GenPop")}
     lines = ["# Patients versus the general population: report", "", stamp(len(full.recordings)), "",
              f"{len(full.recordings)} subjects of TCP (ds005237), first restAP run: "
              f"{groups['Patient']} patients and {groups['GenPop']} from the general population. "
              f"Network-based statistic on Fisher-z edges, covariates {', '.join(COVARIATES)}, "
-             f"{args.permutations} permutations. Method: `pipeline.toml` and `analysis.py`.", "",
+             f"{args.permutations} permutations. Median mean framewise displacement: "
+             f"{fd_by_group['Patient']:.3f} mm in patients, {fd_by_group['GenPop']:.3f} mm in the general "
+             "population. Method: `pipeline.toml` and `analysis.py`.", "",
              "| band | direction | t threshold | components | largest component (p) |",
              "|---|---|---|---|---|"]
     found: list[str] = []
     dropped_edges: set[str] = set()
     for output, label in BANDS.items():
         table, dropped = finite_edges(results.feature_table("rest_fc", output, "edges", participants=dataset.participants))
+        table = with_mean_fd(table, fd)
         dropped_edges.update(name.split(":", 1)[1] for name in dropped)
         for tail, direction in DIRECTIONS.items():
             for threshold in THRESHOLDS:
@@ -118,8 +140,9 @@ def main() -> None:
         f"- Dropped edges, not finite in some recording: {', '.join(sorted(dropped_edges)) or 'none'}. "
         "In the TCP parcellated files the two cerebellum channels hold identical signals, so their "
         "correlation is 1 and its Fisher z infinite.",
-        "- Head motion often differs between patients and controls and can change connectivity. "
-        "These files are denoised with global signal regression, but motion is not a covariate here.",
+        "- Head motion changes connectivity and often differs between groups. The files are "
+        "denoised with global signal regression, and each subject's mean framewise displacement, "
+        "from the dataset's motion_FD table, is a covariate.",
         "- Patients in the TCP have a range of diagnoses; a difference between the groups need not "
         "hold for any single diagnosis.",
         "",

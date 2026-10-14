@@ -35,6 +35,7 @@ fn registry_lists_builtin_operations() {
             "na_mvmd",
             "reconstruct",
             "region_average",
+            "regress",
             "select",
             "spectrum",
             "stft",

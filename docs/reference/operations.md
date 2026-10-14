@@ -220,6 +220,18 @@ Averages channels by region, hemisphere or tag (functional connectivity in Fishe
 | `split_hemispheres` | boolean | `false` | Keep left and right apart: `PFCm_left`, `PFCm_right`. |
 | `tag` | string | — | Tag key to group by when `by = "tag"`, for example `yeo17`. |
 
+## `regress`
+
+Removes confound regressors, the mean, a linear trend and slow cosine drifts from every channel in one least-squares fit (docs/regression.md).
+
+- **Inputs:** `data` (series), `regressors` (series)
+- **Outputs:** `signal` (series)
+
+| Parameter | Type | Default | Meaning |
+|---|---|---|---|
+| `detrend` | boolean | `true` | Also remove a linear trend. The mean is always removed. |
+| `high_pass_hz` | number | — | Also remove slow drifts below this frequency (Hz) with discrete cosine regressors in the same fit; none by default. |
+
 ## `select`
 
 Keeps the channels whose name, region, hemisphere or tags match the rules (docs/regions.md).

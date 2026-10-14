@@ -9,6 +9,7 @@ mod hilbert;
 mod mvmd;
 mod reconstruct;
 mod regions;
+mod regress;
 mod spectrum;
 mod stft;
 mod vlmd;
@@ -27,6 +28,7 @@ pub use hilbert::{HilbertOperation, HilbertSpectrumOperation};
 pub use mvmd::{MvmdOperation, NaMvmdOperation, VmdOperation};
 pub use reconstruct::ReconstructOperation;
 pub use regions::{RegionAverageOperation, SelectOperation};
+pub use regress::RegressOperation;
 pub use spectrum::SpectrumOperation;
 pub use stft::StftOperation;
 pub use vlmd::VlmdOperation;
@@ -50,6 +52,7 @@ pub fn register_builtin(registry: &mut Registry) {
     registry.register(Arc::new(StftOperation));
     registry.register(Arc::new(VlmdOperation));
     registry.register(Arc::new(ReconstructOperation));
+    registry.register(Arc::new(RegressOperation));
     registry.register(Arc::new(RegionAverageOperation));
     registry.register(Arc::new(SelectOperation));
 }
