@@ -1,3 +1,0 @@
-application/operations/src/regress.rs:29:9: replace Params::nuisance -> Nuisance with Default::default()
-application/operations/src/regress.rs:49:9: replace <impl Operation for RegressOperation>::descriptor -> OperationDescriptor with Default::default()
-application/operations/src/regress.rs:72:13: replace && with || in <impl Operation for RegressOperation>::resolve
