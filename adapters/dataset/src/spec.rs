@@ -68,6 +68,9 @@ pub struct InputSpec {
     pub labels_file: Option<String>,
     /// events_tsv: column holding each event's label (BIDS default: `trial_type`).
     pub label_column: Option<String>,
+    /// timeseries_tsv: columns to read, by name or glob (`*`, `?`), for example `["trans_*", "rot_*"]`.
+    #[serde(default)]
+    pub columns: Vec<String>,
     /// nifti: label atlases (3D NIfTI), relative to the dataset spec's folder. Each gives one
     /// channel per label, in ascending label order; atlases are concatenated in this order.
     #[serde(default)]
@@ -94,6 +97,9 @@ pub enum Format {
     Nifti,
     /// BIDS `events.tsv`: tab-separated `onset`, `duration` and a label column.
     EventsTsv,
+    /// Tab-separated series with a header, one column per series and one row per sample, such
+    /// as fMRIPrep's `*_desc-confounds_timeseries.tsv`.
+    TimeseriesTsv,
 }
 
 #[derive(Debug, Clone, Copy, Default, Deserialize)]
@@ -129,6 +135,9 @@ impl InputSpec {
 
     fn validate(&self) -> Result<(), DatasetError> {
         let invalid = |m: &str| DatasetError::Spec(format!("input {:?}: {m}", self.name));
+        if self.format != Format::TimeseriesTsv && !self.columns.is_empty() {
+            return Err(invalid("`columns` only applies to timeseries_tsv inputs"));
+        }
         match self.format {
             Format::Hdf5 => {
                 if self.sampling_rate_hz.is_some() == self.sidecar.is_some() {
@@ -165,6 +174,30 @@ impl InputSpec {
                     return Err(invalid(
                         "`dataset` and `label_column` do not apply to nifti inputs",
                     ));
+                }
+            }
+            Format::TimeseriesTsv => {
+                if self.sampling_rate_hz.is_some() == self.sidecar.is_some() {
+                    return Err(invalid(
+                        "give exactly one of `sampling_rate_hz` or `sidecar`",
+                    ));
+                }
+                if self.columns.is_empty() {
+                    return Err(invalid(
+                        "timeseries_tsv inputs need `columns`, the names or globs to read",
+                    ));
+                }
+                let other = [
+                    ("dataset", self.dataset.is_some()),
+                    ("labels_file", self.labels_file.is_some()),
+                    ("label_column", self.label_column.is_some()),
+                    ("atlases", !self.atlases.is_empty()),
+                    ("standardize", self.standardize != StandardizeName::None),
+                ];
+                if let Some((field, _)) = other.iter().find(|(_, set)| *set) {
+                    return Err(invalid(&format!(
+                        "`{field}` does not apply to timeseries_tsv inputs"
+                    )));
                 }
             }
             Format::EventsTsv => {
@@ -218,6 +251,11 @@ impl ChannelsSpec {
                 Some(i) if i.format == Format::EventsTsv => {
                     return Err(invalid(format!(
                         "names_for: {target:?} is not a signal input"
+                    )));
+                }
+                Some(i) if i.format == Format::TimeseriesTsv => {
+                    return Err(invalid(format!(
+                        "names_for: {target:?} takes its names from its columns"
                     )));
                 }
                 Some(i) if i.labels_file.is_some() => {

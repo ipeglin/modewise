@@ -4,7 +4,8 @@ Usage: python examples/case-studies/fetch_tcp.py [task ...]      (default: restA
 
 Files come from OpenNeuro's public S3 bucket. Each download is checked against the size and MD5
 in the bucket listing; files already present with the right size are kept. About 1.7 MB per run,
-about 2 GB for every rest and face-task run of all subjects.
+about 2 GB for every rest and face-task run of all subjects, plus the framewise displacement
+tables (motion_FD, about 10 MB).
 """
 
 import hashlib
@@ -51,6 +52,8 @@ def wanted(key, tasks):
         return True
     if key.startswith("ds005237/phenotype/"):
         return name.endswith(".tsv")
+    if key.startswith("ds005237/motion_FD/"):
+        return name.endswith(".csv")
     task = re.search(r"task-([A-Za-z]+)_", name)
     if task is None or task.group(1) not in tasks:
         return False
@@ -74,7 +77,8 @@ def download(item):
 def main():
     tasks = set(sys.argv[1:] or ["restAP", "restPA", "hammerAP"])
     items = [i for prefix in ("ds005237/participants", "ds005237/dataset_description", "ds005237/phenotype/",
-                              "ds005237/fMRI_timeseries_clean_denoised_GSR_parcellated/", "ds005237/sub-")
+                              "ds005237/motion_FD/", "ds005237/fMRI_timeseries_clean_denoised_GSR_parcellated/",
+                              "ds005237/sub-")
              for i in listing(prefix) if wanted(i[0], tasks)]
     with ThreadPoolExecutor(8) as pool:
         results = list(pool.map(download, items))

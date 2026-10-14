@@ -36,11 +36,13 @@ format = "events_tsv"
 | `hdf5` | series | `dataset`, plus `sidecar` or `sampling_rate_hz` |
 | `nifti` | series: one channel per atlas label, parcellated at load time (`docs/volumes.md`) | `atlases` (paths relative to the spec's folder); optional `standardize`; `sidecar` or `sampling_rate_hz`, else the header's TR |
 | `events_tsv` | events | nothing else |
+| `timeseries_tsv` | series: one channel per chosen column, named after it ([regression](regression.md)) | `columns` (names or globs), plus `sidecar` or `sampling_rate_hz` |
 
 ## Sampling rate and events
 
 - **Sidecar:** `SamplingFrequency` (Hz) is read first, otherwise `RepetitionTime` (s), so the same rule serves EEG, MEG, fNIRS and fMRI.
 - **`events_tsv`** follows BIDS. `onset` and `duration` are in seconds from the first stored sample. Rows with `n/a` onset or duration are rejected.
+- **`timeseries_tsv`** reads a header row and one row per sample, such as fMRIPrep confounds. `n/a` in the first row takes the second row's value; `n/a` in any later row is an error.
 
 ## Channels
 

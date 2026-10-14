@@ -1018,6 +1018,7 @@ dependencies = [
  "modewise_method",
  "modewise_mvmd",
  "modewise_pipeline",
+ "modewise_regress",
  "modewise_signals",
  "modewise_spectral",
  "modewise_stft",
@@ -1096,6 +1097,16 @@ dependencies = [
  "ndarray",
  "numpy",
  "pyo3",
+ "serde_json",
+]
+
+[[package]]
+name = "modewise_regress"
+version = "0.2.0"
+dependencies = [
+ "modewise_method",
+ "ndarray",
+ "proptest",
  "serde_json",
 ]
 

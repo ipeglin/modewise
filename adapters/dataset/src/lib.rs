@@ -9,6 +9,7 @@ mod events_tsv;
 mod participants;
 mod pattern;
 mod spec;
+mod timeseries_tsv;
 
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
@@ -169,6 +170,11 @@ impl Dataset {
             Format::EventsTsv => {
                 let column = input.label_column.as_deref().unwrap_or("trial_type");
                 events_tsv::read(path, column).map(Artifact::Events)
+            }
+            Format::TimeseriesTsv => {
+                let hz = self.sampling_rate(input, recording)?.unwrap_or(f64::NAN);
+                let fs = SamplingRate::new(hz).map_err(|e| e.to_string())?;
+                timeseries_tsv::read(path, &input.columns, fs).map(Artifact::Series)
             }
         }
     }

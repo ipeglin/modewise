@@ -10,7 +10,7 @@ To rerun one:
 python examples/case-studies/fetch_tcp.py restAP restPA hammerAP   # OpenNeuro ds005237, checked against the bucket's MD5s
 python examples/case-studies/frequency-amplitude/analysis.py
 python examples/case-studies/faces-amygdala/analysis.py
-python examples/case-studies/fingerprinting/analysis.py        # about 3 GB of results
+python examples/case-studies/fingerprinting/analysis.py        # about 2.2 GB of results
 python examples/case-studies/patients-genpop/analysis.py       # about 1.4 GB of results
 ```
 
@@ -77,15 +77,16 @@ subjects than the 0.010–0.020 Hz octave, which a 6.5-minute run samples with o
 The Transdiagnostic Connectome Project recruited patients with a range of psychiatric diagnoses
 and a comparison group from the general population. This case study compares their resting-state
 connectivity edge by edge, for the full band and three MODWT octaves, with the network-based
-statistic (`test_groups` with `nbs_threshold`), adjusting for age, sex and site. It tests no
-hypothesis; it shows how a whole-connectome group comparison runs and reports what comes out. The
-files are in `examples/case-studies/patients-genpop/`.
+statistic (`test_groups` with `nbs_threshold`), adjusting for age, sex, site and head motion (mean
+framewise displacement; [regression](regression.md)). It tests no hypothesis; it shows how a
+whole-connectome group comparison runs and reports what comes out. The files are in
+`examples/case-studies/patients-genpop/`.
 
-What it shows: at t > 3.0, every band has a network of edges that is weaker in patients (full band: 691 edges,
-p = 0.002), most consistently in the full band and the 0.039–0.078 Hz octave, where it involves
-the left amygdala and lateral prefrontal cortex. A smaller network is stronger in patients in the
-full band only. These are exploratory results: head motion is not a covariate, and the patients
-span several diagnoses.
+What it shows: every band, at both thresholds, has a network of edges that is weaker in patients
+(full band at t > 3.0: 887 edges, p = 0.001). In the slowest octave (0.010–0.020 Hz) it centres on
+the left nucleus accumbens and its links to the salience network. A smaller network is stronger in
+patients in the full band only. These are exploratory results: the patients span several
+diagnoses, and sixteen tests are reported without correction across them.
 
 ```{include} ../examples/case-studies/patients-genpop/REPORT.md
 :start-line: 4
