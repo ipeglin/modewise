@@ -71,7 +71,7 @@ impl Plan {
                     step: step.id.clone(),
                     message,
                 })?;
-            let bindings = bind_ports(step, &descriptor)?;
+            let bindings = bind_ports(step, &descriptor, op.optional_inputs())?;
             let mut inputs = BTreeMap::new();
             for (port, reference) in &bindings {
                 inputs.insert(
@@ -162,6 +162,7 @@ fn check_names(spec: &PipelineSpec) -> Result<(), PipelineError> {
 fn bind_ports(
     step: &StepSpec,
     descriptor: &OperationDescriptor,
+    optional: &[&str],
 ) -> Result<Vec<(crate::Port, String)>, PipelineError> {
     let invalid = |message: String| PipelineError::InvalidInputs {
         step: step.id.clone(),
@@ -198,6 +199,7 @@ fn bind_ports(
             descriptor
                 .inputs
                 .iter()
+                .filter(|port| map.contains_key(port.name) || !optional.contains(&port.name))
                 .map(|port| {
                     map.get(port.name)
                         .map(|r| (*port, r.clone()))
@@ -448,6 +450,20 @@ mod tests {
         assert_eq!(p.steps[0].inputs.len(), 2);
         let single = plan("[[step]]\nid = \"a\"\nop = \"scale\"\ninput = { signal = \"x\" }\n");
         assert!(single.is_ok());
+    }
+
+    #[test]
+    fn optional_ports_may_stay_unconnected() {
+        let p =
+            plan("[[step]]\nid = \"a\"\nop = \"maybe_pair\"\ninput = { left = \"x\" }\n").unwrap();
+        assert_eq!(p.steps[0].inputs.keys().collect::<Vec<_>>(), ["left"]);
+        let p = plan(
+            "[[step]]\nid = \"a\"\nop = \"maybe_pair\"\ninput = { left = \"x\", right = \"x\" }\n",
+        )
+        .unwrap();
+        assert_eq!(p.steps[0].inputs.len(), 2);
+        let err = plan("[[step]]\nid = \"a\"\nop = \"maybe_pair\"\ninput = { right = \"x\" }\n");
+        assert!(err.is_err());
     }
 
     #[test]

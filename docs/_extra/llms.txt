@@ -29,6 +29,7 @@ Links point to the markdown source of each page. `llms-full.txt` holds all of th
 - [Regions](_sources/regions.md.txt): channel tables, atlases, selecting and averaging regions
 - [Volumes](_sources/volumes.md.txt): NIfTI runs parcellated with label atlases
 - [Nuisance regression](_sources/regression.md.txt): confounds, trend and cosine drifts in one fit; mean FD as a covariate
+- [Task GLM](_sources/glm.md.txt): events convolved with the canonical HRF, AR(1) prewhitening, betas to a group test
 - [Time-frequency](_sources/time-frequency.md.txt): Hilbert attributes and spectra, Morlet CWT
 - [Connectivity](_sources/connectivity.md.txt): functional connectivity (Pearson, PLV), per mode and per epoch
 - [Features](_sources/features.md.txt): feature tables from results (edges, mode power, band amplitude)

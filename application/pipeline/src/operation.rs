@@ -50,6 +50,11 @@ pub trait Operation: Send + Sync {
         port.output_kind()
     }
 
+    /// Inputs a step may leave unconnected; `run` then gets no entry for them.
+    fn optional_inputs(&self) -> &'static [&'static str] {
+        &[]
+    }
+
     /// One sentence on what the operation does, for `modewise ops` and the generated reference.
     fn summary(&self) -> &'static str {
         ""

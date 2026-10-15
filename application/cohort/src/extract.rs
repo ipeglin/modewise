@@ -1,5 +1,5 @@
 use modewise_connectivity::{FunctionalConnectivity, Measure};
-use modewise_decomposition::Decomposition;
+use modewise_decomposition::{Decomposition, Loadings};
 use modewise_epochs::{EpochSource, Epochs};
 use modewise_pipeline::Artifact;
 use modewise_spectral::TimeFrequencyMap;
@@ -30,6 +30,9 @@ pub enum Features {
     /// The mean signal per channel in each condition's epochs (each epoch's mean counts once):
     /// block averages, for example task blocks against control blocks. One row per condition.
     Mean,
+    /// One row per row of loadings, such as GLM betas or t per condition, with its label as the
+    /// condition; features are the channels.
+    Coefficients,
 }
 
 /// Feature names and, per condition (`None` for a whole run), one row of values.
@@ -52,6 +55,11 @@ impl Features {
                 band_amplitude(m, bands, *relative)
             }
             (Self::Mean, Artifact::Epochs(e)) => epoch_means(e),
+            (Self::Coefficients, Artifact::Loadings(l)) => Ok(coefficients(l)),
+            (Self::Coefficients, other) => Err(format!(
+                "coefficients need loadings, such as GLM betas, not {}",
+                other.kind()
+            )),
             (Self::Mean, other) => Err(format!(
                 "mean needs epochs of a series, not {}",
                 other.kind()
@@ -69,6 +77,18 @@ impl Features {
                 other.kind()
             )),
         }
+    }
+}
+
+fn coefficients(l: &Loadings) -> Extracted {
+    Extracted {
+        names: l.channel_labels().to_vec(),
+        rows: l
+            .latent_labels()
+            .iter()
+            .zip(l.values().rows())
+            .map(|(label, row)| (Some(label.clone()), row.to_vec()))
+            .collect(),
     }
 }
 

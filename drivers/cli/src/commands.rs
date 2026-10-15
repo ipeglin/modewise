@@ -136,7 +136,12 @@ pub(crate) fn ops(json: bool, markdown: bool) {
                 .iter()
                 .map(|p| {
                     let kinds: Vec<String> = p.kinds.iter().map(ToString::to_string).collect();
-                    format!("{} ({})", p.name, kinds.join(" or "))
+                    let optional = if op.optional_inputs().contains(&p.name) {
+                        ", optional"
+                    } else {
+                        ""
+                    };
+                    format!("{} ({}{optional})", p.name, kinds.join(" or "))
                 })
                 .collect::<Vec<_>>()
                 .join(", ")

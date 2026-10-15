@@ -30,6 +30,7 @@ members = [
   "methods/mvmd",
   "methods/parcellate",
   "methods/regress",
+  "methods/glm",
   "methods/stats",
   "methods/stft",
   "methods/vlmd",
@@ -64,6 +65,7 @@ modewise_hilbert = { path = "methods/hilbert" }
 modewise_mvmd = { path = "methods/mvmd" }
 modewise_parcellate = { path = "methods/parcellate" }
 modewise_regress = { path = "methods/regress" }
+modewise_glm = { path = "methods/glm" }
 modewise_cohort = { path = "application/cohort" }
 modewise_operations = { path = "application/operations" }
 modewise_pipeline = { path = "application/pipeline" }

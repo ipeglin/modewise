@@ -6,8 +6,14 @@ use serde_json::{Value, json};
 
 use crate::builtin_registry;
 
-fn ports(ports: &[Port]) -> Value {
-    ports.iter().map(|p| json!({"name": p.name, "kinds": p.kinds.iter().map(ToString::to_string).collect::<Vec<_>>()})).collect()
+fn ports(ports: &[Port], optional: &[&str]) -> Value {
+    ports.iter().map(|p| {
+        let mut port = json!({"name": p.name, "kinds": p.kinds.iter().map(ToString::to_string).collect::<Vec<_>>()});
+        if optional.contains(&p.name) {
+            port["optional"] = json!(true);
+        }
+        port
+    }).collect()
 }
 
 fn entry(name: &str, op: &dyn Operation) -> Value {
@@ -16,8 +22,8 @@ fn entry(name: &str, op: &dyn Operation) -> Value {
         "name": name,
         "version": d.version,
         "summary": op.summary(),
-        "inputs": ports(d.inputs),
-        "outputs": ports(d.outputs),
+        "inputs": ports(d.inputs, op.optional_inputs()),
+        "outputs": ports(d.outputs, &[]),
         "params": op.params_schema(),
     })
 }
@@ -112,9 +118,14 @@ fn port_line(ports: &Value) -> String {
                         .map(|k| k.iter().filter_map(Value::as_str).collect())
                         .unwrap_or_default();
                     format!(
-                        "`{}` ({})",
+                        "`{}` ({}{})",
                         p["name"].as_str().unwrap_or_default(),
-                        kinds.join(" or ")
+                        kinds.join(" or "),
+                        if p["optional"] == true {
+                            ", optional"
+                        } else {
+                            ""
+                        }
                     )
                 })
                 .collect::<Vec<_>>()

@@ -476,3 +476,40 @@ fn mean_averages_each_conditions_epochs_of_a_series() {
             .contains("mode_power")
     );
 }
+
+#[test]
+fn coefficients_give_one_row_per_condition() {
+    let betas = Artifact::Loadings(
+        modewise_decomposition::Loadings::new(
+            ndarray::array![[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]],
+            vec!["face".into(), "shape".into()],
+            labels(),
+        )
+        .unwrap(),
+    );
+    let outputs = [RecordingOutput {
+        recording: "subject-01",
+        artifact: &betas,
+    }];
+    let t = feature_table(&outputs, &Features::Coefficients, "subject").unwrap();
+    assert_eq!(t.feature_names(), ["a", "b", "c"]);
+    let conditions: Vec<_> = t
+        .observations()
+        .iter()
+        .map(|o| o.condition.clone().unwrap())
+        .collect();
+    assert_eq!(conditions, ["face", "shape"]);
+    assert_eq!(t.values().row(1).to_vec(), [4.0, 5.0, 6.0]);
+
+    let fc = connectivity(1.0);
+    let wrong = [RecordingOutput {
+        recording: "subject-01",
+        artifact: &fc,
+    }];
+    assert!(
+        feature_table(&wrong, &Features::Coefficients, "subject")
+            .unwrap_err()
+            .to_string()
+            .contains("need loadings")
+    );
+}

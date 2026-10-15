@@ -105,7 +105,7 @@ pub fn residuals(
 /// Orthonormal basis (samples × rank) of the columns' span by Gram–Schmidt with column
 /// pivoting, orthogonalised twice per column. Columns are scaled to unit norm first, so the
 /// rank tolerance, max(n, p)·ε as in numpy's `matrix_rank`, does not depend on their units.
-fn orthonormal_basis(design: ArrayView2<f64>) -> Array2<f64> {
+pub fn orthonormal_basis(design: ArrayView2<f64>) -> Array2<f64> {
     let (n, p) = design.dim();
     let tolerance = n.max(p) as f64 * f64::EPSILON;
     let mut remaining: Vec<Array1<f64>> = design

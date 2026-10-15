@@ -942,6 +942,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "modewise_glm"
+version = "0.2.0"
+dependencies = [
+ "modewise_epochs",
+ "modewise_method",
+ "modewise_regress",
+ "ndarray",
+ "proptest",
+ "serde_json",
+]
+
+[[package]]
 name = "modewise_hdf5"
 version = "0.2.0"
 dependencies = [
@@ -1014,6 +1026,7 @@ dependencies = [
  "modewise_emd",
  "modewise_epochs",
  "modewise_fc",
+ "modewise_glm",
  "modewise_hilbert",
  "modewise_method",
  "modewise_mvmd",

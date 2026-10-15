@@ -14,6 +14,7 @@ modewise_cwt.workspace = true
 modewise_decomposition.workspace = true
 modewise_epochs.workspace = true
 modewise_fc.workspace = true
+modewise_glm.workspace = true
 modewise_hilbert.workspace = true
 modewise_method.workspace = true
 modewise_emd.workspace = true
