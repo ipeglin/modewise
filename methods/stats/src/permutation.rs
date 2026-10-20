@@ -3,13 +3,13 @@
 use modewise_method::MethodError;
 use ndarray::{Array1, Array2, ArrayView2, Axis};
 use rand::SeedableRng;
-use rand::seq::SliceRandom;
 use rand_chacha::ChaCha8Rng;
 use rayon::prelude::*;
 
-use crate::dist::t_upper;
-use crate::glm::{Glm, welch_df, welch_t};
+use crate::dist::{f_upper, t_upper};
+use crate::glm::Glm;
 use crate::nbs::{Component, Edge, components, largest};
+use crate::rearrange::{Blocks, Rearrangements};
 
 /// Which differences count as evidence.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -50,32 +50,32 @@ pub enum Exchange {
     SignFlip,
 }
 
-/// The statistic tested.
-#[derive(Debug, Clone)]
-pub enum Statistic {
-    /// t of one regressor of a GLM; nuisance regressors are handled by Freedman–Lane.
-    Glm(Glm),
-    /// Welch's t of group a against the rest, for two groups without covariates.
-    Welch { in_a: Vec<bool> },
-}
-
 #[derive(Debug, Clone)]
 pub struct PermutationTest {
-    pub statistic: Statistic,
+    /// The model and contrast; nuisance regressors are handled by Freedman–Lane.
+    pub glm: Glm,
     pub exchange: Exchange,
+    pub blocks: Option<Blocks>,
     pub tail: Tail,
     pub n_permutations: usize,
     pub seed: u64,
-    /// Network-based statistic over edge features, at this primary threshold of the tailed t.
+    /// Network-based statistic over edge features, at this primary threshold of the tailed
+    /// statistic.
     pub nbs: Option<(Vec<Option<Edge>>, f64)>,
 }
 
 /// Per-feature results.
 #[derive(Debug, Clone, PartialEq)]
 pub struct TestResult {
+    /// "t", "F", "v" or "G".
+    pub statistic: &'static str,
+    /// Rows of the contrast: the numerator degrees of freedom of F and G.
+    pub rank: usize,
+    /// The statistic per feature.
     pub t: Array1<f64>,
+    /// Denominator degrees of freedom.
     pub df: Array1<f64>,
-    /// From Student's t (Welch–Satterthwaite df for Welch).
+    /// From Student's t for t and v, from F for F and G.
     pub p_parametric: Array1<f64>,
     /// (b + 1) / (m + 1) over m rearrangements (Phipson & Smyth 2010); exact when enumerated.
     pub p_permutation: Array1<f64>,
@@ -87,21 +87,11 @@ pub struct TestResult {
 }
 
 impl PermutationTest {
-    fn t(&self, y: ArrayView2<f64>) -> Array1<f64> {
-        match &self.statistic {
-            Statistic::Glm(glm) => glm.t(y),
-            Statistic::Welch { in_a } => welch_t(y, in_a),
-        }
-    }
-
     /// Runs the test on `y` (observations × features). Results do not depend on the number of
     /// threads: each rearrangement draws from its own random stream.
     pub fn run(&self, y: ArrayView2<f64>) -> Result<TestResult, MethodError> {
         let n = y.nrows();
-        let expected = match &self.statistic {
-            Statistic::Glm(glm) => glm.n_observations(),
-            Statistic::Welch { in_a } => in_a.len(),
-        };
+        let expected = self.glm.n_observations();
         if n != expected {
             return Err(MethodError::ShapeMismatch(format!(
                 "{n} observations but the design has {expected}"
@@ -110,58 +100,41 @@ impl PermutationTest {
         if self.n_permutations == 0 {
             return Err(MethodError::invalid("n_permutations", "must be at least 1"));
         }
-        if let (Statistic::Welch { .. }, Exchange::SignFlip) = (&self.statistic, self.exchange) {
+        let rank = self.glm.rank();
+        if rank > 1 && self.tail != Tail::Both {
             return Err(MethodError::invalid(
-                "exchange",
-                "Welch's t compares groups; use permutation",
+                "tail",
+                "an F test has no direction; use both",
             ));
         }
-        let base = match &self.statistic {
-            Statistic::Glm(glm) => glm.nuisance_residuals(y),
-            Statistic::Welch { .. } => y.to_owned(),
-        };
-        let t = self.t(y);
+        let rearrangements = Rearrangements::new(n, self.exchange, self.blocks.as_ref())?;
+        let base = self.glm.nuisance_residuals(y);
+        let t = self.glm.statistic(y);
         let observed: Vec<f64> = t.iter().map(|&v| self.tail.stat(v)).collect();
-        let exhaustive = self.exchange == Exchange::SignFlip
-            && n < 63
-            && (1u64 << n) - 1 <= self.n_permutations as u64;
+        let exhaustive = rearrangements
+            .count()
+            .is_some_and(|c| c - 1 <= self.n_permutations as u128);
         let m = if exhaustive {
-            (1usize << n) - 1
+            rearrangements.count().map_or(0, |c| c as usize - 1)
         } else {
             self.n_permutations
         };
 
         let rearranged = |r: usize| -> Array2<f64> {
-            match (self.exchange, exhaustive) {
-                (Exchange::SignFlip, true) => {
-                    let flips = r + 1; // 1..2^n − 1; 0 would be the observed data
-                    let mut out = base.clone();
-                    for (i, mut row) in out.axis_iter_mut(Axis(0)).enumerate() {
-                        if flips >> i & 1 == 1 {
-                            row.mapv_inplace(|v| -v);
-                        }
-                    }
-                    out
-                }
-                (Exchange::SignFlip, false) => {
-                    let mut rng = ChaCha8Rng::seed_from_u64(self.seed);
-                    rng.set_stream(r as u64);
-                    let mut out = base.clone();
-                    for mut row in out.axis_iter_mut(Axis(0)) {
-                        if rand::Rng::random::<bool>(&mut rng) {
-                            row.mapv_inplace(|v| -v);
-                        }
-                    }
-                    out
-                }
-                (Exchange::Permute, _) => {
-                    let mut rng = ChaCha8Rng::seed_from_u64(self.seed);
-                    rng.set_stream(r as u64);
-                    let mut order: Vec<usize> = (0..n).collect();
-                    order.shuffle(&mut rng);
-                    base.select(Axis(0), &order)
+            let order = if exhaustive {
+                rearrangements.enumerated(r as u128 + 1) // 0 would be the observed data
+            } else {
+                let mut rng = ChaCha8Rng::seed_from_u64(self.seed);
+                rng.set_stream(r as u64);
+                rearrangements.random(&mut rng)
+            };
+            let mut out = base.select(Axis(0), &order.source);
+            for (mut row, flip) in out.axis_iter_mut(Axis(0)).zip(order.flip) {
+                if flip {
+                    row.mapv_inplace(|v| -v);
                 }
             }
+            out
         };
 
         let features = observed.len();
@@ -169,7 +142,8 @@ impl PermutationTest {
             .into_par_iter()
             .map(|r| {
                 let stats: Vec<f64> = self
-                    .t(rearranged(r).view())
+                    .glm
+                    .statistic(rearranged(r).view())
                     .iter()
                     .map(|&v| self.tail.stat(v))
                     .collect();
@@ -224,19 +198,19 @@ impl PermutationTest {
             None => Vec::new(),
         };
 
-        let df = match &self.statistic {
-            Statistic::Glm(glm) => Array1::from_elem(features, glm.degrees_of_freedom()),
-            Statistic::Welch { in_a } => welch_df(y, in_a),
-        };
+        let df = self.glm.degrees_of_freedom(y);
         let p_parametric = Array1::from_shape_fn(features, |f| {
             let (tf, d) = (t[f], df[f]);
             match self.tail {
+                _ if rank > 1 => f_upper(tf, rank as f64, d),
                 Tail::Greater => t_upper(tf, d),
                 Tail::Less => t_upper(-tf, d),
                 Tail::Both => (2.0 * t_upper(tf.abs(), d)).min(1.0),
             }
         });
         Ok(TestResult {
+            statistic: self.glm.name(),
+            rank,
             t,
             df,
             p_parametric,

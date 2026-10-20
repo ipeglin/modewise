@@ -524,12 +524,18 @@ class StatsReport:
     """Per-feature results of a permutation test (docs/statistics.md)."""
 
     feature_names: list[str]
+    statistic: Literal["t", "F", "v", "G"]
+    """v and G are t and F with variance groups (Welch)."""
+    rank: int
+    """Rows of the contrast: 1 for t and v, the numerator degrees of freedom for F and G."""
     t: NDArray[np.float64]
+    """The statistic per feature, as named by statistic."""
     df: NDArray[np.float64]
+    """Denominator degrees of freedom (Welch's approximation for v and G)."""
     p_parametric: NDArray[np.float64]
-    """From Student's t (Welch–Satterthwaite df for Welch); for reference."""
+    """From Student's t (t, v) or F (F, G); for reference."""
     p_permutation: NDArray[np.float64]
-    """(b + 1) / (m + 1) over m rearrangements; exact when every sign flip was enumerated."""
+    """(b + 1) / (m + 1) over m rearrangements; exact when every rearrangement was enumerated."""
     p_fwer: NDArray[np.float64]
     """Family-wise error over all features, by the maximum statistic."""
     q_fdr: NDArray[np.float64]
@@ -540,7 +546,8 @@ class StatsReport:
     n_rearrangements: int
     exhaustive: bool
     regressors: list[str]
-    def to_pandas(self) -> Any: ...
+    def to_pandas(self) -> Any:
+        """One row per feature; the statistic's column is named by statistic."""
 
 class Loadings:
     """How strongly each latent component contributes to each channel (latent × channel)."""
@@ -622,7 +629,7 @@ def read_channels(
 def test_groups(
     table: FeatureTable,
     column: str,
-    groups: tuple[str, str],
+    groups: Sequence[str],
     *,
     covariates: Sequence[str] = (),
     condition: str | None = None,
@@ -633,10 +640,12 @@ def test_groups(
     fdr: Literal["bh", "by"] = "bh",
     nbs_threshold: float | None = None,
 ) -> StatsReport:
-    """groups[0] minus groups[1] of a participant column, per feature (docs/statistics.md).
+    """Groups of a participant column, per feature (docs/statistics.md): groups[0] minus
+    groups[1] (t) for two groups, all equal (F) for more.
 
     GLM with centred covariates (text columns dummy-coded), Freedman–Lane permutation.
-    welch=True (no covariates) uses Welch's t. One row per subject is required.
+    welch=True gives each group its own variance: Aspin–Welch v (Welch's t without
+    covariates) or G (Welch's ANOVA without covariates). One row per subject is required.
     """
 
 def test_paired(
@@ -666,6 +675,31 @@ def test_correlation(
     nbs_threshold: float | None = None,
 ) -> StatsReport:
     """The slope of a numeric participant column per feature, adjusting for covariates."""
+
+def test_glm(
+    table: FeatureTable,
+    design: ArrayLike,
+    contrast: ArrayLike,
+    *,
+    regressors: Sequence[str] | None = None,
+    exchange: Literal["permute", "signflip"] = "permute",
+    blocks: str | None = None,
+    whole_blocks: bool = False,
+    variance_groups: str | None = None,
+    tail: Literal["both", "greater", "less"] = "both",
+    n_permutations: int = 5000,
+    seed: int = 0,
+    fdr: Literal["bh", "by"] = "bh",
+    nbs_threshold: float | None = None,
+) -> StatsReport:
+    """A design matrix (one row per table row, as given: no intercept or centring added) tested
+    by a contrast (docs/statistics.md). A 1-D contrast gives t; a 2-D one gives F over its rows.
+
+    blocks and variance_groups name metadata columns, or "subject". Rows are rearranged within
+    blocks, or blocks as wholes with whole_blocks=True (Winkler et al. 2015); without blocks,
+    one row per subject is required. variance_groups gives v or G. Every rearrangement is
+    enumerated (exact p) when they fit in n_permutations.
+    """
 
 def read_nifti(
     path: str | PathLike[str],

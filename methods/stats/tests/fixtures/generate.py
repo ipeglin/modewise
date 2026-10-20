@@ -1,8 +1,9 @@
 """Regenerate statistics fixtures from independent implementations.
 
 statsmodels OLS (t and p of one coefficient), scipy Welch t-test and incomplete beta,
-statsmodels multipletests (BH, BY), an exact sign-flip enumeration in numpy, and bctpy's
-get_components for network-based statistic components.
+statsmodels multipletests (BH, BY), statsmodels f_test and anova_oneway (Welch's ANOVA), an
+exact sign-flip enumeration in numpy, and bctpy's get_components for network-based statistic
+components.
 
 Usage: uv run --no-project -p 3.12 --with numpy --with scipy --with statsmodels --with bctpy python generate.py
 """
@@ -16,6 +17,7 @@ import numpy as np
 import statsmodels.api as sm
 from scipy import special, stats
 from statsmodels.stats.multitest import multipletests
+from statsmodels.stats.oneway import anova_oneway
 
 rng = np.random.default_rng(8)
 out = {}
@@ -109,6 +111,20 @@ for c in range(1, int(membership.max()) + 1):
     if edges:
         components.append(sorted(edges))
 out["nbs"] = {"t": tmap.tolist(), "threshold": 3.0, "components": sorted(components)}
+
+# F test of the group and age coefficients together (statsmodels f_test on the GLM above).
+tests = [fit.f_test(np.array([[0.0, 1.0, 0.0], [0.0, 0.0, 1.0]])) for fit in fits]
+out["f_test"] = {"F": [float(np.squeeze(t.fvalue)) for t in tests],
+                 "p": [float(t.pvalue) for t in tests], "df": float(tests[0].df_denom)}
+
+# Welch's one-way ANOVA (statsmodels anova_oneway, unequal variances): G with one variance
+# group per cell and the equality of all cell means as the contrast.
+sizes = [6, 8, 11]
+labels = np.repeat([0, 1, 2], sizes)
+welch_y = rng.normal(0, 1, sum(sizes)) * np.array([0.6, 1.5, 3.0])[labels] + np.array([0.0, 0.5, 1.5])[labels]
+anova = anova_oneway(welch_y, labels, use_var="unequal")
+out["welch_anova"] = {"y": welch_y.tolist(), "labels": labels.tolist(), "G": float(anova.statistic),
+                      "p": float(anova.pvalue), "df": float(anova.df[1])}
 
 (Path(__file__).parent / "reference.json").write_text(json.dumps(out, indent=1))
 print("written", {k: len(v) if isinstance(v, (list, dict)) else v for k, v in out.items()})

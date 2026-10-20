@@ -3,9 +3,16 @@
 use std::collections::BTreeMap;
 
 use modewise_cohort::{Design, Settings, test};
-use modewise_stats::{Exchange, Fdr, Glm, PermutationTest, Statistic, Tail};
+use modewise_stats::{Exchange, Fdr, Glm, PermutationTest, Tail};
 use modewise_study::{FeatureTable, Observation, Participants};
 use ndarray::Array2;
+
+/// t of column `j` of `design` for each feature of `y`.
+fn glm_t(design: Array2<f64>, j: usize, y: ndarray::ArrayView2<f64>) -> ndarray::Array1<f64> {
+    let p = design.ncols();
+    let contrast = Array2::from_shape_fn((1, p), |(_, k)| f64::from(k == j));
+    Glm::new(design, contrast).unwrap().statistic(y)
+}
 
 fn settings() -> Settings {
     Settings {
@@ -83,8 +90,7 @@ fn group_glm_with_covariates_matches_a_hand_built_design() {
         &t,
         &Design::Groups {
             column: "group".into(),
-            a: "Patient".into(),
-            b: "GenPop".into(),
+            levels: vec!["Patient".into(), "GenPop".into()],
             welch: false,
         },
         &s,
@@ -107,7 +113,7 @@ fn group_glm_with_covariates_matches_a_hand_built_design() {
         [1.0, if i < 5 { 1.0 } else { 0.0 }, age[i], male[i]][c]
     });
     let y = t.values().slice(ndarray::s![..9, ..]).to_owned();
-    let expected = Glm::new(design, 1).unwrap().t(y.view());
+    let expected = glm_t(design, 1, y.view());
     for f in 0..2 {
         assert!((r.t[f] - expected[f]).abs() < 1e-12);
     }
@@ -127,17 +133,21 @@ fn welch_paired_and_correlation_designs() {
         &t,
         &Design::Groups {
             column: "group".into(),
-            a: "Patient".into(),
-            b: "GenPop".into(),
+            levels: vec!["Patient".into(), "GenPop".into()],
             welch: true,
         },
         &settings(),
     )
     .unwrap();
-    let in_a: Vec<bool> = (0..10).map(|s| s < 5).collect();
+    let design = Array2::from_shape_fn((10, 2), |(i, c)| f64::from(c == 0 || i < 5));
+    let contrast = ndarray::array![[0.0, 1.0]];
+    let v = Glm::new(design, contrast).unwrap();
     let direct = PermutationTest {
-        statistic: Statistic::Welch { in_a },
+        glm: v
+            .with_variance_groups((0..10).map(|s| usize::from(s >= 5)).collect())
+            .unwrap(),
         exchange: Exchange::Permute,
+        blocks: None,
         tail: Tail::Both,
         n_permutations: 200,
         seed: 3,
@@ -145,6 +155,7 @@ fn welch_paired_and_correlation_designs() {
     }
     .run(t.values())
     .unwrap();
+    assert_eq!((welch.statistic, direct.statistic), ("v", "v"));
     assert_eq!(welch.t, direct.t);
     assert_eq!(welch.p_permutation, direct.p_permutation);
 
@@ -197,8 +208,7 @@ fn designs_refuse_what_breaks_their_assumptions() {
     let both = table(&["face", "shape"]);
     let groups = Design::Groups {
         column: "group".into(),
-        a: "Patient".into(),
-        b: "GenPop".into(),
+        levels: vec!["Patient".into(), "GenPop".into()],
         welch: false,
     };
     let err = |t: &FeatureTable, d: &Design, s: &Settings| test(t, d, s).unwrap_err();
@@ -216,21 +226,16 @@ fn designs_refuse_what_breaks_their_assumptions() {
     );
     let welch_cov = Design::Groups {
         column: "group".into(),
-        a: "Patient".into(),
-        b: "GenPop".into(),
+        levels: vec!["Patient".into(), "GenPop".into()],
         welch: true,
     };
-    assert!(
-        err(
-            &table(&[""]),
-            &welch_cov,
-            &Settings {
-                covariates: vec!["age".into()],
-                ..settings()
-            }
-        )
-        .contains("no covariates")
-    );
+    let with_age = Settings {
+        covariates: vec!["age".into()],
+        ..settings()
+    };
+    let v = test(&table(&[""]), &welch_cov, &with_age).unwrap();
+    assert_eq!(v.statistic, "v", "Welch with covariates is Aspin–Welch v");
+    assert_eq!(v.regressors, ["intercept", "group=Patient", "age"]);
     assert!(
         err(
             &both,
@@ -292,8 +297,7 @@ fn designs_refuse_what_breaks_their_assumptions() {
     );
     let one_group = Design::Groups {
         column: "group".into(),
-        a: "Patient".into(),
-        b: "Nobody".into(),
+        levels: vec!["Patient".into(), "Nobody".into()],
         welch: true,
     };
     assert!(err(&table(&[""]), &one_group, &settings()).contains("at least two"));
@@ -311,8 +315,7 @@ fn nbs_maps_edge_features_to_networks() {
         &t,
         &Design::Groups {
             column: "group".into(),
-            a: "Patient".into(),
-            b: "GenPop".into(),
+            levels: vec!["Patient".into(), "GenPop".into()],
             welch: false,
         },
         &s,
@@ -363,8 +366,7 @@ fn boundaries_filters_and_covariates_in_paired_designs() {
             &small,
             &Design::Groups {
                 column: "g".into(),
-                a: a.into(),
-                b: b.into(),
+                levels: vec![a.into(), b.into()],
                 welch: true,
             },
             &settings(),
@@ -372,6 +374,13 @@ fn boundaries_filters_and_covariates_in_paired_designs() {
     };
     assert_eq!(pair("A", "B").unwrap().n_observations, 4);
     assert!(pair("C", "D").unwrap_err().contains("at least two"));
+    let three = Design::Groups {
+        column: "g".into(),
+        levels: vec!["A".into(), "B".into(), "C".into()],
+        welch: false,
+    };
+    let err = test(&small, &three, &settings()).unwrap_err();
+    assert!(err.contains("at least two"), "C has one subject: {err}");
 
     // A missing group label and a missing covariate are both counted.
     let mut partial = BTreeMap::new();
@@ -398,8 +407,7 @@ fn boundaries_filters_and_covariates_in_paired_designs() {
         &gappy,
         &Design::Groups {
             column: "g".into(),
-            a: "A".into(),
-            b: "B".into(),
+            levels: vec!["A".into(), "B".into()],
             welch: false,
         },
         &Settings {
@@ -434,7 +442,7 @@ fn boundaries_filters_and_covariates_in_paired_designs() {
         Array2::from_shape_fn((10, 2), |(i, c)| if c == 0 { 1.0 } else { shaps[i] - mean });
     let shape_rows: Vec<usize> = (0..10).map(|s| 2 * s + 1).collect();
     let y = both.values().select(ndarray::Axis(0), &shape_rows);
-    assert_eq!(r.t, Glm::new(design, 1).unwrap().t(y.view()));
+    assert_eq!(r.t, glm_t(design, 1, y.view()));
 
     // Paired with a covariate: the intercept of differences on a centred covariate.
     let r = test(
@@ -453,12 +461,11 @@ fn boundaries_filters_and_covariates_in_paired_designs() {
     let diffs = Array2::from_shape_fn((10, 2), |(s, f)| {
         both.values()[[2 * s, f]] - both.values()[[2 * s + 1, f]]
     });
-    let expected = Glm::new(
+    let expected = glm_t(
         Array2::from_shape_fn((10, 2), |(i, c)| if c == 0 { 1.0 } else { shaps[i] - mean }),
         0,
-    )
-    .unwrap()
-    .t(diffs.view());
+        diffs.view(),
+    );
     for f in 0..2 {
         assert!(
             (r.t[f] - expected[f]).abs() < 1e-9 * expected[f].abs().max(1.0),
@@ -467,4 +474,191 @@ fn boundaries_filters_and_covariates_in_paired_designs() {
             expected[f]
         );
     }
+}
+
+#[test]
+fn three_groups_give_f_or_g() {
+    let t = table(&[""]);
+    let p = Participants::new(
+        vec!["site".into()],
+        (0..10)
+            .map(|s| {
+                let site = ["A", "B", "C"][s % 3].to_string();
+                (format!("s{s:02}"), BTreeMap::from([("site".into(), site)]))
+            })
+            .collect(),
+    )
+    .unwrap();
+    let t = t.with_participants(&p).unwrap();
+    let design = |welch| Design::Groups {
+        column: "site".into(),
+        levels: vec!["A".into(), "B".into(), "C".into()],
+        welch,
+    };
+    let r = test(&t, &design(false), &settings()).unwrap();
+    assert_eq!((r.statistic, r.rank), ("F", 2));
+    assert_eq!(r.regressors, ["intercept", "site=A", "site=B"]);
+    let x = Array2::from_shape_fn((10, 3), |(i, c)| match c {
+        0 => 1.0,
+        c => f64::from(i % 3 == c - 1),
+    });
+    let f = Glm::new(x, ndarray::array![[0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]).unwrap();
+    assert_eq!(r.t, f.statistic(t.values()));
+    assert_eq!(test(&t, &design(true), &settings()).unwrap().statistic, "G");
+    let repeated = Design::Groups {
+        column: "site".into(),
+        levels: vec!["A".into(), "A".into()],
+        welch: false,
+    };
+    assert!(
+        test(&t, &repeated, &settings())
+            .unwrap_err()
+            .contains("different levels")
+    );
+}
+
+/// The design matrix of a within-subject effect: condition, plus one column per subject.
+fn within_subject(table: &FeatureTable) -> (Array2<f64>, Vec<String>) {
+    let rows = table.observations();
+    let design = Array2::from_shape_fn((rows.len(), 11), |(i, c)| match c {
+        0 => f64::from(rows[i].condition.as_deref() == Some("face")),
+        c => f64::from(i / 2 == c - 1),
+    });
+    let mut names = vec!["face".to_string()];
+    names.extend((0..10).map(|s| format!("s{s:02}")));
+    (design, names)
+}
+
+#[test]
+fn a_design_matrix_takes_blocks_and_within_subject_permutation_is_paired_sign_flipping() {
+    let template = table(&["face", "shape"]);
+    let values = Array2::from_shape_fn((20, 2), |(i, f)| {
+        (i as f64 * 0.7 + f as f64).sin() + 0.4 * f64::from(i % 2 == 0)
+    });
+    let both = FeatureTable::new(
+        template.observations().to_vec(),
+        template.feature_names().to_vec(),
+        values,
+    )
+    .unwrap();
+    let (design, regressors) = within_subject(&both);
+    let matrix = |blocks: Option<&str>, whole| Design::Matrix {
+        design: design.clone(),
+        regressors: regressors.clone(),
+        contrast: tested_first(11),
+        exchange: Exchange::Permute,
+        blocks: blocks.map(Into::into),
+        whole_blocks: whole,
+        variance_groups: None,
+    };
+    let s = Settings {
+        n_permutations: 2000,
+        ..settings()
+    };
+    let within = test(&both, &matrix(Some("subject"), false), &s).unwrap();
+    let paired = test(
+        &both,
+        &Design::Paired {
+            a: "face".into(),
+            b: "shape".into(),
+        },
+        &s,
+    )
+    .unwrap();
+    assert!(within.exhaustive && within.n_rearrangements == 1023);
+    assert_eq!(within.regressors, regressors);
+    for f in 0..2 {
+        assert!((within.t[f] - paired.t[f]).abs() < 1e-9 * paired.t[f].abs());
+        assert!((within.p_permutation[f] - paired.p_permutation[f]).abs() < 1e-12);
+    }
+    let unblocked = test(&both, &matrix(None, false), &s).unwrap_err();
+    assert!(
+        unblocked.contains("use test_glm with blocks"),
+        "{unblocked}"
+    );
+
+    // A between-subject group with two rows per subject: whole subjects move together.
+    let group = Array2::from_shape_fn((20, 2), |(i, c)| f64::from(c == 0 || i < 10));
+    let whole = Design::Matrix {
+        design: group.clone(),
+        regressors: vec!["intercept".into(), "patient".into()],
+        contrast: ndarray::array![[0.0, 1.0]],
+        exchange: Exchange::Permute,
+        blocks: Some("subject".into()),
+        whole_blocks: true,
+        variance_groups: Some("group".into()),
+    };
+    let r = test(&template, &whole, &settings()).unwrap();
+    assert_eq!(
+        (r.statistic, r.n_observations, r.exhaustive),
+        ("v", 20, false)
+    );
+}
+
+fn tested_first(p: usize) -> Array2<f64> {
+    Array2::from_shape_fn((1, p), |(_, k)| f64::from(k == 0))
+}
+
+#[test]
+fn a_design_matrix_is_checked() {
+    let one = table(&[""]);
+    let ok = Design::Matrix {
+        design: Array2::ones((10, 1)),
+        regressors: vec!["intercept".into()],
+        contrast: ndarray::array![[1.0]],
+        exchange: Exchange::SignFlip,
+        blocks: None,
+        whole_blocks: false,
+        variance_groups: None,
+    };
+    assert_eq!(
+        test(&one, &ok, &settings()).unwrap().regressors,
+        ["intercept"]
+    );
+    let with = |f: &dyn Fn(&mut Design)| {
+        let mut d = ok.clone();
+        f(&mut d);
+        test(&one, &d, &settings()).unwrap_err()
+    };
+    let set_design = |x: Array2<f64>| {
+        move |d: &mut Design| {
+            if let Design::Matrix { design, .. } = d {
+                *design = x.clone();
+            }
+        }
+    };
+    assert!(with(&set_design(Array2::ones((9, 1)))).contains("9 rows"));
+    let mut missing = Array2::ones((10, 1));
+    missing[[3, 0]] = f64::NAN;
+    assert!(with(&set_design(missing)).contains("missing"));
+    assert!(
+        with(&|d| if let Design::Matrix { regressors, .. } = d {
+            regressors.push("extra".into());
+        })
+        .contains("2 regressor names")
+    );
+    assert!(
+        with(&|d| if let Design::Matrix { blocks, .. } = d {
+            *blocks = Some("age".into());
+        })
+        .contains("has no age")
+    );
+    assert!(
+        with(&|d| if let Design::Matrix {
+            variance_groups, ..
+        } = d
+        {
+            *variance_groups = Some("height".into());
+        })
+        .contains("height")
+    );
+    let covariates = Settings {
+        covariates: vec!["age".into()],
+        ..settings()
+    };
+    assert!(
+        test(&one, &ok, &covariates)
+            .unwrap_err()
+            .contains("no covariates")
+    );
 }

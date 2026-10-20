@@ -48,6 +48,7 @@ fn _core(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(pipeline::operations, m)?)?;
     m.add_function(wrap_pyfunction!(statistics::test_paired, m)?)?;
     m.add_function(wrap_pyfunction!(statistics::test_correlation, m)?)?;
+    m.add_function(wrap_pyfunction!(statistics::test_glm, m)?)?;
     m.add_function(wrap_pyfunction!(channels::read_channels, m)?)?;
     m.add_class::<results::FunctionalConnectivity>()?;
     m.add_function(wrap_pyfunction!(
