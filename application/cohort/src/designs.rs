@@ -2,26 +2,35 @@
 
 use std::collections::{BTreeMap, BTreeSet};
 
-use modewise_stats::{
-    Component, Edge, Exchange, Fdr, Glm, PermutationTest, Statistic, Tail, adjust,
-};
+use modewise_stats::{Blocks, Component, Edge, Exchange, Fdr, Glm, PermutationTest, Tail, adjust};
 use modewise_study::FeatureTable;
 use ndarray::{Array1, Array2};
 
 /// Which comparison to test.
 #[derive(Debug, Clone, PartialEq)]
 pub enum Design {
-    /// Group `a` minus group `b` of a participant column. `welch` (no covariates) uses Welch's t.
+    /// Groups of a participant column: the first minus the second (t) for two levels, all
+    /// equal (F) for more. `welch` gives each group its own variance (v or G).
     Groups {
         column: String,
-        a: String,
-        b: String,
+        levels: Vec<String>,
         welch: bool,
     },
     /// Condition `a` minus condition `b` within each recording, by sign flipping.
     Paired { a: String, b: String },
     /// The slope of a numeric participant column.
     Correlation { score: String },
+    /// A design matrix (one row per table row) and a contrast: one row gives t, more give F.
+    /// Blocks and variance groups name metadata columns, or "subject".
+    Matrix {
+        design: Array2<f64>,
+        regressors: Vec<String>,
+        contrast: Array2<f64>,
+        exchange: Exchange,
+        blocks: Option<String>,
+        whole_blocks: bool,
+        variance_groups: Option<String>,
+    },
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -48,6 +57,11 @@ pub struct NamedComponent {
 #[derive(Debug, Clone, PartialEq)]
 pub struct Report {
     pub feature_names: Vec<String>,
+    /// "t", "F", "v" or "G".
+    pub statistic: &'static str,
+    /// Rows of the contrast.
+    pub rank: usize,
+    /// The statistic per feature.
     pub t: Array1<f64>,
     pub df: Array1<f64>,
     pub p_parametric: Array1<f64>,
@@ -67,10 +81,16 @@ pub struct Report {
 struct Prepared {
     y: Array2<f64>,
     columns: Vec<(String, Vec<f64>)>,
-    tested: usize,
+    contrast: Array2<f64>,
     exchange: Exchange,
-    in_a: Option<Vec<bool>>,
+    blocks: Option<Blocks>,
+    variance_groups: Option<Vec<usize>>,
     dropped: usize,
+}
+
+/// A one-row contrast testing column `j` of `p`.
+fn tested(j: usize, p: usize) -> Array2<f64> {
+    Array2::from_shape_fn((1, p), |(_, k)| f64::from(k == j))
 }
 
 pub fn test(table: &FeatureTable, design: &Design, settings: &Settings) -> Result<Report, String> {
@@ -81,26 +101,22 @@ pub fn test(table: &FeatureTable, design: &Design, settings: &Settings) -> Resul
         .iter()
         .map(|(name, _)| name.clone())
         .collect();
-    let statistic = match prepared.in_a {
-        Some(in_a) => {
-            if in_a.iter().filter(|&&g| g).count() < 2 || in_a.iter().filter(|&&g| !g).count() < 2 {
-                return Err("each group needs at least two observations".into());
-            }
-            Statistic::Welch { in_a }
-        }
-        None => {
-            let design = Array2::from_shape_fn((n, prepared.columns.len()), |(i, c)| {
-                prepared.columns[c].1[i]
-            });
-            Statistic::Glm(Glm::new(design, prepared.tested).map_err(|e| e.to_string())?)
-        }
-    };
+    let design = Array2::from_shape_fn((n, prepared.columns.len()), |(i, c)| {
+        prepared.columns[c].1[i]
+    });
+    let mut glm = Glm::new(design, prepared.contrast).map_err(|e| e.to_string())?;
+    if let Some(groups) = prepared.variance_groups {
+        glm = glm
+            .with_variance_groups(groups)
+            .map_err(|e| e.to_string())?;
+    }
     let edges = settings
         .nbs_threshold
         .map(|threshold| (edge_map(table.feature_names()), threshold));
     let result = PermutationTest {
-        statistic,
+        glm,
         exchange: prepared.exchange,
+        blocks: prepared.blocks,
         tail: settings.tail,
         n_permutations: settings.n_permutations,
         seed: settings.seed,
@@ -123,6 +139,8 @@ pub fn test(table: &FeatureTable, design: &Design, settings: &Settings) -> Resul
         });
     Ok(Report {
         feature_names: names.to_vec(),
+        statistic: result.statistic,
+        rank: result.rank,
         t: result.t,
         df: result.df,
         p_parametric: result.p_parametric,
@@ -187,52 +205,63 @@ fn prepare(table: &FeatureTable, design: &Design, settings: &Settings) -> Result
             });
             Ok(Prepared {
                 y,
+                contrast: tested(0, columns.len()),
                 columns,
-                tested: 0,
                 exchange: Exchange::SignFlip,
-                in_a: None,
+                blocks: None,
+                variance_groups: None,
                 dropped,
             })
         }
         Design::Groups {
             column,
-            a,
-            b,
+            levels,
             welch,
         } => {
-            if *welch && !settings.covariates.is_empty() {
-                return Err("Welch's t takes no covariates; use the GLM (welch = false)".into());
+            let distinct: BTreeSet<&String> = levels.iter().collect();
+            if levels.len() < 2 || distinct.len() != levels.len() {
+                return Err(format!(
+                    "groups needs at least two different levels, got {levels:?}"
+                ));
             }
             require_condition(&conditions, settings)?;
             let labels = metadata(column)?;
             let candidates: Vec<usize> = (0..rows.len()).filter(|&i| in_condition(i)).collect();
             let missing = candidates.iter().filter(|&&i| labels[i].is_none()).count();
+            let level = |i: usize| {
+                labels[i]
+                    .as_ref()
+                    .and_then(|v| levels.iter().position(|l| l == v))
+            };
             let chosen: Vec<usize> = candidates
                 .into_iter()
-                .filter(|&i| matches!(labels[i].as_deref(), Some(v) if v == a || v == b))
+                .filter(|&i| level(i).is_some())
                 .collect();
             check_one_per_subject(table, chosen.iter().copied())?;
             let (kept, covariates, dropped) =
                 covariate_columns(table, &settings.covariates, chosen)?;
-            let in_a: Vec<bool> = kept
-                .iter()
-                .map(|&i| labels[i].as_deref() == Some(a.as_str()))
-                .collect();
-            let mut columns = vec![
-                ("intercept".to_string(), vec![1.0; kept.len()]),
-                (
-                    format!("{column}={a}"),
-                    in_a.iter().map(|&g| if g { 1.0 } else { 0.0 }).collect(),
-                ),
-            ];
+            let group: Vec<usize> = kept.iter().map(|&i| level(i).unwrap_or(0)).collect();
+            if (0..levels.len()).any(|g| group.iter().filter(|&&x| x == g).count() < 2) {
+                return Err("each group needs at least two observations".into());
+            }
+            let mut columns = vec![("intercept".to_string(), vec![1.0; kept.len()])];
+            // One dummy per level but the last, which is the baseline.
+            for (g, name) in levels[..levels.len() - 1].iter().enumerate() {
+                let dummy = group.iter().map(|&x| f64::from(x == g)).collect();
+                columns.push((format!("{column}={name}"), dummy));
+            }
             columns.extend(covariates);
+            let p = columns.len();
+            let contrast =
+                Array2::from_shape_fn((levels.len() - 1, p), |(r, k)| f64::from(k == r + 1));
             let y = table.values().select(ndarray::Axis(0), &kept);
             Ok(Prepared {
                 y,
                 columns,
-                tested: 1,
+                contrast,
                 exchange: Exchange::Permute,
-                in_a: welch.then_some(in_a),
+                blocks: None,
+                variance_groups: welch.then_some(group),
                 dropped: dropped + missing,
             })
         }
@@ -250,14 +279,104 @@ fn prepare(table: &FeatureTable, design: &Design, settings: &Settings) -> Result
             let y = table.values().select(ndarray::Axis(0), &kept);
             Ok(Prepared {
                 y,
+                contrast: tested(1, columns.len()),
                 columns,
-                tested: 1,
                 exchange: Exchange::Permute,
-                in_a: None,
+                blocks: None,
+                variance_groups: None,
                 dropped,
             })
         }
+        Design::Matrix {
+            design,
+            regressors,
+            contrast,
+            exchange,
+            blocks,
+            whole_blocks,
+            variance_groups,
+        } => {
+            if !settings.covariates.is_empty() || settings.condition.is_some() {
+                return Err(
+                    "a design matrix takes no covariates or condition; put them in the matrix"
+                        .into(),
+                );
+            }
+            if design.nrows() != rows.len() {
+                return Err(format!(
+                    "the design has {} rows, the table {}",
+                    design.nrows(),
+                    rows.len()
+                ));
+            }
+            if regressors.len() != design.ncols() {
+                return Err(format!(
+                    "{} regressor names for {} design columns",
+                    regressors.len(),
+                    design.ncols()
+                ));
+            }
+            if design.iter().any(|v| !v.is_finite()) {
+                return Err("the design has missing or infinite values".into());
+            }
+            if blocks.is_none() {
+                check_one_per_subject(table, 0..rows.len())?;
+            }
+            let blocks = blocks
+                .as_deref()
+                .map(|column| {
+                    Ok::<_, String>(Blocks {
+                        block: labels(table, column)?,
+                        whole: *whole_blocks,
+                    })
+                })
+                .transpose()?;
+            let variance_groups = variance_groups
+                .as_deref()
+                .map(|column| labels(table, column))
+                .transpose()?;
+            let columns = regressors
+                .iter()
+                .zip(design.columns())
+                .map(|(name, c)| (name.clone(), c.to_vec()))
+                .collect();
+            Ok(Prepared {
+                y: table.values().to_owned(),
+                columns,
+                contrast: contrast.clone(),
+                exchange: *exchange,
+                blocks,
+                variance_groups,
+                dropped: 0,
+            })
+        }
     }
+}
+
+/// Each row's label in a metadata column (or "subject"), as indices 0, 1, … in order of first
+/// appearance.
+fn labels(table: &FeatureTable, column: &str) -> Result<Vec<usize>, String> {
+    let rows = table.observations();
+    let text: Vec<Option<&str>> = match table.metadata(column) {
+        Ok(values) => values.iter().map(Option::as_deref).collect(),
+        Err(_) if column == "subject" => rows.iter().map(|o| o.subject.as_deref()).collect(),
+        Err(e) => return Err(e.to_string()),
+    };
+    let mut seen: Vec<&str> = Vec::new();
+    text.iter()
+        .enumerate()
+        .map(|(i, value)| {
+            let value =
+                value.ok_or_else(|| format!("row {i} ({}) has no {column}", rows[i].recording))?;
+            Ok(match seen.iter().position(|s| *s == value) {
+                Some(k) => k,
+                None => {
+                    seen.push(value);
+                    seen.len() - 1
+                }
+            })
+        })
+        .collect()
 }
 
 fn require_condition(conditions: &BTreeSet<&str>, settings: &Settings) -> Result<(), String> {
@@ -279,7 +398,7 @@ fn check_one_per_subject(
             && !seen.insert(s.clone())
         {
             return Err(format!(
-                "subject {s:?} appears more than once; rows must be exchangeable, so keep one row per subject (average runs, or filter first)"
+                "subject {s:?} appears more than once; rows must be exchangeable, so keep one row per subject (average runs, or filter first), or use test_glm with blocks"
             ));
         }
     }

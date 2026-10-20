@@ -29,7 +29,7 @@ Unknown parameters are rejected, and missing ones take the defaults in the schem
    `BatchRun.failed`.
 4. **Collect** features across recordings with `Results.feature_table` ([features](features.md)),
    or arrays with `Results.stack`. Values you derive yourself go into `modewise.FeatureTable(...)`.
-5. **Test** with `test_groups`, `test_paired` or `test_correlation`
+5. **Test** with `test_groups`, `test_paired`, `test_correlation` or `test_glm`
    ([statistics](statistics.md)); use `p_fwer` or `q_fdr`, not the uncorrected p-values, when
    many features are tested.
 

@@ -4,8 +4,7 @@
 #![allow(clippy::unwrap_used)]
 
 use modewise_stats::{
-    Edge, Exchange, Fdr, Glm, PermutationTest, Statistic, Tail, adjust, incomplete_beta, t_upper,
-    welch_df, welch_t,
+    Edge, Exchange, Fdr, Glm, PermutationTest, Tail, adjust, incomplete_beta, t_upper,
 };
 use ndarray::{Array1, Array2};
 use serde_json::Value;
@@ -34,15 +33,21 @@ fn close(a: f64, b: f64, tol: f64, what: &str) {
     );
 }
 
-fn test(
-    statistic: Statistic,
-    exchange: Exchange,
-    tail: Tail,
-    n_permutations: usize,
-) -> PermutationTest {
+/// The GLM testing regressor `j` of `design`.
+fn glm(design: Array2<f64>, j: usize) -> Glm {
+    let p = design.ncols();
+    Glm::new(
+        design,
+        Array2::from_shape_fn((1, p), |(_, k)| f64::from(k == j)),
+    )
+    .unwrap()
+}
+
+fn test(glm: Glm, exchange: Exchange, tail: Tail, n_permutations: usize) -> PermutationTest {
     PermutationTest {
-        statistic,
+        glm,
         exchange,
+        blocks: None,
         tail,
         n_permutations,
         seed: 7,
@@ -54,8 +59,7 @@ fn test(
 fn glm_t_and_p_match_statsmodels() {
     let f = &fixture()["glm"];
     let (design, y) = (matrix(&f["design"]), matrix(&f["y"]));
-    let glm = Glm::new(design.clone(), 1).unwrap();
-    let r = test(Statistic::Glm(glm), Exchange::Permute, Tail::Both, 999)
+    let r = test(glm(design.clone(), 1), Exchange::Permute, Tail::Both, 999)
         .run(y.view())
         .unwrap();
     for (i, (t, p)) in floats(&f["t"])
@@ -66,32 +70,66 @@ fn glm_t_and_p_match_statsmodels() {
         close(r.t[i], *t, 1e-10, "t");
         close(r.p_parametric[i], p, 1e-9, "p");
     }
-    let age = Glm::new(design, 2).unwrap();
-    for (got, want) in age.t(y.view()).iter().zip(floats(&f["t_age"])) {
+    let age = glm(design, 2);
+    for (got, want) in age.statistic(y.view()).iter().zip(floats(&f["t_age"])) {
         close(*got, want, 1e-10, "t of age");
     }
 }
 
 #[test]
-fn welch_matches_scipy() {
+fn v_of_two_groups_is_welch_t_as_in_scipy() {
     let f = &fixture()["welch"];
     let y = Array2::from_shape_vec((24, 1), floats(&f["y"])).unwrap();
     let in_a: Vec<bool> = serde_json::from_value(f["in_a"].clone()).unwrap();
-    close(
-        welch_t(y.view(), &in_a)[0],
-        f["t"].as_f64().unwrap(),
-        1e-12,
-        "t",
-    );
-    close(
-        welch_df(y.view(), &in_a)[0],
-        f["df"].as_f64().unwrap(),
-        1e-10,
-        "df",
-    );
-    let r = test(Statistic::Welch { in_a }, Exchange::Permute, Tail::Both, 99)
+    let design = Array2::from_shape_fn((24, 2), |(i, c)| f64::from(c == 0 || in_a[i]));
+    let groups = in_a.iter().map(|&a| usize::from(a)).collect();
+    let v = glm(design, 1).with_variance_groups(groups).unwrap();
+    let r = test(v, Exchange::Permute, Tail::Both, 99)
         .run(y.view())
         .unwrap();
+    assert_eq!(r.statistic, "v");
+    close(r.t[0], f["t"].as_f64().unwrap(), 1e-12, "t");
+    close(r.df[0], f["df"].as_f64().unwrap(), 1e-10, "df");
+    close(r.p_parametric[0], f["p"].as_f64().unwrap(), 1e-9, "p");
+}
+
+#[test]
+fn f_matches_statsmodels() {
+    let (fx, g) = (fixture(), &fixture()["f_test"]);
+    let contrast = ndarray::array![[0.0, 1.0, 0.0], [0.0, 0.0, 1.0]];
+    let f = Glm::new(matrix(&fx["glm"]["design"]), contrast).unwrap();
+    let y = matrix(&fx["glm"]["y"]);
+    let r = test(f.clone(), Exchange::Permute, Tail::Both, 99)
+        .run(y.view())
+        .unwrap();
+    assert_eq!((r.statistic, r.rank), ("F", 2));
+    for (i, (want, p)) in floats(&g["F"]).iter().zip(floats(&g["p"])).enumerate() {
+        close(r.t[i], *want, 1e-10, "F");
+        close(r.p_parametric[i], p, 1e-9, "p");
+        close(r.df[i], g["df"].as_f64().unwrap(), 0.0, "df");
+    }
+    let one_sided = test(f, Exchange::Permute, Tail::Greater, 9).run(y.view());
+    assert!(one_sided.is_err(), "an F test has no direction");
+}
+
+#[test]
+fn g_of_cell_means_is_welch_anova_as_in_statsmodels() {
+    let f = &fixture()["welch_anova"];
+    let labels: Vec<usize> = serde_json::from_value(f["labels"].clone()).unwrap();
+    let n = labels.len();
+    let design = Array2::from_shape_fn((n, 3), |(i, c)| f64::from(labels[i] == c));
+    let contrast = ndarray::array![[1.0, -1.0, 0.0], [0.0, 1.0, -1.0]];
+    let g = Glm::new(design, contrast)
+        .unwrap()
+        .with_variance_groups(labels)
+        .unwrap();
+    let y = Array2::from_shape_vec((n, 1), floats(&f["y"])).unwrap();
+    let r = test(g, Exchange::Permute, Tail::Both, 99)
+        .run(y.view())
+        .unwrap();
+    assert_eq!(r.statistic, "G");
+    close(r.t[0], f["G"].as_f64().unwrap(), 1e-12, "G");
+    close(r.df[0], f["df"].as_f64().unwrap(), 1e-10, "df");
     close(r.p_parametric[0], f["p"].as_f64().unwrap(), 1e-9, "p");
 }
 
@@ -131,21 +169,16 @@ fn fdr_matches_statsmodels() {
 fn small_sign_flip_designs_are_enumerated_exactly() {
     let f = &fixture()["sign_flip"];
     let y = matrix(&f["y"]);
-    let glm = Glm::new(Array2::ones((8, 1)), 0).unwrap();
-    let r = test(
-        Statistic::Glm(glm.clone()),
-        Exchange::SignFlip,
-        Tail::Both,
-        1000,
-    )
-    .run(y.view())
-    .unwrap();
+    let glm = glm(Array2::ones((8, 1)), 0);
+    let r = test(glm.clone(), Exchange::SignFlip, Tail::Both, 1000)
+        .run(y.view())
+        .unwrap();
     assert!(r.exhaustive && r.n_rearrangements == 255);
     for (i, (p, fwer)) in floats(&f["p"]).iter().zip(floats(&f["p_fwer"])).enumerate() {
         close(r.p_permutation[i], *p, 1e-12, "exact p");
         close(r.p_fwer[i], fwer, 1e-12, "exact FWER");
     }
-    let sampled = test(Statistic::Glm(glm), Exchange::SignFlip, Tail::Both, 100)
+    let sampled = test(glm, Exchange::SignFlip, Tail::Both, 100)
         .run(y.view())
         .unwrap();
     assert!(!sampled.exhaustive && sampled.n_rearrangements == 100);
@@ -203,14 +236,9 @@ fn permutation_p_approaches_parametric_p_for_gaussian_data_and_is_reproducible()
     });
     let design = Array2::from_shape_fn((n, 2), |(i, c)| if c == 0 { 1.0 } else { group[i] });
     let run = |perms| {
-        test(
-            Statistic::Glm(Glm::new(design.clone(), 1).unwrap()),
-            Exchange::Permute,
-            Tail::Both,
-            perms,
-        )
-        .run(y.view())
-        .unwrap()
+        test(glm(design.clone(), 1), Exchange::Permute, Tail::Both, perms)
+            .run(y.view())
+            .unwrap()
     };
     let r = run(4000);
     for f in 0..5 {
@@ -237,49 +265,26 @@ fn permutation_p_approaches_parametric_p_for_gaussian_data_and_is_reproducible()
 #[test]
 fn tails_nan_features_and_invalid_tests() {
     let y = ndarray::array![[1.0, f64::NAN], [2.0, 1.0], [3.0, 2.0], [4.0, 1.0]];
-    let glm = Glm::new(Array2::ones((4, 1)), 0).unwrap();
-    let greater = test(
-        Statistic::Glm(glm.clone()),
-        Exchange::SignFlip,
-        Tail::Greater,
-        100,
-    )
-    .run(y.view())
-    .unwrap();
-    let less = test(
-        Statistic::Glm(glm.clone()),
-        Exchange::SignFlip,
-        Tail::Less,
-        100,
-    )
-    .run(y.view())
-    .unwrap();
+    let glm = glm(Array2::ones((4, 1)), 0);
+    let greater = test(glm.clone(), Exchange::SignFlip, Tail::Greater, 100)
+        .run(y.view())
+        .unwrap();
+    let less = test(glm.clone(), Exchange::SignFlip, Tail::Less, 100)
+        .run(y.view())
+        .unwrap();
     assert!(greater.p_parametric[0] < 0.05 && less.p_parametric[0] > 0.95);
     assert!(greater.p_permutation[0] < less.p_permutation[0]);
     assert!(
         greater.t[1].is_nan() && greater.p_permutation[1].is_nan() && greater.p_fwer[1].is_nan()
     );
     assert!(
-        test(
-            Statistic::Glm(glm.clone()),
-            Exchange::SignFlip,
-            Tail::Both,
-            0
-        )
-        .run(y.view())
-        .is_err()
-    );
-    assert!(
-        test(Statistic::Glm(glm), Exchange::SignFlip, Tail::Both, 10)
-            .run(y.slice(ndarray::s![..3, ..]))
+        test(glm.clone(), Exchange::SignFlip, Tail::Both, 0)
+            .run(y.view())
             .is_err()
     );
-    let welch = Statistic::Welch {
-        in_a: vec![true, true, false, false],
-    };
     assert!(
-        test(welch, Exchange::SignFlip, Tail::Both, 10)
-            .run(y.view())
+        test(glm, Exchange::SignFlip, Tail::Both, 10)
+            .run(y.slice(ndarray::s![..3, ..]))
             .is_err()
     );
 }
@@ -308,12 +313,7 @@ fn nbs_finds_a_planted_subnetwork_and_not_noise() {
         noise() + if in_a[i] && a < 3 && b < 3 { 0.8 } else { 0.0 }
     });
     let design = Array2::from_shape_fn((n, 2), |(i, c)| if c == 0 || in_a[i] { 1.0 } else { 0.0 });
-    let mut t = test(
-        Statistic::Glm(Glm::new(design, 1).unwrap()),
-        Exchange::Permute,
-        Tail::Greater,
-        500,
-    );
+    let mut t = test(glm(design, 1), Exchange::Permute, Tail::Greater, 500);
     t.nbs = Some((edges, 3.0));
     let r = t.run(y.view()).unwrap();
     let planted: Vec<usize> = pairs
@@ -332,16 +332,11 @@ fn nbs_finds_a_planted_subnetwork_and_not_noise() {
 fn freedman_lane_sign_flips_match_an_independent_enumeration() {
     let f = &fixture()["freedman_lane"];
     let (design, y) = (matrix(&f["design"]), matrix(&f["y"]));
-    let glm = Glm::new(design, 0).unwrap();
-    let both = test(
-        Statistic::Glm(glm.clone()),
-        Exchange::SignFlip,
-        Tail::Both,
-        1000,
-    )
-    .run(y.view())
-    .unwrap();
-    let greater = test(Statistic::Glm(glm), Exchange::SignFlip, Tail::Greater, 1000)
+    let glm = glm(design, 0);
+    let both = test(glm.clone(), Exchange::SignFlip, Tail::Both, 1000)
+        .run(y.view())
+        .unwrap();
+    let greater = test(glm, Exchange::SignFlip, Tail::Greater, 1000)
         .run(y.view())
         .unwrap();
     for i in 0..2 {
@@ -364,16 +359,11 @@ fn freedman_lane_sign_flips_match_an_independent_enumeration() {
 #[test]
 fn enumeration_starts_at_exactly_two_to_the_n_minus_one_and_random_flips_find_effects() {
     let y = Array2::from_shape_fn((8, 1), |(i, _)| 1.0 + 0.1 * i as f64);
-    let glm = Glm::new(Array2::ones((8, 1)), 0).unwrap();
+    let glm = glm(Array2::ones((8, 1)), 0);
     let at = |perms| {
-        test(
-            Statistic::Glm(glm.clone()),
-            Exchange::SignFlip,
-            Tail::Greater,
-            perms,
-        )
-        .run(y.view())
-        .unwrap()
+        test(glm.clone(), Exchange::SignFlip, Tail::Greater, perms)
+            .run(y.view())
+            .unwrap()
     };
     assert!(at(255).exhaustive && !at(254).exhaustive);
     assert!(
@@ -385,7 +375,7 @@ fn enumeration_starts_at_exactly_two_to_the_n_minus_one_and_random_flips_find_ef
     let effect =
         Array2::from_shape_fn((n, 1), |(i, _)| 0.8 + ((i * 7919) % 13) as f64 / 13.0 - 0.5);
     let sampled = test(
-        Statistic::Glm(Glm::new(Array2::ones((n, 1)), 0).unwrap()),
+        self::glm(Array2::ones((n, 1)), 0),
         Exchange::SignFlip,
         Tail::Both,
         500,
@@ -466,15 +456,15 @@ fn near_singular_designs_are_refused_relative_to_their_scale() {
             1e3 + if i == 0 { 1e-10 } else { 0.0 }
         }
     });
-    assert!(Glm::new(design, 1).is_err());
+    assert!(Glm::new(design, ndarray::array![[0.0, 1.0]]).is_err());
 }
 
 #[test]
 fn rearrangements_equal_up_to_rounding_count_as_ties() {
     // Flipping every sign of one-sample data gives exactly −t, so |t| ties with the observed.
     let y = Array2::from_shape_fn((6, 1), |(i, _)| 0.3 + 0.17 * i as f64);
-    let glm = Glm::new(Array2::ones((6, 1)), 0).unwrap();
-    let r = test(Statistic::Glm(glm), Exchange::SignFlip, Tail::Both, 100)
+    let glm = glm(Array2::ones((6, 1)), 0);
+    let r = test(glm, Exchange::SignFlip, Tail::Both, 100)
         .run(y.view())
         .unwrap();
     assert!(r.exhaustive);

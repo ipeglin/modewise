@@ -33,7 +33,7 @@ Links point to the markdown source of each page. `llms-full.txt` holds all of th
 - [Time-frequency](_sources/time-frequency.md.txt): Hilbert attributes and spectra, Morlet CWT
 - [Connectivity](_sources/connectivity.md.txt): functional connectivity (Pearson, PLV), per mode and per epoch
 - [Features](_sources/features.md.txt): feature tables from results (edges, mode power, band amplitude)
-- [Statistics](_sources/statistics.md.txt): GLM permutation tests, FWER, FDR, NBS
+- [Statistics](_sources/statistics.md.txt): GLM permutation tests (t and F contrasts, Welch v and G, exchangeability blocks), FWER, FDR, NBS
 
 ## Optional
 

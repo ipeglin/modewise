@@ -1,18 +1,20 @@
-//! Group statistics on feature tables: GLM t with Freedman–Lane permutation, Welch's t, sign
-//! flipping for paired designs, FWER by the maximum statistic, FDR, and the network-based
-//! statistic (docs/statistics.md).
+//! Group statistics on feature tables: GLM t and F contrasts (v and G with variance groups) with
+//! Freedman–Lane permutation or sign flipping, exchangeability blocks, FWER by the maximum
+//! statistic, FDR, and the network-based statistic (docs/statistics.md).
 
 mod dist;
 mod fdr;
 mod glm;
 mod nbs;
 mod permutation;
+mod rearrange;
 
-pub use dist::{incomplete_beta, t_upper};
+pub use dist::{f_upper, incomplete_beta, t_upper};
 pub use fdr::{Fdr, adjust};
-pub use glm::{Glm, welch_df, welch_t};
+pub use glm::Glm;
 pub use nbs::{Component, Edge};
-pub use permutation::{Exchange, PermutationTest, Statistic, Tail, TestResult};
+pub use permutation::{Exchange, PermutationTest, Tail, TestResult};
+pub use rearrange::Blocks;
 
 /// Components of suprathreshold edges, exposed for reference tests.
 #[doc(hidden)]

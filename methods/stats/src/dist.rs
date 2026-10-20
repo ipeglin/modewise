@@ -1,4 +1,4 @@
-//! Student's t distribution through the regularised incomplete beta function.
+//! Student's t and F distributions through the regularised incomplete beta function.
 
 /// Upper tail probability P(T > t) for Student's t with `df` degrees of freedom.
 pub fn t_upper(t: f64, df: f64) -> f64 {
@@ -11,6 +11,17 @@ pub fn t_upper(t: f64, df: f64) -> f64 {
     let x = df / (df + t * t);
     let half = 0.5 * incomplete_beta(0.5 * df, 0.5, x);
     if t > 0.0 { half } else { 1.0 - half }
+}
+
+/// Upper tail probability P(F > f) for the F distribution with `d1` and `d2` degrees of freedom.
+pub fn f_upper(f: f64, d1: f64, d2: f64) -> f64 {
+    if f.is_nan() || d1.is_nan() || d2.is_nan() || d1 <= 0.0 || d2 <= 0.0 {
+        return f64::NAN;
+    }
+    if f <= 0.0 {
+        return 1.0;
+    }
+    incomplete_beta(0.5 * d2, 0.5 * d1, d2 / (d2 + d1 * f))
 }
 
 /// Regularised incomplete beta I_x(a, b) by its continued fraction (Lentz's method), using the
@@ -121,5 +132,10 @@ mod tests {
         // Cauchy (df = 1): P(T > 1) = 1/4.
         assert!((t_upper(1.0, 1.0) - 0.25).abs() < 1e-14);
         assert!((t_upper(-1.0, 1.0) - 0.75).abs() < 1e-14);
+        // F(1, d) is t² with d degrees of freedom; F(2, 2) has P(F > f) = 1 / (1 + f).
+        assert!((f_upper(4.0, 1.0, 7.0) - 2.0 * t_upper(2.0, 7.0)).abs() < 1e-14);
+        assert!((f_upper(3.0, 2.0, 2.0) - 0.25).abs() < 1e-14);
+        assert_eq!(f_upper(0.0, 2.0, 5.0), 1.0);
+        assert!(f_upper(f64::NAN, 2.0, 5.0).is_nan() && f_upper(1.0, 0.0, 5.0).is_nan());
     }
 }
